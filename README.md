@@ -1,3 +1,3 @@
 # edu-help
 
-Ecu help
+welcome to Edu help
