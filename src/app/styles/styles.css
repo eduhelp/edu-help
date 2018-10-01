@@ -1,0 +1,17 @@
+body {
+  margin: 0px;
+  font-family: sans-serif;
+}
+.paper {
+  margin: 20px;
+  color: #ccc;
+}
+.slide {
+  float: left;
+  display: inline;
+  width: 0px;
+  padding: 20px;
+  height: 150px;
+}
+
+
