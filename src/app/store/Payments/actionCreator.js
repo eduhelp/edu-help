@@ -4,6 +4,8 @@ import {
   GET_LEVEL_PAYMENTS_SUCCESS,
   RECEIVE_PAYMENT_LIST_SUCCESS,
   MY_PAYMENT_LIST_SUCCESS,
+  LEVEL_ELIGIBILIY_SUCCESS,
+  CONFIRM_RECEIVER_SUCCESS,
 } from './actionType'
 // import config from './../../config/apiConfig'
 import { postService } from '../../services/Registration'
@@ -81,6 +83,28 @@ export function getMyPaymentList (payload) {
   }
 }
 
+export function getLevelEligibility (payload) {
+  return dispatch => {
+    return postService('levelEligibility', payload)
+    .then((resp) => {
+      dispatch({data: resp, type: LEVEL_ELIGIBILIY_SUCCESS})
+    })
+    .catch((error) => {
+      dispatch({ type: MY_PAYMENT_LIST_FAIL})
+    })
+  }
+}
 
+export function addConfirmReceiver (payload) {
+  return dispatch => {
+    return postService('addConfirmReceiver', payload)
+    .then((resp) => {
+      dispatch({data: resp, type: CONFIRM_RECEIVER_SUCCESS})
+    })
+    .catch((error) => {
+      dispatch({ type: MY_PAYMENT_LIST_FAIL})
+    })
+  }
+}
 
 

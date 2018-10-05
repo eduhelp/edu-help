@@ -4,9 +4,11 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withStyles } from '@material-ui/core/styles'
 import MiniDrawer from './DrawerComponent'
-import { userLogout } from '../../store/Registration/actionCreator'
+import { userLogout, getAuthInfo } from '../../store/Registration/actionCreator'
 import Snackbars from '../Common/Snackbars'
 import { toggleSnackBar } from '../../store/Snackbar/actionCreator'
+import Auth from '../Auth/Auth'
+import { checkCookie, getCookie } from '../../components/Common/Utils'
 
 const styles = theme => ({
   header: {
@@ -49,6 +51,22 @@ export class Layout extends React.Component {
     notificationActions: {},
   }
 
+  componentWillMount() {
+    const chCookie = checkCookie()
+    if (this.props.authInfo.isAuth === false && chCookie === true) {
+      const sendData = JSON.parse(window.localStorage.getItem('AuthInfo'))
+      this.props.getAuthInfo(sendData)
+    }
+    
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const chCookie = checkCookie()
+    if (!chCookie) {
+      window.location.replace('/')
+    } 
+  }
+
   render () {
     return (
       <div>
@@ -66,7 +84,6 @@ export class Layout extends React.Component {
           authInfo = {this.props.authInfo}
           userLogout = {this.props.userLogout}
         />
-
       </div>
     )
   }
@@ -76,6 +93,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators({
     userLogout,
     toggleSnackBar,
+    getAuthInfo,
   }, dispatch)
 
 const mapStateToProps = state => ({

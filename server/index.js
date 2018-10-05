@@ -28,7 +28,7 @@ var router = express.Router();
 
 
 
-router.get('/', function(req,res) {
+router.get('/*', function(req,res) {
     res.sendFile(path.join(__dirname+"./../src/index.html"));
 });
 
@@ -52,6 +52,14 @@ function connectDB(query, res) {
     });
 }
 
+function getCurrentDate() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    return mm + '/' + dd + '/' + yyyy;
+}
+
 router.get('/rest/usersList', async function(req, res) {
     const curQuery = "select * from users"
     var result = await connectDB(curQuery, res)
@@ -64,7 +72,11 @@ router.post('/rest/addUser', async function(req, res) {
     var curQuery = "insert into users(username, pwd, email, mobile, dob, gender, address, pincode, sponsor_id, status) values('"+req.body.username+"','"+req.body.pwd+"','"+req.body.email+"',"+req.body.mobile+",'"+req.body.dob+"','"+req.body.gender+"','"+req.body.address+"',"+req.body.pincode+","+req.body.sponsor_id+",'Inactive')"
     var result = await connectDB(curQuery, res)
     if(result) {
-       res.status(200).send({ message: 'data inserted successfully..'})
+        var insQuery = "insert into payments(from_id, to_id, payment_level, payment_value, paid_status, receiver_type, receiver_confirm_date) values("+result[0].user_id+","+req.body.sponsor_id+",1,100,'Pending','Sponsor','"+getCurrentDate()+"')"
+        var insResult = await connectDB(insQuery, res)
+        if(insResult) {
+            res.status(200).send({ message: 'data inserted successfully..'})
+        }
     }
 });
 
@@ -119,7 +131,7 @@ router.post('/rest/userLogin', async function(req, res) {
         if(result.length === 0) {
             res.status(403).send({status: true, variant: 'error', message: 'Invalid username or password'})
         } else {
-            res.status(200).send({ message: 'user authricated', data: result[0]})
+            res.status(200).send(result[0])
         }
     }
 });
@@ -141,11 +153,10 @@ router.post('/rest/paymentDetails', async function(req, res) {
 });
 
 router.post('/rest/makeLevelPayment', async function(req, res) {
-    var curQuery = "insert into payments(from_id, to_id, payment_level, payment_value, payment_mode, from_bank, to_bank, transaction_id, confirm_status) values("+req.body.from_id+", "+req.body.to_id+",'"+req.body.payment_level+"',"+req.body.payment_value+",'"+req.body.payment_mode+"','"+req.body.from_bank+"','"+req.body.to_bank+"','"+req.body.transaction_id+"','Pending')"
-    console.log(curQuery)
-    var result = await connectDB(curQuery, res)
+    var updQuery = "update payments set paid_status='Completed', payment_mode='"+req.body.payment_mode+"', from_bank='"+req.body.from_bank+"', to_bank='"+req.body.to_bank+"', transaction_id='"+req.body.transaction_id+"', transaction_date='"+getCurrentDate()+"', confirm_status='Pending' where payment_id="+req.body.payment_id
+    var result = await connectDB(updQuery, res)
     if(result) {
-        res.status(200).send(result)
+        res.status(200).send({message: 'payment details successfully updated'})
     }
 });
 
@@ -153,6 +164,13 @@ router.post('/rest/receivePaymentList', async function(req, res) {
     var curQuery = "select * from payments where payment_level="+req.body.payment_level+" and to_id="+req.body.user_id+" and confirm_status='Pending'"
     var result = await connectDB(curQuery, res)
     if(result) {
+        for(var i=0; i<result.length; i++) {
+            var selQuery = "select * from users where user_id="+result[i].from_id
+            var selResult = await connectDB(selQuery, res)
+            if (selResult) {
+                result[i]['giverInfo'] = selResult[0]
+            }
+        }
         res.status(200).send(result)
     }
 });
@@ -161,26 +179,40 @@ router.post('/rest/myPaymentList', async function(req, res) {
     var curQuery = "select * from payments where from_id="+req.body.user_id
     var result = await connectDB(curQuery, res)
     if(result) {
+        for(var i=0; i<result.length; i++) {
+            var selQuery = "select * from users where user_id="+result[i].to_id
+            var selResult = await connectDB(selQuery, res)
+            if (selResult) {
+                result[i]['receiverInfo'] = selResult[0]
+            }
+        }
         res.status(200).send(result)
     }
 });
 
+var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status"
 router.post('/rest/getUserDetails', async function(req, res) {
-    var curQuery = "select * from users where user_id="+req.body.user_id
+    var curQuery = "select "+userInfoList+" from users where user_id="+req.body.user_id
     var result = await connectDB(curQuery, res)
     if(result) {
         if(result.length === 0) {
             res.status(403).send({status: true, variant: 'error', message: 'Invalid Sponsor ID'})
         } else {
-            res.status(200).send(result)
+            res.status(200).send(result[0])
         }
     }
 });
 
 router.post('/rest/confirmLevelPayment', async function(req, res) {
-    var updateQuery = "update payments set confirm_status='Confirmed' where payment_id="+req.body.payment_id
+    var updateQuery = "update payments set confirm_status='Confirmed', confirm_date='"+getCurrentDate()+"' where payment_id="+req.body.payment_id
     var updateRes = await connectDB(updateQuery, res)
     if(updateRes) {
+        if(req.body.receiver_type === "SmartSpreader") {
+            var updQuery = "update smart_spreaders set current_status='Completed', completed_date='"+getCurrentDate()+"', payment_id="+req.body.payment_id+" where user_id="+req.body.to_id+" and current_status='InProgress'"
+            var updRes = await connectDB(updQuery, res)
+            var insQuery = "insert into smart_spreaders(user_id, added_date, current_status) values("+req.body.to_id+",'"+getCurrentDate()+"','Active')"
+            var insRes = await connectDB(insQuery, res)
+        }
         if(req.body.payment_level === "1") {
             var retArr = []
             var curLevel = 0
@@ -222,15 +254,14 @@ router.post('/rest/changeUserStatus', async function(req, res) {
     }
 });
 
-router.post('/rest/checkEligibility', async function(req, res) {
+router.post('/rest/levelEligibility', async function(req, res) {
     var curQuery = "select * from payments where from_id="+req.body.user_id+" and payment_level='"+req.body.payment_level+"'"
-    console.log(curQuery)
     var result = await connectDB(curQuery, res)
     if(result) {
         if(result.length === 0) {
-            res.status(403).send({status: true, variant: 'error', message: 'Invalid username or password'})
+            res.status(200).send({ eligibility: false })
         } else {
-            res.status(200).send({ message: 'user authricated', data: result[0]})
+            res.status(200).send({ eligibility: true })
         }
     }
 });
@@ -242,7 +273,6 @@ router.post('/rest/myTree', async function(req, res) {
     res.status(200).send(resultArray)
 });
 
-var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status"
 async function getMyTreeArray(sp_id, retArr, getLevel, res) {
     var curQuery = "select * from positions where parent_id="+sp_id
     var curResult = await connectDB(curQuery, res)
@@ -265,9 +295,12 @@ async function getMyTreeArray(sp_id, retArr, getLevel, res) {
 router.post('/rest/myTopLevel', async function(req, res) {
     var retArr = []
     var curLevel = 1
+    var resultArray = []
     var curQuery = "select * from positions where user_id="+req.body.user_id
     var curResult = await connectDB(curQuery, res)
-    var resultArray = await getTopLevelArray(curResult[0].parent_id, retArr, curLevel, req.body.max_level, res)
+    if (curResult.length > 0) {
+        resultArray = await getTopLevelArray(curResult[0].parent_id, retArr, curLevel, req.body.max_level, res)
+    }
     res.status(200).send(resultArray)
 });
 
@@ -276,10 +309,26 @@ async function getTopLevelArray(user_id, retArr, getLevel, max_level, res) {
     var curResult = await connectDB(curQuery, res)
     var curQuery = "select "+userInfoList+" from users where user_id="+curResult[0].user_id
     var result = await connectDB(curQuery, res)
+    var findRootLevelId = await getMyParentLevelWise(user_id, getLevel, res)
+    var eligibility = ''
+    if (findRootLevelId) {
+        var eliQuery = "select * from payments where from_id="+user_id+" and payment_level='"+getLevel+"'"
+        var eliResult = await connectDB(eliQuery, res)
+        if(eliResult) {
+            if(eliResult.length === 0) {
+                eligibility = false
+            } else {
+                eligibility = true
+            }
+        }
+    } else {
+        eligibility = true
+    }
     var nodeObj = {
         level: getLevel,
         parent_id: curResult[0].parent_id,
-        nodeInfo: result[0]
+        nodeInfo: result[0],
+        levelEligibility: eligibility
     }
     retArr.push(nodeObj)
     if(max_level > getLevel && curResult[0].parent_id !== '0') {
@@ -288,6 +337,60 @@ async function getTopLevelArray(user_id, retArr, getLevel, max_level, res) {
     } 
     return retArr;
 }
+
+async function getMyParentLevelWise(user_id, maxLevel, res) {
+    var haveRootLevel = true
+    var cur_user_id = user_id
+    outerLoop: for(var i=1; i<=maxLevel; i++) {
+        var curQuery = "select * from positions where user_id="+cur_user_id
+        var curResult = await connectDB(curQuery, res)
+        if (curResult) {
+            if (curResult[0].parent_id === '0' && i<maxLevel) {
+                haveRootLevel = false
+                break outerLoop;
+            } else {
+                cur_user_id = curResult[0].parent_id
+            }
+        }
+    }
+    return haveRootLevel
+}
+
+router.post('/rest/activeSmartSpreader', async function(req, res) {
+    var curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id  where t1.current_status='Active' order by t1.spreader_id limit 1"
+    var result = await connectDB(curQuery, res)
+    if(result) {
+        res.status(200).send(result[0])
+    }
+});
+
+router.post('/rest/addConfirmReceiver', async function(req, res) {
+    var insQuery = "insert into payments(from_id, to_id, payment_level, payment_value, paid_status, receiver_type, receiver_confirm_date) values("+req.body.from_id+","+req.body.to_id+","+req.body.payment_level+","+req.body.payment_value+",'Pending','"+req.body.receiver_type+"','"+getCurrentDate()+"')"
+    if(req.body.receiver_type == 'RootParent') {
+        var result = await connectDB(insQuery, res)
+        if(result) {
+            res.status(200).send({message: 'receiver confirmed from root parent'})
+        }
+    } else if(req.body.receiver_type == 'SmartSpreader') {
+        var curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id  where t1.current_status='Active' order by t1.spreader_id limit 1"
+        var result = await connectDB(curQuery, res)
+        if(result) {
+            if(result[0].user_id == req.body.to_id) {
+                var updQuery = "update smart_spreaders set current_status='InProgress' where user_id="+req.body.to_id
+                var updResult = await connectDB(updQuery, res)
+                if(updResult) {
+                    var result = await connectDB(insQuery, res)
+                    if(result) {
+                        res.status(200).send({message: 'receiver confirmed from smart spreader'})
+                    }
+                }
+            } else {
+                res.status(403).send({message: 'selected smart spreader already engaged, please select another smart spreader'})
+            }
+        }
+    }
+    
+});
 
 app.use("/", router)
 app.listen(9000);

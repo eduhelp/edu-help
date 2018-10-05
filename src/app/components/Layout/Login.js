@@ -35,7 +35,6 @@ export class Login extends React.Component {
   }
 
   loginSubmit = () => {
-      console.log("fun triggered")
       const loginData = {
           username: this.state.username,
           pwd: this.state.pwd

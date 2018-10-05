@@ -2,11 +2,13 @@ import { fromJS } from 'immutable'
 import {
   MY_TREE_SUCCESS,
   MY_TOP_LEVEL_SUCCESS,
+  ACTIVE_SMART_SPREADER_SUCCESS,
 } from './actionType'
 
 export const initialState = fromJS({
-  myTree: {},
-  myTopLevel: {},
+  myTree: [],
+  myTopLevel: [],
+  smartSpreaderInfo: [],
 })
 
 export default function grouperReducer (state = initialState, action) {
@@ -18,6 +20,10 @@ export default function grouperReducer (state = initialState, action) {
     case MY_TOP_LEVEL_SUCCESS:
       return state
         .set('myTopLevel', fromJS(action.data))
+
+    case ACTIVE_SMART_SPREADER_SUCCESS:
+      return state
+        .set('smartSpreaderInfo',fromJS(action.data))
 
     default:
       return state

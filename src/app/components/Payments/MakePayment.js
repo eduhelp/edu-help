@@ -12,9 +12,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MakePaymentDetails from './MakePaymentDetails'
 import MakePaymentConfirm from './MakePaymentConfirm'
-import { getLevelPayments, makeLevelPayment, getMyPaymentList } from '../../store/Payments/actionCreator'
-import { getMyTopLevel } from '../../store/Placements/actionCreator'
-// import { addUser } from '../../store/Registration/actionCreator'
+import { getLevelPayments, makeLevelPayment, getMyPaymentList, getLevelEligibility } from '../../store/Payments/actionCreator'
 
 const styles = theme => ({
   root: {
@@ -44,47 +42,14 @@ class MakePayment extends React.Component {
             stepCompleted: false,
             curPaymentObject: '',
             paymentInfo: '',
-            paymentEntryInfo: ''
-            }
-    }
-    
-    componentWillMount() {
-        const sendData = {
-            user_id : this.props.authInfo.data.data.user_id
-        }
-        this.props.getLevelPayments()
-        this.props.getMyPaymentList(sendData)
-        this.setState({ current_level: this.props.match.params.levelIndex })
-        if (this.props.match.params.levelIndex > 1) {
-            var sendLevelData = {
-                user_id : this.props.authInfo.data.data.user_id,
-                max_level: 7
-            }
-            this.props.getMyTopLevel(sendLevelData)
+            paymentEntryInfo: '',
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        const curPaymentObject = _.find(nextProps.myPaymentList, (n) => { return (n.payment_level == this.state.current_level) })
-        this.setState({ curPaymentObject })
-        var levelObj = _.find(nextProps.levelPayments, (n) => { return n.level_index == this.state.current_level} )
-        var selected_to_id = ''
-        if(this.state.current_level == 1) {
-            selected_to_id = nextProps.authInfo.data.data.sponsor_id
-        } else {
-            var nodeObj = _.find(nextProps.myTopLevel, (n) => { return (n.level == this.state.current_level)})
-            selected_to_id = nodeObj.nodeInfo.user_id
-        }
-        this.setState({
-            paymentInfo: {
-                from_id: nextProps.authInfo.data.data.user_id,
-                to_id: selected_to_id,
-                payment_level: this.state.current_level,
-                payment_value: levelObj.level_payment
-            }
-        })
+        console.log('nextProps.makePaymentObj')
+        console.log(nextProps.makePaymentObj)
     }
-
     submitPaymentDetails = (paymentEntryInfo) => {
         this.setState({
             paymentEntryInfo
@@ -92,7 +57,7 @@ class MakePayment extends React.Component {
       }
 
     getSteps() {
-      return ['Payment Details - level'+this.props.match.params.levelIndex, 'Payment Confirmation'];
+      return ['Payment Details - level'+this.props.makePaymentObj.payment_level, 'Payment Confirmation'];
     }
     
     
@@ -103,7 +68,8 @@ class MakePayment extends React.Component {
             <div>
               <MakePaymentDetails 
                 submitCB = {this.submitPaymentDetails}
-                paymentInfo={this.state.paymentInfo}
+                authInfo={this.props.authInfo}
+                makePaymentObj={this.props.makePaymentObj}
               />
             </div>
           )
@@ -111,7 +77,8 @@ class MakePayment extends React.Component {
           return (
             <div>
               <MakePaymentConfirm 
-                paymentInfo={this.state.paymentInfo}
+                authInfo={this.props.authInfo}
+                makePaymentObj={this.props.makePaymentObj}
                 paymentEntryInfo={this.state.paymentEntryInfo}
               />
             </div>
@@ -133,15 +100,12 @@ class MakePayment extends React.Component {
     let { skipped, paymentInfo, paymentEntryInfo } = this.state;
     if( activeStep === 1) {
         var sendData = {
-            payment_level: paymentInfo.payment_level,
-            from_id: paymentInfo.from_id,
-            to_id: paymentInfo.to_id,
-            payment_value: paymentInfo.payment_value,
+            payment_id: this.props.makePaymentObj.payment_id,
             payment_mode: paymentEntryInfo.payment_mode,
             from_bank: paymentEntryInfo.from_bank,
             to_bank: paymentEntryInfo.to_bank,
             transaction_id: paymentEntryInfo.transaction_id
-          }
+          } 
           this.props.makeLevelPayment(sendData)
       this.setState({
         activeStep: activeStep + 1,
@@ -198,7 +162,7 @@ class MakePayment extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, makePaymentObj } = this.props;
     const steps = this.getSteps(this.props);
     const { activeStep, paymentInfo, curPaymentObject } = this.state;
     let nextBtnDisabledState = false
@@ -209,19 +173,19 @@ class MakePayment extends React.Component {
     } else if (activeStep === 3) {
       nextBtnDisabledState = true
     }  */
-    const levelText = (this.props.match.params.levelIndex === 1) ? "Level "+this.props.match.params.levelIndex+" (Sponsor)" : "Level "+this.props.match.params.levelIndex
+    const levelText = (makePaymentObj.payment_level === 1) ? "Level "+makePaymentObj.payment_level+" (Sponsor)" : "Level "+makePaymentObj.payment_level
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
           <h2>{levelText} - make payment.</h2>
         </Paper>
-        {(curPaymentObject) ? (
+        {(makePaymentObj.confirm_status !== null) ? (
             <Paper className={classes.paper}>
-                <h5>You are done the level{curPaymentObject.payment_level} payment - status : {curPaymentObject.confirm_status}</h5>
+                <h5>You are done the level{makePaymentObj.payment_level} payment - status : {makePaymentObj.confirm_status}</h5>
             </Paper>
         ) : (
             <div>
-                {(paymentInfo.to_id == 0) ? (
+                {(makePaymentObj.to_id == 0) ? (
                     <Paper className={classes.paper}>
                         <h5>You are the root ID - you can't make any payment</h5>
                     </Paper>
@@ -249,9 +213,9 @@ class MakePayment extends React.Component {
                             <div>
                             <Typography className={classes.instructions}>
                                 All steps completed - you're finished <br />
-                                please make the payment to your sponsor for activation.
+                                Please wait until receiver confirmation.
                             </Typography>
-                            <Button onClick={this.handleReset} className={classes.button}>
+                            <Button onClick={this.handleReset} className={classes.button} onClick={this.props.cancelCB}>
                                 make another payment
                             </Button>
                             </div>
@@ -261,6 +225,14 @@ class MakePayment extends React.Component {
                                 {this.getStepContent(activeStep)}
                             </div>
                             <div>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={this.props.cancelCB}
+                                className={classes.button}
+                                >
+                                Cancel
+                                </Button>
                                 <Button
                                 disabled={activeStep === 0}
                                 onClick={this.handleBack}
@@ -309,13 +281,10 @@ const mapDispatchToProps = dispatch =>
     getLevelPayments,
     makeLevelPayment,
     getMyPaymentList,
-    getMyTopLevel,
+    getLevelEligibility,
   }, dispatch)
 
 const mapStateToProps = state => ({
-  authInfo: state.getIn(['RegistrationContainer', 'authInfo']).toJS(),
-  levelPayments: state.getIn(['PaymentsContainer', 'levelPayments']).toJS(),
-  myPaymentList: state.getIn(['PaymentsContainer', 'myPaymentList']).toJS(),
-  myTopLevel: state.getIn(['PlcementsContainer', 'myTopLevel']).toJS(),
+  // authInfo: state.getIn(['RegistrationContainer', 'authInfo']).toJS(),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(MakePayment))

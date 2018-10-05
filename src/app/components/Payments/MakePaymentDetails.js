@@ -41,7 +41,7 @@ export class MakePaymentDetails extends React.Component {
   }
 
   render() {
-    const { classes, paymentInfo } = this.props
+    const { classes, authInfo, makePaymentObj  } = this.props
     return (
       <div>
         <Paper className={classes.paper}>
@@ -52,7 +52,7 @@ export class MakePaymentDetails extends React.Component {
                         Payment Level
                     </Grid>
                     <Grid item xs={6}>
-                        {paymentInfo.payment_level}
+                        {makePaymentObj.payment_level}
                     </Grid>
                 </Grid>
             </Grid>
@@ -62,7 +62,7 @@ export class MakePaymentDetails extends React.Component {
                         Payment From
                     </Grid>
                     <Grid item xs={6}>
-                        {paymentInfo.from_id}
+                        {authInfo.data.username}({authInfo.data.data.user_id})
                     </Grid>
                 </Grid>
             </Grid>
@@ -72,7 +72,7 @@ export class MakePaymentDetails extends React.Component {
                         Payment To
                     </Grid>
                     <Grid item xs={6}>
-                        {paymentInfo.to_id}
+                      {makePaymentObj.receiverInfo.username}({makePaymentObj.receiverInfo.user_id})
                     </Grid>
                 </Grid>
             </Grid>
@@ -82,7 +82,7 @@ export class MakePaymentDetails extends React.Component {
                         Payment Value
                     </Grid>
                     <Grid item xs={6}>
-                        {paymentInfo.payment_value}
+                        {makePaymentObj.payment_value}
                     </Grid>
                 </Grid>
             </Grid>

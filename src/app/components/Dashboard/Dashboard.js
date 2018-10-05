@@ -1,12 +1,14 @@
 import React from 'react'
-import _ from 'lodash'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import { getPaymentDetails, confirmLevelPayment } from '../../store/Payments/actionCreator'
+import { DashboardDetails } from './DashboardDetails'
+
+import { getMyTree, getMyTopLevel, getActiveSmartSpreader } from '../../store/Placements/actionCreator'
+import { getUserDetails } from '../../store/Registration/actionCreator'
+import { getReceivePaymentList, getMyPaymentList, getLevelPayments } from '../../store/Payments/actionCreator'
+import ConfirmReceiver from '../Payments/ConfirmReceiver';
+import MakePayment from "../Payments/MakePayment"
 
 const styles = {
   root: {
@@ -35,265 +37,124 @@ export class Dashboard extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-        confirmStatus: {
-            makePaymentStatus: {
-                level1: false,
-                level2: false,
-                level3: false,
-                level4: false,
-                level5: false,
-                level6: false,
-                level7: false
-            },
-            receivePaymentStatus: {
-                level1: false,
-                level2: false,
-                level3: false,
-                level4: false,
-                level5: false,
-                level6: false,
-                level7: false
-            },
-        }
+        currentPage : 'Dashboard',
+        levelIndex: '',
+        treeParentID: '',
+        treeParentInfo: '',
+        levelEligibility: false,
+        makePaymentObj: {},
     }
+    
   }
+  
+  componentWillMount() {
+    var sendData = {
+        user_id: this.props.authInfo.data.user_id,
+        max_level: 7
+    }
+    this.props.getMyTree(sendData)
+    this.props.getMyTopLevel(sendData)
+    var sponsorData = {
+      user_id: this.props.authInfo.data.sponsor_id,
+    }
+    this.props.getUserDetails(sponsorData)
+    var listData = {
+      user_id: this.props.authInfo.data.user_id,
+      payment_level: 1
+    }
+    this.props.getReceivePaymentList(listData)
+    this.props.getMyPaymentList(sendData)
+    this.props.getLevelPayments()
+    this.props.getActiveSmartSpreader()
+}
 
-  componentWillReceiveProps(nextProps) {
-    const user_id =  nextProps.authInfo.data.data.user_id
-    nextProps.userPayments.map((option) => {
-        if(option.payment_level === 1 && option.from_id === user_id) {
-            this.setState({ confirmStatus: { makePaymentStatus: { level1: true } } })
-        }
-        if(option.payment_level === 1 && option.to_id === user_id) {
-            this.setState({ confirmStatus: { receivePaymentStatus: { level1: true } } })
-            this.setState({ leve1_info: option })
-        }
+confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, treeParentInfo) => {
+    //if(!levelEligibility) this.props.getActiveSmartSpreader()
+    console.log(currentPage, levelIndex, treeParentID, levelEligibility, treeParentInfo)
+    this.setState({
+        currentPage,
+        levelIndex,
+        treeParentID,
+        levelEligibility,
+        treeParentInfo
     })
   }
 
-  componentDidMount() {
-      var sendData = {
-          user_id: this.props.authInfo.data.data.user_id
-      }
-      this.props.getPaymentDetails(sendData)
+  makePayment = (currentPage,makePaymentObj) => {
+    this.setState({
+        currentPage,
+        makePaymentObj
+    })
   }
 
-
+  cancelCallBack = () => {
+    this.setState({
+        currentPage: 'Dashboard'
+    })
+  }
 
   render() {
     const { classes } = this.props
+    let DisplayPage = ''
+    if (this.state.currentPage === 'Dashboard') {
+        DisplayPage = <DashboardDetails 
+            authInfo={this.props.authInfo}
+            myTree={this.props.myTree}
+            myTopLevel={this.props.myTopLevel}
+            sponsorDetails={this.props.sponsorDetails}
+            sponsorPayments={this.props.sponsorPayments}
+            myPaymentList={this.props.myPaymentList}
+            classes={classes}
+            confirmReceiverCB={this.confirmReceiver}
+            makePaymentCB={this.makePayment}
+            />
+    } else if (this.state.currentPage === 'ConfirmReceiver') {
+        var levelObj = _.find(this.props.levelPayments, (n) => { return n.level_index == this.state.levelIndex} )
+        DisplayPage = <ConfirmReceiver
+            authInfo={this.props.authInfo}
+            levelPayment={levelObj.level_payment}
+            sponsorDetails={this.props.sponsorDetails}
+            levelIndex={this.state.levelIndex}
+            treeParentID={this.state.treeParentID}
+            treeParentInfo={this.state.treeParentInfo}
+            levelEligibility={this.state.levelEligibility}
+            cancelCB={this.cancelCallBack}
+        />
+    } else if (this.state.currentPage === 'MakePayment') {
+        var levelObj = _.find(this.props.levelPayments, (n) => { return n.level_index == this.state.levelIndex} )
+        DisplayPage = <MakePayment
+            authInfo={this.props.authInfo}
+            makePaymentObj={this.state.makePaymentObj}
+            cancelCB={this.cancelCallBack}
+        />
+    }
+    
     return (
-      <div id="mainContainer">
-        <Grid container>
-            <Grid item xs={12}>
-                <Paper className={classes.paper}>
-                    <Grid container>
-                        <Grid item xs={6}>
-                           <h2> Account Status </h2>
-                        </Grid>
-                        <Grid item xs={6}>
-                           <h2> {this.props.authInfo.data.data.status}</h2>
-                        </Grid>
-                    </Grid>
-                </Paper>
-            </Grid>
-            <Grid item xs={12}>
-                <Grid container>
-                    <Grid item xs={6}>
-                        <Paper className={classes.paper}>
-                            <Grid container>
-                                <Grid item xs={12} className={classes.marginLeft20}>
-                                    <h3> Make Payments </h3>
-                                </Grid>
-                                <Grid item xs={12} className={classes.marginLeft20}>
-                                    <Grid container className={classes.dataRowOdd}>
-                                        <Grid item xs={4}>
-                                            <Link className={classes.navLink} to="/make_payment/1">To Sponsor</Link>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.100
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                        Paid - status 
-                                        </Grid>
-                                    </Grid>
-                                    {this.props.authInfo.data.data.status == 'Active' && 
-                                    <div>
-                                    <Grid container className={classes.dataRowEven}>
-                                        <Grid item xs={4}>
-                                            <Link className={classes.navLink} to="/make_payment/2">Level 2</Link>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.150
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            -- status -- 
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={classes.dataRowOdd}>
-                                        <Grid item xs={4}>
-                                            Level 3
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.400
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            -- status -- 
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={classes.dataRowEven}>
-                                        <Grid item xs={4}>
-                                            Level 4
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.2000
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            -- status -- 
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={classes.dataRowOdd}>
-                                        <Grid item xs={4}>
-                                            Level 5
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.4000
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            -- status -- 
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={classes.dataRowEven}>
-                                        <Grid item xs={4}>
-                                            Level 6
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.10000
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            -- status -- 
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={classes.dataRowOdd}>
-                                        <Grid item xs={4}>
-                                            Level 7
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.2000
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            -- status -- 
-                                        </Grid>
-                                    </Grid>
-                                    </div>
-                                    }
-                                </Grid>
-                            </Grid>
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Paper className={classes.paper}>
-                            <Grid container>
-                                <Grid item xs={12} className={classes.marginLeft20}>
-                                    <h3> Receive Payments </h3>
-                                </Grid>
-                                <Grid item xs={12} className={classes.marginLeft20}>
-                                    <Grid container className={classes.dataRowOdd}>
-                                        <Grid item xs={4}>
-                                            <Link className={classes.navLink} to="/receive_payment/1">Level1 Receive Payment List</Link>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.100  
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            confirm now
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={classes.dataRowEven}>
-                                        <Grid item xs={4}>
-                                            <Link className={classes.navLink} to="/receive_payment/2">Level 2</Link>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.150
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            -- status -- 
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={classes.dataRowOdd}>
-                                        <Grid item xs={4}>
-                                            Level 3
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.400
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            -- status -- 
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={classes.dataRowEven}>
-                                        <Grid item xs={4}>
-                                            Level 4
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.2000
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            -- status -- 
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={classes.dataRowOdd}>
-                                        <Grid item xs={4}>
-                                            Level 5
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.4000
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            -- status -- 
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={classes.dataRowEven}>
-                                        <Grid item xs={4}>
-                                            Level 6
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.10000
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            -- status -- 
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={classes.dataRowOdd}>
-                                        <Grid item xs={4}>
-                                            Level 7
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            Rs.2000
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            -- status -- 
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Paper>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Grid>
-      </div>)
+        <div>
+            {DisplayPage}
+        </div>
+      )
   }
 }
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    getPaymentDetails,
-    confirmLevelPayment,
+    getMyTree,
+    getMyTopLevel,
+    getUserDetails,
+    getReceivePaymentList,
+    getMyPaymentList,
+    getLevelPayments,
+    getActiveSmartSpreader,
   }, dispatch)
 
 const mapStateToProps = state => ({
     authInfo: state.getIn(['RegistrationContainer', 'authInfo']).toJS(),
-    userPayments: state.getIn(['PaymentsContainer', 'userPayments']).toJS(),
+    levelPayments: state.getIn(['PaymentsContainer', 'levelPayments']).toJS(),
+    myTree: state.getIn(['PlcementsContainer', 'myTree']).toJS(),
+    myTopLevel: state.getIn(['PlcementsContainer', 'myTopLevel']).toJS(),
+    sponsorDetails: state.getIn(['RegistrationContainer', 'userDetails']).toJS(),
+    sponsorPayments: state.getIn(['PaymentsContainer', 'receivePaymentsList']).toJS(),
+    myPaymentList: state.getIn(['PaymentsContainer', 'myPaymentList']).toJS(),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard))

@@ -70,6 +70,9 @@ export class ReceivePendingList extends React.Component {
                         <Grid item xs={3}>
                             From Level
                         </Grid>
+                        <Grid item xs={3}>
+                            Receive Mode
+                        </Grid>
                     </Grid>
                 </Grid>
                 {this.props.receivePaymentsList.map((option) => {
@@ -86,10 +89,13 @@ export class ReceivePendingList extends React.Component {
                                     />
                                 </Grid>
                                 <Grid item xs={3}>
-                                    {option.from_id}
+                                    {option.giverInfo.username} ({option.from_id})
                                 </Grid>
                                 <Grid item xs={3}>
                                     {option.payment_level}
+                                </Grid>
+                                <Grid item xs={3}>
+                                    {option.receiver_type}
                                 </Grid>
                             </Grid>
                         </Grid>

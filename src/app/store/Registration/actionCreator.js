@@ -5,14 +5,13 @@ import {
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
   GET_USER_DETAILS_SUCCESS,
-  GET_USER_DETAILS_FAIL,
+  GET_AUTH_INFO_SUCCESS,
 } from './actionType'
 import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
 // import config from './../../config/apiConfig'
 import { getService, postService } from '../../services/Registration'
 
 export function getUsers () {
-  console.log("action - get users")
   return { type: GET_USERS }
 }
 
@@ -103,4 +102,8 @@ export function getUserDetails (payload) {
       dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
     })
   }
+}
+
+export function getAuthInfo (payload) {
+  return {data: payload, type: GET_AUTH_INFO_SUCCESS }
 }

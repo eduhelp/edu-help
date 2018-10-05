@@ -17,6 +17,7 @@ import Grid from '@material-ui/core/Grid'
 import Home from '../Home/Home'
 import Registration from '../Registration/Registration'
 import Dashboard from '../Dashboard/Dashboard'
+import ConfirmReceiver from '../Payments/ConfirmReceiver'
 import MakePayment from '../Payments/MakePayment'
 import ReceivePayment from '../Payments/ReceivePayment'
 import MyTree from '../Placements/MyTree'
@@ -177,7 +178,7 @@ class MiniDrawer extends React.Component {
             <div className={classes.companyTitle}>CGN International</div>
             {(isAuth) ? (
                 <div> 
-                    Welcome {data.data.username}
+                    Welcome {data.username}
                     <Button color="primary" className={classes.button} onClick={this.confirmLogout}>
                         Logout
                     </Button>
@@ -226,7 +227,8 @@ class MiniDrawer extends React.Component {
                     <Route exact path="/" component={Home} />
                     <Route exact path="/registration" component={Registration} />
                     <Route exact path="/dashboard" component={Dashboard} />
-                    <Route exact path="/make_payment/:levelIndex" component={MakePayment} />
+                    <Route exact path="/confirm_receiver/:levelIndex/:paymentTo" component={ConfirmReceiver} />
+                    <Route exact path="/make_payment/:levelIndex/:paymentTo" component={MakePayment} />
                     <Route exact path="/receive_payment/:levelIndex" component={ReceivePayment} />
                     <Route exact path="/my_tree" component={MyTree} />
                 </Switch>

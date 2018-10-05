@@ -21,7 +21,7 @@ export class MyTree extends React.Component {
   
   componentWillMount() {
       var sendData = {
-          user_id : this.props.authInfo.data.data.user_id,
+          user_id : this.props.authInfo.data.user_id,
           max_level: 7
       }
       this.props.getMyTree(sendData)
@@ -29,9 +29,7 @@ export class MyTree extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('my tree')
-    console.log(nextProps.myTree)
-    console.log(nextProps.myTopLevel)
+
   }
 
   render() {

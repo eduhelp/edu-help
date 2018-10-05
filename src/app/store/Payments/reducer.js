@@ -4,6 +4,8 @@ import {
   GET_LEVEL_PAYMENTS_SUCCESS,
   RECEIVE_PAYMENT_LIST_SUCCESS,
   MY_PAYMENT_LIST_SUCCESS,
+  LEVEL_ELIGIBILIY_SUCCESS,
+  CONFIRM_RECEIVER_SUCCESS,
 } from './actionType'
 
 export const initialState = fromJS({
@@ -11,6 +13,8 @@ export const initialState = fromJS({
   levelPayments: [],
   receivePaymentsList: [],
   myPaymentList: [],
+  levelEligibility: [],
+  confirmReceiver: ''
 })
 
 
@@ -31,6 +35,14 @@ export default function paymentsReducer (state = initialState, action) {
     case MY_PAYMENT_LIST_SUCCESS:
       return state
         .set('myPaymentList', fromJS(action.data))
+    
+    case LEVEL_ELIGIBILIY_SUCCESS:
+      return state
+        .set('levelEligibility', fromJS(action.data))
+    
+    case LEVEL_ELIGIBILIY_SUCCESS:
+        return state
+          .set('confirmReceiver', fromJS('confirmed'))
 
     default:
       return state

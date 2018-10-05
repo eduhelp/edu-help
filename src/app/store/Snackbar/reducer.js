@@ -10,8 +10,6 @@ export const initialState = fromJS({
 export default function grouperReducer (state = initialState, action) {
   switch (action.type) {
     case TOGGLE_SNACKBAR:
-    console.log('comes here')
-    console.log(action.snackMessage)
       return state
         .set('snackbarMessage', fromJS(action.snackMessage))
 

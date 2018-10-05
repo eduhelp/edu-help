@@ -53,7 +53,7 @@ class ReceivePayment extends React.Component {
         this.props.getLevelPayments() 
         const recData = {
           payment_level: this.props.match.params.levelIndex,
-          user_id: this.props.authInfo.data.data.user_id
+          user_id: this.props.authInfo.data.user_id
         }
         this.props.getReceivePaymentList(recData)
     }
@@ -116,8 +116,11 @@ class ReceivePayment extends React.Component {
     let { skipped, paymentInfo } = this.state;
     if( activeStep === 2) {
         console.log('place to make api call')
+        var paymentObj = _.find(this.props.receivePaymentsList, (n) => { return n.payment_id == paymentInfo.payment_id })
         var sendData = {
             payment_id: paymentInfo.payment_id,
+            to_id: paymentObj.to_id,
+            receiver_type: paymentObj.receiver_type,
             user_id: paymentInfo.user_id,
             sponsor_id: paymentInfo.sponsor_id,
             payment_level: this.props.match.params.levelIndex
