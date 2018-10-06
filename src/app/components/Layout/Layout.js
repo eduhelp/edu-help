@@ -7,7 +7,6 @@ import MiniDrawer from './DrawerComponent'
 import { userLogout, getAuthInfo } from '../../store/Registration/actionCreator'
 import Snackbars from '../Common/Snackbars'
 import { toggleSnackBar } from '../../store/Snackbar/actionCreator'
-import Auth from '../Auth/Auth'
 import { checkCookie, getCookie } from '../../components/Common/Utils'
 
 const styles = theme => ({
@@ -62,7 +61,8 @@ export class Layout extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const chCookie = checkCookie()
-    if (!chCookie) {
+    const pathName = window.location.pathname
+    if (!chCookie && pathName !== '/registration' && pathName !== 'about_plan') {
       window.location.replace('/')
     } 
   }
@@ -71,8 +71,8 @@ export class Layout extends React.Component {
     return (
       <div>
         <Helmet
-          defaultTitle="CGN International"
-          titleTemplate="%s - CGN International"
+          defaultTitle="Edu Help"
+          titleTemplate="%s - Edu Help"
         />
         <Snackbars
           variant={this.props.snackbarMessage.variant}

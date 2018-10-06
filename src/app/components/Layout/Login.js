@@ -55,8 +55,7 @@ export class Login extends React.Component {
             <Grid item xs={12}>
                 <TextField
                     id="outlined-with-placeholder"
-                    label="Enter User Name"
-                    placeholder="Placeholder"
+                    label="User Name or Mobile Number"
                     className={classes.textField}
                     margin="normal"
                     variant="outlined"
@@ -67,8 +66,7 @@ export class Login extends React.Component {
             <Grid item xs={12}>
                 <TextField
                     id="outlined-with-placeholder"
-                    label="Enter Password"
-                    placeholder="Placeholder"
+                    label="Password"
                     type='password'
                     className={classes.textField}
                     margin="normal"

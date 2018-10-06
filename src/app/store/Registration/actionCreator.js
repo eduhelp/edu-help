@@ -6,6 +6,7 @@ import {
   LOGOUT_SUCCESS,
   GET_USER_DETAILS_SUCCESS,
   GET_AUTH_INFO_SUCCESS,
+  UPDATE_USER_INFO_SUCCESS,
 } from './actionType'
 import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
 // import config from './../../config/apiConfig'
@@ -106,4 +107,18 @@ export function getUserDetails (payload) {
 
 export function getAuthInfo (payload) {
   return {data: payload, type: GET_AUTH_INFO_SUCCESS }
+}
+
+export function updateUserInfo(payload) {
+  return dispatch => {
+    return postService('updateUserInfo', payload)
+    .then((resp) => {
+      dispatch({ data: resp, type: GET_AUTH_INFO_SUCCESS })
+      const succMsg = {status: true, variant: 'success', message: 'Your details updated successfully'}
+      dispatch({ snackMessage: succMsg, type: TOGGLE_SNACKBAR })
+    })
+    .catch((error) => {
+      dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
+    })
+  }
 }

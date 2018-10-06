@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -8,11 +10,18 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import Button from '@material-ui/core/Button';
+import { changeDateFormat } from '../../components/Common/Utils'
+import { updateUserInfo } from '../../store/Registration/actionCreator'
 
 const styles = {
   root: {
     display: 'flex',
     height: 300,
+  },
+  paper: {
+    margin: '10px 0px',
+    padding: '10px',
   },
   marginLeft20: {
     marginLeft: 20,
@@ -20,61 +29,72 @@ const styles = {
   textField: {
     width:200,
   },
+  btnRow: {
+      textAlign: 'center',
+      padding: 5,
+  },
 };
 
 
-
-export class UserInfo extends React.Component {
-  constructor() {
-    super()
+export class MyInfo extends React.Component {
+  constructor(props) {
+    super(props)
     this.state = {
-      userInfo: {
-        username: '',
-        pwd: '',
-        mobile: '',
         email: '',
         dob: '',
         gender: '',
         address: '',
         zipcode: ''
-      }
     }
   }
 
-  componentWillMount(){
-    this.setState({ userInfo: this.props.userInfo })
+  componentWillReceiveProps(nextProps) {
+    console.log('nextProps.authInfo')
+    console.log(nextProps.authInfo)
   }
 
-handleChange = (stName) => (event) => {
-    this.setState({ userInfo: { 
-      ...this.state.userInfo,
-      [stName] : event.target.value
-    }})
-    setTimeout(()=> {
-      this.props.submitCB(this.state.userInfo)
-    }, 100)
-}
+  componentWillMount(){
+    console.log('componentWillMount')
+    const dob = changeDateFormat(this.props.authInfo.dob)
+    console.log(dob)
+    this.setState({ 
+        email: this.props.authInfo.email,
+        dob: dob,
+        gender: this.props.authInfo.gender,
+        address: this.props.authInfo.address,
+        pincode: this.props.authInfo.pincode
+    })
+  }
+
+    handleChange = (stName) => (event) => {
+        console.log(event.target.value)
+        this.setState({ 
+            [stName] : event.target.value
+        })
+    }
+
+    handleUpdate = event => {
+        const sendData = {
+            user_id: this.props.authInfo.user_id,
+            email: this.state.email,
+            dob: this.state.dob,
+            gender: this.state.gender,
+            address: this.state.address,
+            pincode: this.state.pincode
+        }
+        this.props.updateUserInfo(sendData)
+    }
 
   render() {
     const { classes } = this.props
-    console.log(this.state.userInfo)
     return (
-      <div>
-        <Paper>
+      <div id="mainContainer">
+        <Paper className={classes.paper}>
           <Grid container>
             <Grid item xs={6}>
               <Grid container>
                 <Grid item xs={12} className={classes.marginLeft20}>
-                  <TextField
-                    id="outlined-with-placeholder"
-                    label="Enter User Name"
-                    placeholder="Placeholder"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                    value={this.state.userInfo.username}
-                    onChange={this.handleChange('username')}
-                  /> 
+                  Username : {this.props.authInfo.username} 
                 </Grid>
                 <Grid item xs={12} className={classes.marginLeft20}>
                   <TextField
@@ -84,7 +104,7 @@ handleChange = (stName) => (event) => {
                     className={classes.textField}
                     margin="normal"
                     variant="outlined"
-                    value={this.state.userInfo.email}
+                    value={this.state.email}
                     onChange={this.handleChange('email')}
                   /> 
                 </Grid>
@@ -101,7 +121,7 @@ handleChange = (stName) => (event) => {
                     }}
                     margin="normal"
                     variant="outlined"
-                    value={this.state.userInfo.dob}
+                    value={this.state.dob}
                     onChange={this.handleChange('dob')}
                   />
                 </Grid>
@@ -113,7 +133,7 @@ handleChange = (stName) => (event) => {
                     className={classes.textField}
                     margin="normal"
                     variant="outlined"
-                    value={this.state.userInfo.address}
+                    value={this.state.address}
                     onChange={this.handleChange('address')}
                   /> 
                 </Grid>
@@ -122,34 +142,7 @@ handleChange = (stName) => (event) => {
             <Grid item xs={6}>
             <Grid container>
                 <Grid item xs={12} className={classes.marginLeft20}>
-                  <TextField
-                    id="outlined-with-placeholder"
-                    label="Enter Password"
-                    type='password'
-                    placeholder="Placeholder"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                    maxLength="8"
-                    value={this.state.userInfo.pwd}
-                    onChange={this.handleChange('pwd')}
-                  /> 
-                </Grid>
-                <Grid item xs={12} className={classes.marginLeft20}>
-                  <TextField
-                    id="outlined-with-placeholder"
-                    label="Enter mobile"
-                    placeholder="Placeholder"
-                    type='number'
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                    value={this.state.userInfo.mobile}
-                    inputProps={{
-                      maxLength: 10,
-                    }}
-                    onChange={this.handleChange('mobile')}
-                  /> 
+                    Mobile : {this.props.authInfo.mobile} 
                 </Grid>
                 <Grid item xs={12} className={classes.marginLeft20}>
                   <FormControl component="fieldset" className={classes.formControl}>
@@ -158,7 +151,7 @@ handleChange = (stName) => (event) => {
                       aria-label="Gender"
                       name="gender"
                       className={classes.group}
-                      value={this.state.userInfo.gender}
+                      value={this.state.gender}
                       onChange={this.handleChange('gender')}
                     >
                       <FormControlLabel value="female" control={<Radio />} label="Female" />
@@ -178,16 +171,34 @@ handleChange = (stName) => (event) => {
                     inputProps={{
                       maxLength: 6,
                     }}
-                    value={this.state.userInfo.pincode}
+                    value={this.state.pincode}
                     onChange={this.handleChange('pincode')}
                   /> 
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
+          <Grid item xs={12} className={classes.btnRow}>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={this.handleUpdate}
+                className={classes.button}
+            >
+                Update
+            </Button>
+          </Grid>
         </Paper>
       </div>)
   }
 }
 
-export default withStyles(styles)(UserInfo)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({
+    updateUserInfo,
+  }, dispatch)
+
+const mapStateToProps = state => ({
+    // usersList: state.getIn(['RegistrationContainer', 'usersList']).toJS(),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(MyInfo))

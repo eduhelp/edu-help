@@ -6,6 +6,7 @@ import {
   LOGOUT_SUCCESS,
   GET_USER_DETAILS_SUCCESS,
   GET_AUTH_INFO_SUCCESS,
+  UPDATE_USER_INFO_SUCCESS,
 } from './actionType'
 import { setCookie, deleteCookie } from '../../components/Common/Utils'
 
@@ -54,6 +55,11 @@ export default function usersReducer (state = initialState, action) {
       const authInfoReload = {isAuth: true, data: action.data, expTime: dt }
       return state
         .set('authInfo', fromJS(authInfoReload))
+    
+    case UPDATE_USER_INFO_SUCCESS:
+      window.localStorage.setItem('AuthInfo', JSON.stringify(action.data));
+      return state
+        .set('authInfo', fromJS(authInfo))
         
     default:
       return state

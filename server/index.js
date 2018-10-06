@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 var router = express.Router();
-
+var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status"
 
 
 router.get('/*', function(req,res) {
@@ -69,7 +69,7 @@ router.get('/rest/usersList', async function(req, res) {
 });
 
 router.post('/rest/addUser', async function(req, res) {
-    var curQuery = "insert into users(username, pwd, email, mobile, dob, gender, address, pincode, sponsor_id, status) values('"+req.body.username+"','"+req.body.pwd+"','"+req.body.email+"',"+req.body.mobile+",'"+req.body.dob+"','"+req.body.gender+"','"+req.body.address+"',"+req.body.pincode+","+req.body.sponsor_id+",'Inactive')"
+    var curQuery = "insert into users(username, pwd, email, mobile, dob, gender, address, pincode, sponsor_id, status) values('"+req.body.username+"','"+req.body.pwd+"','"+req.body.email+"','"+req.body.mobile+"','"+req.body.dob+"','"+req.body.gender+"','"+req.body.address+"',"+req.body.pincode+","+req.body.sponsor_id+",'Inactive')"
     var result = await connectDB(curQuery, res)
     if(result) {
         var insQuery = "insert into payments(from_id, to_id, payment_level, payment_value, paid_status, receiver_type, receiver_confirm_date) values("+result[0].user_id+","+req.body.sponsor_id+",1,100,'Pending','Sponsor','"+getCurrentDate()+"')"
@@ -119,19 +119,30 @@ async function insertToPosition(user_id, resArr, res) {
 
 async function updateUser(user_id, res) {
     var curQuery = "update users set status='Active' where user_id="+user_id
-    console.log(curQuery)
     var result = await connectDB(curQuery, res)
     return result
 }
+
 router.post('/rest/userLogin', async function(req, res) {
-    var curQuery = "select user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status from users where username='"+req.body.username+"' and pwd='"+req.body.pwd+"'"
-    console.log(curQuery)
+    var curQuery = "select user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status from users where (username='"+req.body.username+"' or mobile='"+req.body.username+"') and pwd='"+req.body.pwd+"'"
     var result = await connectDB(curQuery, res)
     if(result) {
         if(result.length === 0) {
             res.status(403).send({status: true, variant: 'error', message: 'Invalid username or password'})
         } else {
             res.status(200).send(result[0])
+        }
+    }
+});
+
+router.post('/rest/updateUserInfo', async function(req, res) {
+    var curQuery = "update users set email='"+req.body.email+"', dob='"+req.body.dob+"', gender='"+req.body.gender+"', address='"+req.body.address+"', pincode='"+req.body.pincode+"' where user_id="+req.body.user_id
+    var result = await connectDB(curQuery, res)
+    if(result) {
+        var selQuery = "select "+userInfoList+" from users where user_id="+req.body.user_id
+        var selResult = await connectDB(selQuery, res)
+        if (selResult) {
+            res.status(200).send(selResult[0])
         }
     }
 });
@@ -190,7 +201,7 @@ router.post('/rest/myPaymentList', async function(req, res) {
     }
 });
 
-var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status"
+
 router.post('/rest/getUserDetails', async function(req, res) {
     var curQuery = "select "+userInfoList+" from users where user_id="+req.body.user_id
     var result = await connectDB(curQuery, res)

@@ -32,3 +32,12 @@ export function deleteCookie(cname) {
     window.document.cookie = cname+"="+"; "+expires;//Set the cookie with name and the expiration date
  
 }
+
+export function changeDateFormat(checkDate) {
+    const dt = new Date(checkDate)
+    var dd = dt.getDate();
+    var mm = dt.getMonth()+1; //January is 0!
+    mm = mm < 10 ? '0'+mm : mm
+    var yyyy = dt.getFullYear();
+    return yyyy + '-' + mm + '-' + dd
+}

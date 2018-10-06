@@ -12,23 +12,18 @@ const styles = {
 };
 
 
-export class Auth extends React.Component {
-  constructor(props) {
-    super(props)
+export class ChangePassword extends React.Component {
+  constructor() {
+    super()
     
   }
   
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.authInfo.isAuth) {
-        
-    }
-  }
 
   render() {
     const { classes } = this.props
     return (
       <div id="mainContainer">
-        Home page content comes here
+        ChangePassword page content comes here
       </div>)
   }
 }
@@ -38,6 +33,6 @@ const mapDispatchToProps = dispatch =>
   }, dispatch)
 
 const mapStateToProps = state => ({
-    authInfo: state.getIn(['RegistrationContainer', 'authInfo']).toJS(),
+    // usersList: state.getIn(['RegistrationContainer', 'usersList']).toJS(),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Auth))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ChangePassword))

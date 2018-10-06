@@ -20,6 +20,7 @@ import Dashboard from '../Dashboard/Dashboard'
 import ConfirmReceiver from '../Payments/ConfirmReceiver'
 import MakePayment from '../Payments/MakePayment'
 import ReceivePayment from '../Payments/ReceivePayment'
+import Profile from '../Profile/Profile'
 import MyTree from '../Placements/MyTree'
 import Button from '@material-ui/core/Button';
 import { Dialog } from '@material-ui/core';
@@ -126,6 +127,13 @@ const styles = theme => ({
     fontSize: 28,
     fontFamily: 'sans-serif',
   },
+  userInfo: {
+      position: 'absolute',
+      right: 10,
+  },
+  userNameDisp: {
+      color: '#000',
+  },
 })
 
 class MiniDrawer extends React.Component {
@@ -175,19 +183,21 @@ class MiniDrawer extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <div className={classes.companyTitle}>CGN International</div>
-            {(isAuth) ? (
-                <div> 
-                    Welcome {data.username}
-                    <Button color="primary" className={classes.button} onClick={this.confirmLogout}>
-                        Logout
+            <div className={classes.companyTitle}>Edu Help</div>
+            <div className={classes.userInfo}>
+                {(isAuth) ? (
+                    <div className={classes.userNameDisp}> 
+                        Welcome {data.username} 
+                        <Button color="primary" className={classes.button} onClick={this.confirmLogout}>
+                            Logout
+                        </Button>
+                    </div>
+                ) : (
+                    <Button color="primary" className={classes.button} onClick={this.openDrawer}>
+                        Login
                     </Button>
-                </div>
-            ) : (
-                <Button color="primary" className={classes.button} onClick={this.openDrawer}>
-                    Login
-                </Button>
-            )}
+                )}
+            </div>
             <SideDrawer
               drawerPosition="right"
               drawerContent={<Login closeDrawer={this.closeDrawer} />}
@@ -231,6 +241,7 @@ class MiniDrawer extends React.Component {
                     <Route exact path="/make_payment/:levelIndex/:paymentTo" component={MakePayment} />
                     <Route exact path="/receive_payment/:levelIndex" component={ReceivePayment} />
                     <Route exact path="/my_tree" component={MyTree} />
+                    <Route exact path='/profile' component={Profile} />
                 </Switch>
               </Grid>
             </Grid>
