@@ -14,7 +14,12 @@ const styles = {
     margin: 10,
     padding: 10,
     textAlign: 'center',
-  }
+  },
+  sponsorBox: {
+    backgroundColor: '#ede2e3',
+    textAlign: 'left',
+    padding: 10,
+  },
 };
 
 
@@ -34,9 +39,15 @@ export class SponsorInfo extends React.Component {
   }
 
 handleChange = (event) => {
-    this.setState({ sponsorInfo: { 
-        sponsor_id : event.target.value
-      }})
+  this.setState({ sponsorInfo: { 
+    sponsor_id : event.target.value
+  }})
+  if (!event.target.value) {
+    this.props.getUserCB(this.state.sponsorInfo)
+    setTimeout(()=> {
+      this.props.submitCB(this.state.sponsorInfo)
+    }, 100)
+  }
 }
 
 handleSubmit = (event) => {
@@ -72,11 +83,13 @@ handleSubmit = (event) => {
                 Go
               </Button>
             </Grid>
-            <Grid item xs={6}>
-              Sponsor Id : {this.props.sponsorDetails.user_id} <br />
-              Sponsor Name : {this.props.sponsorDetails.username} <br />
-              Sponsor Mobile: {this.props.sponsorDetails.mobile} <br />
-            </Grid>
+            {(this.props.sponsorDetails && this.state.sponsorInfo.sponsor_id) && 
+              <Grid item xs={6} className={classes.sponsorBox}>
+                Sponsor Id : {this.props.sponsorDetails.user_id} <br />
+                Sponsor Name : {this.props.sponsorDetails.username} <br />
+                Sponsor Mobile: {this.props.sponsorDetails.mobile} <br />
+              </Grid>
+            }
           </Grid>
            
         </Paper>

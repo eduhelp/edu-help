@@ -7,6 +7,7 @@ import {
   GET_USER_DETAILS_SUCCESS,
   GET_AUTH_INFO_SUCCESS,
   UPDATE_USER_INFO_SUCCESS,
+  CHECK_AVAILABLE_SUCCESS,
 } from './actionType'
 import { setCookie, deleteCookie } from '../../components/Common/Utils'
 
@@ -16,7 +17,11 @@ export const initialState = fromJS({
   authInfo: {
     isAuth: false
   },
-  userDetails: {}
+  userDetails: {},
+  availableStatus: {
+    username: false,
+    mobile: false
+  }
 })
 
 
@@ -60,6 +65,11 @@ export default function usersReducer (state = initialState, action) {
       window.localStorage.setItem('AuthInfo', JSON.stringify(action.data));
       return state
         .set('authInfo', fromJS(authInfo))
+
+    case CHECK_AVAILABLE_SUCCESS:
+      const stausTempArr = ['availableStatus', action.data.field_name]
+      return state
+        .setIn(stausTempArr, action.data.availableStatus)
         
     default:
       return state

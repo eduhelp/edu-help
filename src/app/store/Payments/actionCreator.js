@@ -13,7 +13,7 @@ import { postService } from '../../services/Registration'
 
 export function getPaymentDetails (payload) {
   return dispatch => {
-    return postService('paymentDetails',payload)
+    return postService('payments/paymentDetails',payload)
     .then((resp) => {
       dispatch({data: resp, type: GET_PAYMENTS_SUCCESS})
     })
@@ -25,7 +25,7 @@ export function getPaymentDetails (payload) {
 
 export function getLevelPayments () {
   return dispatch => {
-    return postService('levelPayments')
+    return postService('payments/levelPayments')
     .then((resp) => {
       dispatch({data: resp, type: GET_LEVEL_PAYMENTS_SUCCESS})
     })
@@ -37,7 +37,7 @@ export function getLevelPayments () {
 
 export function makeLevelPayment (payload) {
   return dispatch => {
-    return postService('makeLevelPayment', payload)
+    return postService('payments/makeLevelPayment', payload)
     .then((resp) => {
       dispatch({data: resp, type: MAKE_PAYMENT_SUCCESS})
     })
@@ -49,7 +49,7 @@ export function makeLevelPayment (payload) {
 
 export function getReceivePaymentList (payload) {
   return dispatch => {
-    return postService('receivePaymentList', payload)
+    return postService('payments/receivePaymentList', payload)
     .then((resp) => {
       dispatch({data: resp, type: RECEIVE_PAYMENT_LIST_SUCCESS})
     })
@@ -61,7 +61,7 @@ export function getReceivePaymentList (payload) {
 
 export function confirmLevelPayment (payload) {
   return dispatch => {
-    return postService('confirmLevelPayment', payload)
+    return postService('payments/confirmLevelPayment', payload)
     .then((resp) => {
       dispatch({data: resp, type: CONFIRM_PAYMENT_SUCCESS})
     })
@@ -73,7 +73,7 @@ export function confirmLevelPayment (payload) {
 
 export function getMyPaymentList (payload) {
   return dispatch => {
-    return postService('myPaymentList', payload)
+    return postService('payments/myPaymentList', payload)
     .then((resp) => {
       dispatch({data: resp, type: MY_PAYMENT_LIST_SUCCESS})
     })
@@ -85,7 +85,7 @@ export function getMyPaymentList (payload) {
 
 export function getLevelEligibility (payload) {
   return dispatch => {
-    return postService('levelEligibility', payload)
+    return postService('payments/levelEligibility', payload)
     .then((resp) => {
       dispatch({data: resp, type: LEVEL_ELIGIBILIY_SUCCESS})
     })
@@ -97,7 +97,7 @@ export function getLevelEligibility (payload) {
 
 export function addConfirmReceiver (payload) {
   return dispatch => {
-    return postService('addConfirmReceiver', payload)
+    return postService('payments/addConfirmReceiver', payload)
     .then((resp) => {
       dispatch({data: resp, type: CONFIRM_RECEIVER_SUCCESS})
     })

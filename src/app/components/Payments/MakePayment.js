@@ -70,6 +70,7 @@ class MakePayment extends React.Component {
                 submitCB = {this.submitPaymentDetails}
                 authInfo={this.props.authInfo}
                 makePaymentObj={this.props.makePaymentObj}
+                paymentEntryInfo={this.state.paymentEntryInfo}
               />
             </div>
           )
@@ -104,7 +105,8 @@ class MakePayment extends React.Component {
             payment_mode: paymentEntryInfo.payment_mode,
             from_bank: paymentEntryInfo.from_bank,
             to_bank: paymentEntryInfo.to_bank,
-            transaction_id: paymentEntryInfo.transaction_id
+            transaction_id: paymentEntryInfo.transaction_id,
+            transaction_date: paymentEntryInfo.transaction_date
           } 
           this.props.makeLevelPayment(sendData)
       this.setState({
@@ -164,15 +166,13 @@ class MakePayment extends React.Component {
   render() {
     const { classes, makePaymentObj } = this.props;
     const steps = this.getSteps(this.props);
-    const { activeStep, paymentInfo, curPaymentObject } = this.state;
-    let nextBtnDisabledState = false
-    /*if (activeStep === 1 && SponsorInfo !== 'undefined' && SponsorInfo !== '') {
-      nextBtnDisabledState = true
-    } else if (activeStep === 2 && UserInfo !== 'undefined' && UserInfo !== '') {
-      nextBtnDisabledState = true
-    } else if (activeStep === 3) {
-      nextBtnDisabledState = true
-    }  */
+    const { activeStep, paymentEntryInfo } = this.state;
+    let nextBtnDisabledState = true
+    if (activeStep === 0 && paymentEntryInfo.transaction_id !== undefined && paymentEntryInfo.transaction_id !== '') {
+        nextBtnDisabledState = false
+    } else if (activeStep === 1) {
+        nextBtnDisabledState = false 
+    }  
     const levelText = (makePaymentObj.payment_level === 1) ? "Level "+makePaymentObj.payment_level+" (Sponsor)" : "Level "+makePaymentObj.payment_level
     return (
       <div className={classes.root}>
@@ -231,7 +231,7 @@ class MakePayment extends React.Component {
                                 onClick={this.props.cancelCB}
                                 className={classes.button}
                                 >
-                                Cancel
+                                Back to Dashboard
                                 </Button>
                                 <Button
                                 disabled={activeStep === 0}

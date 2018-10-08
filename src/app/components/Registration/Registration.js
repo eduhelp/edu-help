@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import SponsorInfo from './SponsorInfo'
 import UserInfo from './UserInfo'
 import ConfirmInfo from './ConfirmInfo'
-import { addUser, getUserDetails } from '../../store/Registration/actionCreator'
+import { addUser, getUserDetails, checkAvailability } from '../../store/Registration/actionCreator'
 
 const styles = theme => ({
   root: {
@@ -41,6 +41,7 @@ class Registration extends React.Component {
             stepCompleted: false,
             sponsorInfo: '',
             userInfo: '',
+            userInfoError: '',
             }
     }
     
@@ -68,6 +69,13 @@ class Registration extends React.Component {
       this.props.getUserDetails(sendData)
     }
 
+    checkAvailability = (field_name, field_value) => {
+      const sendData = {
+        field_name,
+        field_value
+      }
+      this.props.checkAvailability(sendData)
+    }
     getStepContent(step) {
       switch (step) {
         case 0:
@@ -87,6 +95,9 @@ class Registration extends React.Component {
               <UserInfo 
                 submitCB = {this.submitUserInfo}
                 userInfo={this.state.userInfo}
+                userInfoError={this.state.userInfoError}
+                checkAvailabilityCB={this.checkAvailability}
+                availableStatus={this.props.availableStatus}
               />
             </div>
           )
@@ -96,6 +107,7 @@ class Registration extends React.Component {
               <ConfirmInfo
                 sponsorInfo={this.state.sponsorInfo}
                 userInfo={this.state.userInfo}
+                sponsorDetails = {this.props.userDetails}
               />
             </div>
           )
@@ -113,6 +125,14 @@ class Registration extends React.Component {
     return false
   };
 
+  validateUserInfo = () => {
+    if(!this.state.userInfo.username) {
+      this.state.userInfoError.username = 'Required'
+      return false
+    }
+    return true
+  }
+
   handleNext = () => {
     const { activeStep } = this.state;
     let { skipped } = this.state;
@@ -123,6 +143,14 @@ class Registration extends React.Component {
         activeStep: activeStep + 1,
         skipped,
       });
+    } if( activeStep === 1) {
+      if(this.validateUserInfo()) {
+        this.setState({
+          activeStep: activeStep + 1,
+          skipped,
+        });
+      }
+      console.log('validate user form')
     } else {
       if (this.isStepSkipped(activeStep)) {
         skipped = new Set(skipped.values());
@@ -176,15 +204,16 @@ class Registration extends React.Component {
   render() {
     const { classes } = this.props;
     const steps = this.getSteps(this.props);
-    const { activeStep, SponsorInfo } = this.state;
-    let nextBtnDisabledState = false
-    /*if (activeStep === 1 && SponsorInfo !== 'undefined' && SponsorInfo !== '') {
-      nextBtnDisabledState = true
-    } else if (activeStep === 2 && UserInfo !== 'undefined' && UserInfo !== '') {
-      nextBtnDisabledState = true
-    } else if (activeStep === 3) {
-      nextBtnDisabledState = true
-    }  */
+    const { activeStep, sponsorInfo, userInfo } = this.state;
+    let nextBtnDisabledState = true
+    console.log(activeStep, sponsorInfo.sponsor_id)
+    if (activeStep === 0 && sponsorInfo.sponsor_id !== undefined && sponsorInfo.sponsor_id !== '') {
+      nextBtnDisabledState = false
+    } else if (activeStep === 1 && userInfo !== 'undefined' && userInfo !== '') {
+      nextBtnDisabledState = false
+    } else if (activeStep === 2) {
+      nextBtnDisabledState = false 
+    }  
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
@@ -267,10 +296,12 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators({
     addUser,
     getUserDetails,
+    checkAvailability,
   }, dispatch)
 
 const mapStateToProps = state => ({
   userDetails: state.getIn(['RegistrationContainer', 'userDetails']).toJS(),
+  availableStatus: state.getIn(['RegistrationContainer', 'availableStatus']).toJS(),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Registration))

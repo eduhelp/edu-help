@@ -38,6 +38,7 @@ export class DashboardDetails extends React.Component {
   render() {
     const { classes } = this.props
     const myTreeLevels = _.groupBy(this.props.myTree, (obj) => { return obj.level })
+    const level1SponsorObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == 1) })
     return (
       <div id="mainContainer">
         <Grid container>
@@ -73,10 +74,29 @@ export class DashboardDetails extends React.Component {
                                             Status
                                         </Grid>
                                     </Grid>
+                                    {level1SponsorObject && 
+                                        <Grid container className={classes.dataRowEven}>
+                                            <Grid item xs={3}>
+                                                to sponsor
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                {this.props.sponsorDetails.username} ({this.props.sponsorDetails.user_id})
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                {(level1SponsorObject.paid_status == 'Completed') ? (
+                                                    <span>Done</span>
+                                                ) : (level1SponsorObject.paid_status == 'Pending') ? (
+                                                    <span className={classes.navLink} onClick={this.makePayment(level1SponsorObject)}>Make Payment</span>
+                                                ) : (
+                                                    <span>Issue with payment, contact admin</span>
+                                                )}
+                                            </Grid>
+                                        </Grid>
+                                    }
                                     {this.props.myTopLevel.map((option, key) => {
                                         const curPaymentObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == option.level) })
                                         console.log(curPaymentObject)
-                                        //if(option.level > 1)  {
+                                        if(option.level > 1)  {
                                             const levText = 'level '+option.level
                                             return (
                                                 <Grid container className={classes.dataRowEven} key={key}>
@@ -103,7 +123,7 @@ export class DashboardDetails extends React.Component {
                                                     </Grid>
                                                 </Grid>
                                             )
-                                        //}
+                                        }
                                     })
                                     }
                                 </Grid>

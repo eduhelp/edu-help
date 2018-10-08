@@ -6,7 +6,7 @@ import {
   LOGOUT_SUCCESS,
   GET_USER_DETAILS_SUCCESS,
   GET_AUTH_INFO_SUCCESS,
-  UPDATE_USER_INFO_SUCCESS,
+  CHECK_AVAILABLE_SUCCESS,
 } from './actionType'
 import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
 // import config from './../../config/apiConfig'
@@ -29,7 +29,7 @@ export function getUsersAPI () {
 
 export function getUsersAPITemp () {
   return dispatch => {
-    return getService('usersList')
+    return getService('users/usersList')
     .then((resp) => {
       dispatch({data: resp, type: GET_USERS_SUCCESS})
     })
@@ -41,7 +41,7 @@ export function getUsersAPITemp () {
 
 export function addUser (payload) {
   return dispatch => {
-    return postService('addUser', payload)
+    return postService('users/addUser', payload)
     .then((resp) => {
       dispatch({data: resp, type: ADD_USER_SUCCESS})
       //dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
@@ -54,7 +54,7 @@ export function addUser (payload) {
 
 export function userLogin (payload) {
   return dispatch => {
-    return postService('userLogin', payload)
+    return postService('users/userLogin', payload)
     .then((resp) => {
       dispatch({data: resp, type: LOGIN_SUCCESS})
       var succSnackbar = {status: true, variant: 'success', message: 'successfully logged in'}
@@ -83,7 +83,7 @@ export function userLogout () {
 
 export function changeUserStatus (payload) {
   return dispatch => {
-    return postService('changeUserStatus', payload)
+    return postService('users/changeUserStatus', payload)
     .then((resp) => {
       dispatch({data: resp, type: ADD_USER_SUCCESS})
     })
@@ -95,7 +95,7 @@ export function changeUserStatus (payload) {
 
 export function getUserDetails (payload) {
   return dispatch => {
-    return postService('getUserDetails', payload)
+    return postService('users/getUserDetails', payload)
     .then((resp) => {
       dispatch({data: resp, type: GET_USER_DETAILS_SUCCESS })
     })
@@ -111,7 +111,7 @@ export function getAuthInfo (payload) {
 
 export function updateUserInfo(payload) {
   return dispatch => {
-    return postService('updateUserInfo', payload)
+    return postService('users/updateUserInfo', payload)
     .then((resp) => {
       dispatch({ data: resp, type: GET_AUTH_INFO_SUCCESS })
       const succMsg = {status: true, variant: 'success', message: 'Your details updated successfully'}
@@ -122,3 +122,44 @@ export function updateUserInfo(payload) {
     })
   }
 }
+
+export function updatePaymentInfo(payload) {
+  return dispatch => {
+    return postService('users/updatePaymentInfo', payload)
+    .then((resp) => {
+      dispatch({ data: resp, type: GET_AUTH_INFO_SUCCESS })
+      const succMsg = {status: true, variant: 'success', message: 'Your details updated successfully'}
+      dispatch({ snackMessage: succMsg, type: TOGGLE_SNACKBAR })
+    })
+    .catch((error) => {
+      dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
+    })
+  }
+}
+
+export function changePassword(payload) {
+  return dispatch => {
+    return postService('users/changePassword', payload)
+    .then((resp) => {
+      dispatch({ data: resp, type: GET_AUTH_INFO_SUCCESS })
+      const succMsg = {status: true, variant: 'success', message: 'password successfully changed'}
+      dispatch({ snackMessage: succMsg, type: TOGGLE_SNACKBAR })
+    })
+    .catch((error) => {
+      dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
+    })
+  }
+}
+
+export function checkAvailability(payload) {
+  return dispatch => {
+    return postService('users/checkAvailability', payload)
+    .then((resp) => {
+      dispatch({ data: resp, type: CHECK_AVAILABLE_SUCCESS })
+    })
+    .catch((error) => {
+      dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
+    })
+  }
+}
+

@@ -79,10 +79,22 @@ handleChange = (stName) => (event) => {
                     <Grid item xs={9}>
                       {this.props.sponsorInfo.sponsor_id} 
                     </Grid>
+                    <Grid item xs={3}>
+                      Sponsor Name : 
+                    </Grid>
+                    <Grid item xs={9}>
+                      {this.props.sponsorDetails.username} 
+                    </Grid>
+                    <Grid item xs={3}>
+                      Sponsor Mobile : 
+                    </Grid>
+                    <Grid item xs={9}>
+                      {this.props.sponsorDetails.mobile} 
+                    </Grid>
                   </Grid> 
                 </Grid>
                 <Grid item xs={6}>
-                  sponsor details comes here
+                  
                 </Grid>
               </Grid>
             </Grid>

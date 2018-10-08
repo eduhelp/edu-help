@@ -48,15 +48,8 @@ export class MyInfo extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('nextProps.authInfo')
-    console.log(nextProps.authInfo)
-  }
-
   componentWillMount(){
-    console.log('componentWillMount')
     const dob = changeDateFormat(this.props.authInfo.dob)
-    console.log(dob)
     this.setState({ 
         email: this.props.authInfo.email,
         dob: dob,
@@ -67,7 +60,6 @@ export class MyInfo extends React.Component {
   }
 
     handleChange = (stName) => (event) => {
-        console.log(event.target.value)
         this.setState({ 
             [stName] : event.target.value
         })
