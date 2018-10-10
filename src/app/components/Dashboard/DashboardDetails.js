@@ -113,7 +113,9 @@ export class DashboardDetails extends React.Component {
                                                 {this.props.sponsorDetails.username} ({this.props.sponsorDetails.user_id})
                                             </Grid>
                                             <Grid item xs={3}>
-                                                <span className={classes.navLink} onClick={this.showBankDetails(this.props.sponsorDetails.username,level1SponsorObject.receiverInfo)}>Bank Details</span>
+                                                {(level1SponsorObject.receiverInfo.bank_details && 
+                                                    <span className={classes.navLink} onClick={this.showBankDetails(this.props.sponsorDetails.username,level1SponsorObject.receiverInfo)}>Bank Details</span>
+                                                )}
                                             </Grid>
                                             <Grid item xs={3}>
                                                 {(level1SponsorObject.paid_status == 'Completed') ? (
@@ -140,7 +142,9 @@ export class DashboardDetails extends React.Component {
                                                         {option.nodeInfo.username} ({option.nodeInfo.user_id})
                                                     </Grid>
                                                     <Grid item xs={3}>
-                                                        <span className={classes.navLink} onClick={this.showBankDetails(option.nodeInfo.username,option.nodeInfo)}>Bank Details</span>
+                                                        {(option.nodeInfo.bank_details && 
+                                                            <span className={classes.navLink} onClick={this.showBankDetails(option.nodeInfo.username,option.nodeInfo)}>Bank Details</span>
+                                                        )}
                                                     </Grid>
                                                     <Grid item xs={3}>
                                                         {(curPaymentObject) ? (
