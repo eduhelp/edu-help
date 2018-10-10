@@ -31,7 +31,7 @@ let pool = new pg.Pool({
     password: 'dbPwd247',
     database: 'EduHelp',
     max: 10,
-    host: 'localhost',
+    host: '103.235.104.177',
     user: 'dbuser'
 })
 
