@@ -11,16 +11,28 @@ let pool = new pg.Pool({
     host: 'localhost',
     user: 'postgres'
 })
-*/
+
 
 //server
 let pool = new pg.Pool({
     port: 5432,
-    password: 'fgjgo874nvj^7hv',
+    password: 'fgjgo874nvj7hv',
     database: 'EduHelp',
     max: 10,
     host: 'localhost',
     user: 'postgres'
+})
+*/
+
+
+//server
+let pool = new pg.Pool({
+    port: 5432,
+    password: 'dbPwd247',
+    database: 'EduHelp',
+    max: 10,
+    host: 'localhost',
+    user: 'dbuser'
 })
 
 module.exports = {
