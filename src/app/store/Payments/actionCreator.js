@@ -8,6 +8,7 @@ import {
   CONFIRM_RECEIVER_SUCCESS,
 } from './actionType'
 // import config from './../../config/apiConfig'
+import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
 import { postService } from '../../services/Registration'
 
 
@@ -39,7 +40,9 @@ export function makeLevelPayment (payload) {
   return dispatch => {
     return postService('payments/makeLevelPayment', payload)
     .then((resp) => {
-      dispatch({data: resp, type: MAKE_PAYMENT_SUCCESS})
+      // dispatch({data: resp, type: MAKE_PAYMENT_SUCCESS})
+      var succSnackbar = {status: true, variant: 'success', message: 'payment details successfully updated'}
+      dispatch({ snackMessage: succSnackbar, type: TOGGLE_SNACKBAR })
     })
     .catch((error) => {
       dispatch({ type: MAKE_PAYMENT_FAIL})
@@ -64,6 +67,8 @@ export function confirmLevelPayment (payload) {
     return postService('payments/confirmLevelPayment', payload)
     .then((resp) => {
       dispatch({data: resp, type: CONFIRM_PAYMENT_SUCCESS})
+      var succSnackbar = {status: true, variant: 'success', message: 'payment confirmed and entry placed'}
+      dispatch({ snackMessage: succSnackbar, type: TOGGLE_SNACKBAR })
     })
     .catch((error) => {
       dispatch({ type: CONFIRM_PAYMENT_FAIL})
@@ -100,6 +105,8 @@ export function addConfirmReceiver (payload) {
     return postService('payments/addConfirmReceiver', payload)
     .then((resp) => {
       dispatch({data: resp, type: CONFIRM_RECEIVER_SUCCESS})
+      var succSnackbar = {status: true, variant: 'success', message: 'Receiver confirmed'}
+      dispatch({ snackMessage: succSnackbar, type: TOGGLE_SNACKBAR })
     })
     .catch((error) => {
       dispatch({ type: MY_PAYMENT_LIST_FAIL})

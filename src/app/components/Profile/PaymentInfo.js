@@ -62,12 +62,12 @@ export class PaymentInfo extends React.Component {
                 wallet_gp_name: bank_details.wallet_gp_name
             })
         } else {
-            this.setState({ 
+            /*this.setState({ 
                 wallet_paytm_number: authInfo.mobile,
                 wallet_gp_number: authInfo.mobile,
                 wallet_paytm_name: authInfo.username,
                 wallet_gp_name: authInfo.username
-            })
+            }) */
         }
         
     }

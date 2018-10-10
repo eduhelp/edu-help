@@ -127,6 +127,7 @@ class ConfirmReceiver extends React.Component {
             receiver_type: receiver_type
           }
           this.props.addConfirmReceiver(sendData)
+          window.location.replace('/dashboard')
       this.setState({
         activeStep: activeStep + 1,
         skipped,

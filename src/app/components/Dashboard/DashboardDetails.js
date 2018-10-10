@@ -3,12 +3,17 @@ import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Dialog from '../Common/Dialog'
+import BankDetails from './BankDetails'
 
 export class DashboardDetails extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
         myTreeLevels: [],
+        dialogOpenStatus: false,
+        dialogTitle: '',
+        dialogContent: ''
     }
   }
 
@@ -34,13 +39,35 @@ export class DashboardDetails extends React.Component {
     console.log(paymentObject)
     this.props.makePaymentCB('MakePayment', paymentObject)
   }
- 
+  
+  showBankDetails = (username, receiverInfo) => event => {
+    this.setState({
+        dialogOpenStatus: true,
+        dialogTitle: username+"'s Bank Details",
+        dialogContent: <BankDetails details={receiverInfo.bank_details} />
+      })
+  }
+  closeDialog = () => {
+      this.setState({
+        dialogOpenStatus: false,
+        dialogTitle: '',
+        dialogContent: ''
+      })
+  }
+
   render() {
     const { classes } = this.props
     const myTreeLevels = _.groupBy(this.props.myTree, (obj) => { return obj.level })
     const level1SponsorObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == 1) })
     return (
       <div id="mainContainer">
+        <Dialog
+            dialogOpenStatus = {this.state.dialogOpenStatus}
+            dialogTitle = {this.state.dialogTitle}
+            dialogContent = {this.state.dialogContent}
+            closeCB = {this.closeDialog}
+
+        />
         <Grid container>
             <Grid item xs={12}>
                 <Paper className={classes.paper}>
@@ -67,8 +94,11 @@ export class DashboardDetails extends React.Component {
                                         <Grid item xs={3}>
                                             Level
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item xs={3}>
                                             Parent (User ID)
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            Bank Details
                                         </Grid>
                                         <Grid item xs={3}>
                                             Status
@@ -79,8 +109,11 @@ export class DashboardDetails extends React.Component {
                                             <Grid item xs={3}>
                                                 to sponsor
                                             </Grid>
-                                            <Grid item xs={6}>
+                                            <Grid item xs={3}>
                                                 {this.props.sponsorDetails.username} ({this.props.sponsorDetails.user_id})
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                <span className={classes.navLink} onClick={this.showBankDetails(this.props.sponsorDetails.username,level1SponsorObject.receiverInfo)}>Bank Details</span>
                                             </Grid>
                                             <Grid item xs={3}>
                                                 {(level1SponsorObject.paid_status == 'Completed') ? (
@@ -103,8 +136,11 @@ export class DashboardDetails extends React.Component {
                                                     <Grid item xs={3}>
                                                         {levText}
                                                     </Grid>
-                                                    <Grid item xs={6}>
+                                                    <Grid item xs={3}>
                                                         {option.nodeInfo.username} ({option.nodeInfo.user_id})
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <span className={classes.navLink} onClick={this.showBankDetails(option.nodeInfo.username,option.nodeInfo)}>Bank Details</span>
                                                     </Grid>
                                                     <Grid item xs={3}>
                                                         {(curPaymentObject) ? (

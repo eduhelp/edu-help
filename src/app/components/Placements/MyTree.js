@@ -21,9 +21,14 @@ const styles = {
   },
   rowHead: {
     padding: 10,
+    background: '#333',
+    color: '#fff'
+  },
+  rowOdd: {
+    padding: 10,
     background: '#ebebeb',
   },
-  rowDetails: {
+  rowEven: {
     padding: 10,
     background: '#fbfbfb',
   },
@@ -72,9 +77,9 @@ export class MyTree extends React.Component {
                     </Grid>
                 </Grid>
             </Grid>
-            {Object.keys(group_levels).map((key) => {
+            {Object.keys(group_levels).map((key, index) => {
                 return (
-                <Grid item xs={12} className={classes.rowDetails}>
+                <Grid item xs={12} className={index %2 ? classes.rowEven : classes.rowOdd} key={index}>
                     <Grid container>
                         <Grid item xs={2}>
                             Level{key}
@@ -83,7 +88,7 @@ export class MyTree extends React.Component {
                             {group_levels[key].map((option) => {
                                 return (
                                     <div>
-                                        {option.nodeInfo.username} ({option.nodeInfo.user_id}) - parent : {option.parent_id}
+                                        {option.nodeInfo.username} ({option.nodeInfo.user_id}) || placed under : {option.parent_id} || Sponsor Id : {option.nodeInfo.sponsor_id}
                                     </div>
                                 )
                             })}

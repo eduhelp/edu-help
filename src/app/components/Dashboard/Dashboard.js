@@ -30,6 +30,10 @@ const styles = {
     padding: 10,
     background: '#efefef',
   },
+  navLink: {
+    textDecoration: 'underline',
+    cursor: 'pointer',
+  },
 };
 
 
@@ -65,11 +69,16 @@ export class Dashboard extends React.Component {
     this.props.getReceivePaymentList(listData)
     this.props.getMyPaymentList(sendData)
     this.props.getLevelPayments()
-    this.props.getActiveSmartSpreader()
+    // this.props.getActiveSmartSpreader()
 }
 
 confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, treeParentInfo) => {
-    //if(!levelEligibility) this.props.getActiveSmartSpreader()
+    if(!levelEligibility) {
+        var sendData = {
+            payment_levle: levelIndex
+        }
+        this.props.getActiveSmartSpreader(sendData)
+    }
     console.log(currentPage, levelIndex, treeParentID, levelEligibility, treeParentInfo)
     this.setState({
         currentPage,

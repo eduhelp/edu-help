@@ -126,6 +126,7 @@ class ReceivePayment extends React.Component {
             payment_level: this.props.match.params.levelIndex
           }
           this.props.confirmLevelPayment(sendData)
+          window.location.replace('/dashboard')
       this.setState({
         activeStep: activeStep + 1,
         skipped,

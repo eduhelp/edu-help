@@ -109,6 +109,7 @@ class MakePayment extends React.Component {
             transaction_date: paymentEntryInfo.transaction_date
           } 
           this.props.makeLevelPayment(sendData)
+          window.location.replace('/dashboard')
       this.setState({
         activeStep: activeStep + 1,
         skipped,
