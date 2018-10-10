@@ -11,7 +11,7 @@ let pool = new pg.Pool({
     host: 'localhost',
     user: 'postgres'
 })
-
+*/
 
 //server
 let pool = new pg.Pool({
@@ -22,9 +22,9 @@ let pool = new pg.Pool({
     host: 'localhost',
     user: 'postgres'
 })
-*/
 
 
+/*
 //server
 let pool = new pg.Pool({
     port: 5432,
@@ -34,7 +34,7 @@ let pool = new pg.Pool({
     host: '103.235.104.177',
     user: 'dbuser'
 })
-
+*/
 module.exports = {
     connectDB: function (query, res) {
         return new Promise((resolve, reject)  => {
