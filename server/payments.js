@@ -62,8 +62,6 @@ router.post('/confirmLevelPayment', async function(req, res) {
             }
             retArr.push(nodeObj)
             var resultArray = await getRootArray(req.body.sponsor_id, retArr, curLevel, res)
-            console.log('resultArray')
-            console.log(resultArray)
             var insResult = await insertToPosition(req.body.user_id, resultArray, res)
             var updResult = await updateUser(req.body.user_id, res)
             if(updResult) {
@@ -95,10 +93,8 @@ async function getRootArray(sp_id, retArr, getLevel, res) {
 
 async function insertToPosition(user_id, resArr, res) {
     const maxObj = _.maxBy(resArr, function(o) { return o.level })
-    console.log(maxObj)
     outerLoop: for(var i=0; i<=maxObj.level; i++) {
         const filteredData = _.filter(resArr, function(obj) { return obj.level==i })
-        console.log(filteredData)
         innerLoop: for(var j=0; j<filteredData.length; j++) {
             var countQuery = "select count(*) from positions where parent_id="+filteredData[j].node
             var curRes = await pg_connect.connectDB(countQuery, res)

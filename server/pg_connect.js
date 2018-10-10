@@ -43,7 +43,6 @@ module.exports = {
                     res.status(403).send({ message: 'problem to connect to db'})
                 } else {
                     db.query(query, (err, table) => {
-                        console.log(query)
                         done();
                         if(err) {
                             res.status(403).send({ message: 'problem in executing query'})

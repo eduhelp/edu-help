@@ -20,6 +20,8 @@ async function getMyTreeArray(sp_id, retArr, getLevel, res) {
         var result = await pg_connect.connectDB(curQuery, res)
         var nodeObj = {
             level: curLevel,
+            parent_id: sp_id,
+            user_id: result[0].user_id,
             nodeInfo: result[0]
         }
         retArr.push(nodeObj)

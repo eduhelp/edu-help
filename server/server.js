@@ -38,7 +38,6 @@ function connectDB(query, res) {
             if(err) {
                 res.status(403).send({ message: 'problem to connect to db'})
             } else {
-                console.log(query)
                 db.query(query, (err, table) => {
                     done();
                     if(err) {
@@ -99,10 +98,8 @@ async function getRootArray(sp_id, retArr, getLevel, res) {
 
 async function insertToPosition(user_id, resArr, res) {
     const maxObj = _.maxBy(resArr, function(o) { return o.level })
-    console.log(maxObj)
     outerLoop: for(var i=0; i<=maxObj.level; i++) {
         const filteredData = _.filter(resArr, function(obj) { return obj.level==i })
-        console.log(filteredData)
         innerLoop: for(var j=0; j<filteredData.length; j++) {
             var countQuery = "select count(*) from positions where parent_id="+filteredData[j].node
             var curRes = await connectDB(countQuery, res)
@@ -233,8 +230,6 @@ router.post('/rest/confirmLevelPayment', async function(req, res) {
             }
             retArr.push(nodeObj)
             var resultArray = await getRootArray(req.body.sponsor_id, retArr, curLevel, res)
-            console.log('resultArray')
-            console.log(resultArray)
             var insResult = await insertToPosition(req.body.user_id, resultArray, res)
             var updResult = await updateUser(req.body.user_id, res)
             if(updResult) {
@@ -259,8 +254,6 @@ router.post('/rest/changeUserStatus', async function(req, res) {
         }
         retArr.push(nodeObj)
         var resultArray = await getRootArray(req.body.sponsor_id, retArr, curLevel, res)
-        console.log('resultArray')
-        console.log(resultArray)
         var insReturn = await insertToPosition(req.body.user_id, resultArray, res)
     }
 });
