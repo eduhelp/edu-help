@@ -38,7 +38,7 @@ router.post('/myTopLevel', async function(req, res) {
     var resultArray = []
     var curQuery = "select * from positions where user_id="+req.body.user_id
     var curResult = await pg_connect.connectDB(curQuery, res)
-    if (curResult.length > 0) {
+    if (curResult.length > 0 && req.body.user_id !== '1') {
         resultArray = await getTopLevelArray(curResult[0].parent_id, retArr, curLevel, req.body.max_level, res)
     }
     res.status(200).send(resultArray)
@@ -47,8 +47,8 @@ router.post('/myTopLevel', async function(req, res) {
 async function getTopLevelArray(user_id, retArr, getLevel, max_level, res) {
     var curQuery = "select * from positions where user_id="+user_id
     var curResult = await pg_connect.connectDB(curQuery, res)
-    var curQuery = "select "+userInfoList+" from users where user_id="+curResult[0].user_id
-    var result = await pg_connect.connectDB(curQuery, res)
+    var curUserQuery = "select "+userInfoList+" from users where user_id="+curResult[0].user_id
+    var result = await pg_connect.connectDB(curUserQuery, res)
 
     var bnkQuery = "select * from user_bank_details where user_id="+curResult[0].user_id
     var bnkresult = await pg_connect.connectDB(bnkQuery, res)
