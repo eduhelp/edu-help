@@ -80,19 +80,6 @@ export function userLogout () {
   return { type: LOGOUT_SUCCESS }
 }
 
-
-export function changeUserStatus (payload) {
-  return dispatch => {
-    return postService('users/changeUserStatus', payload)
-    .then((resp) => {
-      dispatch({data: resp, type: ADD_USER_SUCCESS})
-    })
-    .catch((error) => {
-      dispatch({ type: ADD_USER_FAIL})
-    })
-  }
-}
-
 export function getUserDetails (payload) {
   return dispatch => {
     return postService('users/getUserDetails', payload)

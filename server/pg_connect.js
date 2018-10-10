@@ -1,12 +1,25 @@
 var express = require('express');
 var pg = require('pg');
 
+/*
+//Local
 let pool = new pg.Pool({
     port: 5432,
     password: '1234',
     database: 'eduhelp',
     max: 10,
     host: 'localhost',
+    user: 'postgres'
+})
+*/
+
+//server
+let pool = new pg.Pool({
+    port: 5432,
+    password: 'fgjgo874nvj^7hv',
+    database: 'EduHelp',
+    max: 10,
+    host: '103.235.104.177',
     user: 'postgres'
 })
 
@@ -17,7 +30,6 @@ module.exports = {
                 if(err) {
                     res.status(403).send({ message: 'problem to connect to db'})
                 } else {
-                    console.log(query)
                     db.query(query, (err, table) => {
                         done();
                         if(err) {

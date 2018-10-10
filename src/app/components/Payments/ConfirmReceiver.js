@@ -60,6 +60,7 @@ class ConfirmReceiver extends React.Component {
                 payment_level: this.props.levelIndex,
                 payment_value: this.props.levelPayment,
                 level_eligibility: this.props.levelEligibility,
+                bank_details: this.props.authInfo.data.bank_details,
             }
         })
     }
@@ -242,7 +243,7 @@ class ConfirmReceiver extends React.Component {
                                 onClick={this.props.cancelCB}
                                 className={classes.button}
                                 >
-                                Cancel
+                                Bank to Dashboard
                                 </Button>
 
                                 <Button
