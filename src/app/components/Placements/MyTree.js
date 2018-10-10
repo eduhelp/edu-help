@@ -1,7 +1,10 @@
 import React from 'react'
+import _ from 'lodash'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import { getMyTree, getMyTopLevel } from '../../store/Placements/actionCreator'
 
 const styles = {
@@ -9,7 +12,21 @@ const styles = {
     display: 'flex',
     height: 300,
   },
- 
+  paper: {
+    margin: 10,
+    padding: 10,
+  },
+  marginLeft20: {
+    marginLeft: 20,
+  },
+  rowHead: {
+    padding: 10,
+    background: '#ebebeb',
+  },
+  rowDetails: {
+    padding: 10,
+    background: '#fbfbfb',
+  },
 };
 
 
@@ -33,10 +50,48 @@ export class MyTree extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, myTree } = this.props
+    const group_levels = _.groupBy(myTree, 'level')
+    console.log(group_levels)
+    Object.keys(group_levels).forEach(function(key) {
+        console.log('key >> '+key)
+    })
     return (
       <div id="mainContainer">
-        my tree comes here
+        <Paper className={classes.paper}>
+          <h2>My Tree</h2>
+        </Paper>
+        <Paper className={classes.paper}>
+            <Grid item xs={12} className={classes.rowHead}>
+                <Grid container>
+                    <Grid item xs={2}>
+                        Level
+                    </Grid>
+                    <Grid item xs={10}>
+                        Node
+                    </Grid>
+                </Grid>
+            </Grid>
+            {Object.keys(group_levels).map((key) => {
+                return (
+                <Grid item xs={12} className={classes.rowDetails}>
+                    <Grid container>
+                        <Grid item xs={2}>
+                            Level{key}
+                        </Grid>
+                        <Grid item xs={10}>
+                            {group_levels[key].map((option) => {
+                                return (
+                                    <div>
+                                        {option.nodeInfo.username} ({option.nodeInfo.user_id}) - parent : {option.parent_id}
+                                    </div>
+                                )
+                            })}
+                        </Grid>
+                    </Grid>
+                </Grid>)
+            })}
+        </Paper>
       </div>)
   }
 }
