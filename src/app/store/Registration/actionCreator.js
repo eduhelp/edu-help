@@ -7,6 +7,7 @@ import {
   GET_USER_DETAILS_SUCCESS,
   GET_AUTH_INFO_SUCCESS,
   CHECK_AVAILABLE_SUCCESS,
+  SMART_SPREADERS_SUCCESS,
 } from './actionType'
 import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
 // import config from './../../config/apiConfig'
@@ -146,6 +147,21 @@ export function checkAvailability(payload) {
     })
     .catch((error) => {
       dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
+    })
+  }
+}
+
+export function getSmartSpreaders(payload) {
+  return dispatch => {
+    return postService('users/getSmartSpreaders', payload)
+    .then((resp) => {
+      console.log('then clock')
+      dispatch({ data: resp, type: SMART_SPREADERS_SUCCESS })
+    })
+    .catch((error) => {
+      console.log('catch clock')
+      const errMsg = {status: true, variant: 'error', message: 'problem while get the smart spreaders'}
+      dispatch({ snackMessage: errMsg, type: TOGGLE_SNACKBAR })
     })
   }
 }

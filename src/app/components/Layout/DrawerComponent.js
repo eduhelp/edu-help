@@ -26,6 +26,7 @@ import Button from '@material-ui/core/Button';
 import { Dialog } from '@material-ui/core';
 import Login from './Login'
 import SideDrawer from '../Common/SideDrawer'
+import SmartSpreader from '../SmartSpreader/SmartSpreader';
 // import NotFound from '../NotFoundPage/NotFoundPage'
 // import { ReactComponent as Logo } from '../../images/logo.svg'
 
@@ -242,6 +243,7 @@ class MiniDrawer extends React.Component {
                     <Route exact path="/receive_payment/:levelIndex" component={ReceivePayment} />
                     <Route exact path="/my_tree" component={MyTree} />
                     <Route exact path='/profile' component={Profile} />
+                    <Route exact path='/smart_spreaders' component={SmartSpreader} />
                 </Switch>
               </Grid>
             </Grid>

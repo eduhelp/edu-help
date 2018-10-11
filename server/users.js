@@ -104,4 +104,12 @@ router.post('/checkAvailability', async function(req, res) {
     }
 });
 
+router.post('/getSmartSpreaders', async function(req, res) {
+    curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id left join payments t3 on t1.payment_id = t3.payment_id where t1.payment_level="+req.body.payment_level+" order by t1.spreader_id"
+    var result = await pg_connect.connectDB(curQuery, res)
+    if(result) {
+        res.status(200).send(result)
+    }
+});
+
 module.exports = router

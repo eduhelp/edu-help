@@ -26,7 +26,6 @@ export default class FormDialog extends React.Component {
   render() {
     return (
       <div style={{width:450}}>
-        <Button onClick={this.handleClickOpen}>Open form dialog</Button>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}

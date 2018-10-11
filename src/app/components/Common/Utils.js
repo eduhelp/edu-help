@@ -48,3 +48,22 @@ export function isEmpty (data) {
     (data.hasOwnProperty('length') && data.length === 0) ||
     (data.constructor === Object && Object.keys(data).length === 0))
   }
+
+export function getFormatedDate (dt) {
+    const month = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Des' ]
+    if (dt) {
+      let fdate = new Date(dt)
+      var mm = fdate.getMonth()
+      var dd = fdate.getDate()
+  
+      return [
+        month[mm], ' ',
+        (dd > 9 ? '' : '0') + dd, ', ',
+        fdate.getFullYear(),
+  
+      ].join('')
+    } else {
+      return ''
+    }
+}
+  

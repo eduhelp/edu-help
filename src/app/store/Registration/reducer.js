@@ -8,6 +8,7 @@ import {
   GET_AUTH_INFO_SUCCESS,
   UPDATE_USER_INFO_SUCCESS,
   CHECK_AVAILABLE_SUCCESS,
+  SMART_SPREADERS_SUCCESS,
 } from './actionType'
 import { setCookie, deleteCookie } from '../../components/Common/Utils'
 
@@ -21,7 +22,8 @@ export const initialState = fromJS({
   availableStatus: {
     username: false,
     mobile: false
-  }
+  },
+  smartSpreadersList: []
 })
 
 
@@ -70,7 +72,13 @@ export default function usersReducer (state = initialState, action) {
       const stausTempArr = ['availableStatus', action.data.field_name]
       return state
         .setIn(stausTempArr, action.data.availableStatus)
-        
+    
+    case SMART_SPREADERS_SUCCESS:
+    console.log('reducer')
+    console.log(action.data)
+      return state
+        .set('smartSpreadersList', fromJS(action.data))
+
     default:
       return state
   }
