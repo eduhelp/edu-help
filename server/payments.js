@@ -215,11 +215,11 @@ router.post('/addConfirmReceiver', async function(req, res) {
             res.status(200).send({message: 'receiver confirmed from root parent'})
         }
     } else if(req.body.receiver_type == 'SmartSpreader') {
-        var curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id  where t1.current_status='Active' order by t1.spreader_id limit 1"
+        var curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id  where t1.current_status='Active' and t1.payment_level="+req.body.payment_level+" order by t1.spreader_id limit 1"
         var result = await pg_connect.connectDB(curQuery, res)
         if(result) {
             if(result[0].user_id == req.body.to_id) {
-                var updQuery = "update smart_spreaders set current_status='InProgress' where user_id="+req.body.to_id
+                var updQuery = "update smart_spreaders set current_status='InProgress' where spreader_id="+result[0].spreader_id
                 var updResult = await pg_connect.connectDB(updQuery, res)
                 if(updResult) {
                     var result = await pg_connect.connectDB(insQuery, res)
