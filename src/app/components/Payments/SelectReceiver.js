@@ -136,8 +136,8 @@ export class SelectReceiver extends React.Component {
                                             <br />Bank Name: {smartSpreaderInfo.bank_details.bank_ac_number}
                                             <br />Branch Name: {smartSpreaderInfo.bank_details.bank_ac_number}
                                             <br />IFSC Code: {smartSpreaderInfo.bank_details.bank_ac_number}<br />
-                                            <br />Paytm Wallet : {smartSpreaderInfo.bank_details.wallet_paytm_name} ({userDetails.bank_details.wallet_paytm_number})
-                                            <br />Google Pay : {smartSpreaderInfo.bank_details.wallet_gp_name} ({userDetails.bank_details.wallet_gp_number})
+                                            <br />Paytm Wallet : {smartSpreaderInfo.bank_details.wallet_paytm_name} ({smartSpreaderInfo.bank_details.wallet_paytm_number})
+                                            <br />Google Pay : {smartSpreaderInfo.bank_details.wallet_gp_name} ({smartSpreaderInfo.bank_details.wallet_gp_number})
                                         </Grid>
                                          }
                                     </Grid>

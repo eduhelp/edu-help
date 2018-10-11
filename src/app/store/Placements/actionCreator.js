@@ -30,9 +30,9 @@ import {
     }
   }
 
-  export function getActiveSmartSpreader () {
+  export function getActiveSmartSpreader (payload) {
     return dispatch => {
-      return postService('placements/activeSmartSpreader')
+      return postService('placements/activeSmartSpreader', payload)
       .then((resp) => {
         dispatch({data: resp, type: ACTIVE_SMART_SPREADER_SUCCESS})
       })

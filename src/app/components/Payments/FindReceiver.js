@@ -35,8 +35,6 @@ export class FindReceiver extends React.Component {
   }
   
   componentWillReceiveProps(nextProps) {
-      console.log('userDetails')
-      console.log(nextProps.userDetails)
      this.setState({ 
         receiverInfo: nextProps.receiverInfo,
         selectedValue: nextProps.receiverInfo.receiver_id
@@ -144,8 +142,8 @@ export class FindReceiver extends React.Component {
                                             <br />Bank Name: {smartSpreaderInfo.bank_details.bank_ac_number}
                                             <br />Branch Name: {smartSpreaderInfo.bank_details.bank_ac_number}
                                             <br />IFSC Code: {smartSpreaderInfo.bank_details.bank_ac_number}<br />
-                                            <br />Paytm Wallet : {smartSpreaderInfo.bank_details.wallet_paytm_name} ({userDetails.bank_details.wallet_paytm_number})
-                                            <br />Google Pay : {smartSpreaderInfo.bank_details.wallet_gp_name} ({userDetails.bank_details.wallet_gp_number})
+                                            <br />Paytm Wallet : {smartSpreaderInfo.bank_details.wallet_paytm_name} ({smartSpreaderInfo.bank_details.wallet_paytm_number})
+                                            <br />Google Pay : {smartSpreaderInfo.bank_details.wallet_gp_name} ({smartSpreaderInfo.bank_details.wallet_gp_number})
                                         </Grid>
                                          }
                                     </Grid>

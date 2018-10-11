@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import FindReceiver from './FindReceiver'
 import SelectReceiver from './SelectReceiver'
 import { addConfirmReceiver } from '../../store/Payments/actionCreator'
+import LoadingHOC from '../Common/HOC/LoadingHOC'
 
 const styles = theme => ({
   root: {
@@ -298,4 +299,4 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   smartSpreaderInfo: state.getIn(['PlcementsContainer', 'smartSpreaderInfo']).toJS(),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ConfirmReceiver))
+export default connect(mapStateToProps, mapDispatchToProps)(LoadingHOC('smartSpreaderInfo')(withStyles(styles)(ConfirmReceiver)))

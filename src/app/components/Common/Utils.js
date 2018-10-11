@@ -41,3 +41,10 @@ export function changeDateFormat(checkDate) {
     var yyyy = dt.getFullYear();
     return yyyy + '-' + mm + '-' + dd
 }
+
+export function isEmpty (data) {
+    return (data === null ||
+    data === undefined ||
+    (data.hasOwnProperty('length') && data.length === 0) ||
+    (data.constructor === Object && Object.keys(data).length === 0))
+  }
