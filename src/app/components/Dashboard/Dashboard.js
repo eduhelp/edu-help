@@ -75,7 +75,7 @@ export class Dashboard extends React.Component {
 confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, treeParentInfo) => {
     if(!levelEligibility) {
         var sendData = {
-            payment_levle: levelIndex
+            payment_level: levelIndex
         }
         this.props.getActiveSmartSpreader(sendData)
     }
