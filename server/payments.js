@@ -71,7 +71,11 @@ router.post('/confirmLevelPayment', async function(req, res) {
         } else {
             res.status(200).send({message: 'Confirmaton status successfully updated for level-'+req.body.payment_level})
         }
-        await placementToSmartSpreaderBucket(req.body.user_id, req.body.payment_level, res) 
+        var usersCountQuery = "select count(*) from users where sponsor_id="+req.body.user_id+" and status='Active'"
+        var usersCountResult = await pg_connect.connectDB(usersCountQuery, res)
+        if(usersCountResult[0].count >= 6) {
+            await placementToSmartSpreaderBucket(req.body.user_id, req.body.payment_level, res)
+        }
     }
 });
 
