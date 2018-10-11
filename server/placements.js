@@ -102,7 +102,7 @@ async function getMyParentLevelWise(user_id, maxLevel, res) {
 }
 
 router.post('/activeSmartSpreader', async function(req, res) {
-    var curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id  where t1.current_status='Active' and t1.payment_levle="+req.body.payment_levle+" order by t1.spreader_id limit 1"
+    var curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id  where t1.current_status='Active' and t1.payment_level="+req.body.payment_level+" order by t1.spreader_id limit 1"
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
         res.status(200).send(result[0])

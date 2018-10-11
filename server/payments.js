@@ -150,7 +150,7 @@ async function entryToSmartSpreaderBucket(user_id, payment_level, res) {
 
 async function placementToSmartSpreaderBucket(user_id, payment_level, res) {
     // check im into smart spreader bucket or not
-    var ssQuery = "select count(*) from smart_spreaders where user_id="+user_id+" and payment_levle="+payment_level
+    var ssQuery = "select count(*) from smart_spreaders where user_id="+user_id+" and payment_level="+payment_level
     var ssResult = await pg_connect.connectDB(ssQuery, res)
     if(ssResult[0].count == 0) {
         // insert to smart spreader table for level i
