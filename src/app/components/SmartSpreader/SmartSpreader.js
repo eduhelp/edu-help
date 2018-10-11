@@ -80,7 +80,7 @@ export class SmartSpreader extends React.Component {
 
   componentWillReceiveProps (nextProps) {
     const activeList = _.filter(nextProps.smartSpreadersList, (n) => { return n.current_status == 'Active'})
-    this.setState({displayList: activeList})
+    this.setState({displayList: activeList,selectedStatus: 'Active'})
   }
 
   handleStatusChange = event => {
@@ -158,10 +158,9 @@ export class SmartSpreader extends React.Component {
                         </Select>
                     </FormControl>
                 </Grid>
-                {this.state.displayList.length > 0 && 
                     <Grid item xs={12}>
                         <Grid container>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <Radio
                                     checked={this.state.selectedStatus === 'Active'}
                                     onChange={this.handleStatusChange}
@@ -170,7 +169,16 @@ export class SmartSpreader extends React.Component {
                                     aria-label="A"
                                 /> Active
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
+                                <Radio
+                                    checked={this.state.selectedStatus === 'InProgress'}
+                                    onChange={this.handleStatusChange}
+                                    value='InProgress'
+                                    name="radio-button-demo"
+                                    aria-label="A"
+                                /> InProgress
+                            </Grid>
+                            <Grid item xs={3}>
                                 <Radio
                                     checked={this.state.selectedStatus === 'Completed'}
                                     onChange={this.handleStatusChange}
@@ -179,7 +187,7 @@ export class SmartSpreader extends React.Component {
                                     aria-label="A"
                                 /> Completed
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <Radio
                                     checked={this.state.selectedStatus === 'All'}
                                     onChange={this.handleStatusChange}
@@ -190,7 +198,6 @@ export class SmartSpreader extends React.Component {
                             </Grid>
                         </Grid>
                     </Grid>
-                }
             </Grid>
         </Paper>
         {(this.state.selectedLevel && this.state.displayList.length > 0) ? (
