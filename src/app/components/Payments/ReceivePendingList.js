@@ -75,7 +75,7 @@ export class ReceivePendingList extends React.Component {
                         </Grid>
                     </Grid>
                 </Grid>
-                {this.props.receivePaymentsList.map((option) => {
+                {this.props.confirmPendingList.map((option) => {
                     return (
                         <Grid item xs={12} className={classes.grid}>
                             <Grid container>

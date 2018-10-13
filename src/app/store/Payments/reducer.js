@@ -2,7 +2,7 @@ import { fromJS } from 'immutable'
 import {
   GET_PAYMENTS_SUCCESS,
   GET_LEVEL_PAYMENTS_SUCCESS,
-  RECEIVE_PAYMENT_LIST_SUCCESS,
+  MY_CONFIRM_PENDING_LIST,
   MY_PAYMENT_LIST_SUCCESS,
   LEVEL_ELIGIBILIY_SUCCESS,
   CONFIRM_RECEIVER_SUCCESS,
@@ -12,11 +12,11 @@ import {
 export const initialState = fromJS({
   userPayments : [],
   levelPayments: [],
-  receivePaymentsList: [],
+  confirmPendingList: [],
   myPaymentList: [],
   levelEligibility: [],
   confirmReceiver: '',
-  myReceivedPayments: []
+  myReceivedList: []
 })
 
 
@@ -30,9 +30,9 @@ export default function paymentsReducer (state = initialState, action) {
       return state
         .set('levelPayments', fromJS(action.data))
 
-    case RECEIVE_PAYMENT_LIST_SUCCESS:
+    case MY_CONFIRM_PENDING_LIST:
       return state
-        .set('receivePaymentsList', fromJS(action.data))
+        .set('confirmPendingList', fromJS(action.data))
     
     case MY_PAYMENT_LIST_SUCCESS:
       return state
@@ -48,7 +48,7 @@ export default function paymentsReducer (state = initialState, action) {
 
     case RECEIVED_PAYMENT_LIST_SUCCESS:
         return state
-          .set('myReceivedPayments', fromJS(action.data))
+          .set('myReceivedList', fromJS(action.data))
           
     default:
       return state

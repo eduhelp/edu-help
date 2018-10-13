@@ -20,8 +20,8 @@ export class DashboardDetails extends React.Component {
   componentWillReceiveProps(nextProps) {
     console.log('authInfo')
     console.log(nextProps.authInfo)
-    console.log('sponsorPayments')
-    console.log(nextProps.sponsorPayments)
+    //console.log('sponsorPayments')
+    //console.log(nextProps.sponsorPayments)
     console.log('myTree')
     console.log(nextProps.myTree)
     console.log('myTopLevel')
@@ -29,7 +29,7 @@ export class DashboardDetails extends React.Component {
     console.log('myPaymentList')
     console.log(nextProps.myPaymentList)
     console.log('myReceivedList')
-    console.log(nextProps.myPaymentList)
+    console.log(nextProps.myReceivedList)
   }
 
   confirmReceiver = (levelIndex, treeParentId, levelEligibility, treeParentInfo) => event => {
@@ -136,9 +136,10 @@ export class DashboardDetails extends React.Component {
                                         </Grid>
                                     }
                                     {this.props.myTopLevel.map((option, key) => {
+                                        receivedCheck = false
                                         const curPaymentObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == option.level) })
-                                        if(option.level >= '3') {
-                                            const checkLevel = parseInt(option.level) - 2
+                                        if(option.level >= 3) {
+                                            const checkLevel = option.level - 2
                                             const curReceivedObject = _.find(this.props.myReceivedList, (n) => { return (n.payment_level == checkLevel) })
                                             if(curReceivedObject) {
                                                 receivedCheck = true
@@ -146,7 +147,6 @@ export class DashboardDetails extends React.Component {
                                         } else {
                                             receivedCheck = true
                                         }
-
                                         if(option.level > 1 && nextLevelCheck && receivedCheck)  {
                                             if(!curPaymentObject && nextLevelCheck) {
                                                 nextLevelCheck = false
@@ -210,7 +210,7 @@ export class DashboardDetails extends React.Component {
                                             Status
                                         </Grid>
                                     </Grid>
-                                    {this.props.sponsorPayments.length > 0 &&
+                                    {/*this.props.sponsorPayments.length > 0 &&
                                         <Grid container className={classes.dataRowEven}>
                                             <Grid item xs={3}>
                                                 <Link className={classes.navLink} to="/receive_payment/1">From Referrals</Link>
@@ -222,9 +222,9 @@ export class DashboardDetails extends React.Component {
                                                 -- Status --
                                             </Grid>
                                         </Grid>
-                                    }
+                                    */}
                                     {Object.keys(myTreeLevels).map((key) => {
-                                        if (key > 1) {
+                                        //if (key > 1) {
                                             const receivePaymentLink = '/receive_payment/'+key
                                             return (
                                                 <Grid container className={classes.dataRowEven} key={key}>
@@ -239,7 +239,7 @@ export class DashboardDetails extends React.Component {
                                                     </Grid>
                                                 </Grid>
                                             )
-                                        }
+                                       // }
                                     })
                                     }
                                 </Grid>

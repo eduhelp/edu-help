@@ -6,7 +6,7 @@ import { DashboardDetails } from './DashboardDetails'
 
 import { getMyTree, getMyTopLevel, getActiveSmartSpreader } from '../../store/Placements/actionCreator'
 import { getUserDetails } from '../../store/Registration/actionCreator'
-import { getReceivePaymentList, getMyPaymentList, getLevelPayments, getReceivedPayments } from '../../store/Payments/actionCreator'
+import { getReceivedPaymentList, getMyPaymentList, getLevelPayments, getReceivedPayments } from '../../store/Payments/actionCreator'
 import ConfirmReceiver from '../Payments/ConfirmReceiver';
 import MakePayment from "../Payments/MakePayment"
 
@@ -66,10 +66,10 @@ export class Dashboard extends React.Component {
       user_id: this.props.authInfo.data.user_id,
       payment_level: 1
     }
-    this.props.getReceivePaymentList(listData)
+    // this.props.getReceivePaymentList(listData)
     this.props.getMyPaymentList(sendData)
     this.props.getLevelPayments()
-    this.props.getReceivedPayments(sendData)
+    this.props.getReceivedPaymentList(sendData)
     // this.props.getActiveSmartSpreader()
 }
 
@@ -113,8 +113,9 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
             myTree={this.props.myTree}
             myTopLevel={this.props.myTopLevel}
             sponsorDetails={this.props.sponsorDetails}
-            sponsorPayments={this.props.sponsorPayments}
+            // sponsorPayments={this.props.sponsorPayments}
             myPaymentList={this.props.myPaymentList}
+            myReceivedList={this.props.myReceivedList}
             classes={classes}
             confirmReceiverCB={this.confirmReceiver}
             makePaymentCB={this.makePayment}
@@ -153,7 +154,7 @@ const mapDispatchToProps = dispatch =>
     getMyTree,
     getMyTopLevel,
     getUserDetails,
-    getReceivePaymentList,
+    getReceivedPaymentList,
     getMyPaymentList,
     getLevelPayments,
     getActiveSmartSpreader,
@@ -166,8 +167,8 @@ const mapStateToProps = state => ({
     myTree: state.getIn(['PlcementsContainer', 'myTree']).toJS(),
     myTopLevel: state.getIn(['PlcementsContainer', 'myTopLevel']).toJS(),
     sponsorDetails: state.getIn(['RegistrationContainer', 'userDetails']).toJS(),
-    sponsorPayments: state.getIn(['PaymentsContainer', 'receivePaymentsList']).toJS(),
+    // sponsorPayments: state.getIn(['PaymentsContainer', 'receivePaymentsList']).toJS(),
     myPaymentList: state.getIn(['PaymentsContainer', 'myPaymentList']).toJS(),
-    myReceivedPayments: state.getIn(['PaymentsContainer', 'myReceivedPayments']).toJS(),
+    myReceivedList: state.getIn(['PaymentsContainer', 'myReceivedList']).toJS(),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard))

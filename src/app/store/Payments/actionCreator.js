@@ -2,7 +2,7 @@ import {
   GET_PAYMENTS_SUCCESS,
   GET_PAYMENTS_FAIL,
   GET_LEVEL_PAYMENTS_SUCCESS,
-  RECEIVE_PAYMENT_LIST_SUCCESS,
+  MY_CONFIRM_PENDING_LIST,
   MY_PAYMENT_LIST_SUCCESS,
   LEVEL_ELIGIBILIY_SUCCESS,
   CONFIRM_RECEIVER_SUCCESS,
@@ -63,11 +63,11 @@ export function makeLevelPayment (payload) {
   }
 }
 
-export function getReceivePaymentList (payload) {
+export function myConfirmPendingList (payload) {
   return dispatch => {
-    return postService('payments/receivedPaymentList', payload)
+    return postService('payments/myConfirmPendingList', payload)
     .then((resp) => {
-      dispatch({data: resp, type: RECEIVED_PAYMENT_LIST_SUCCESS})
+      dispatch({data: resp, type: MY_CONFIRM_PENDING_LIST})
     })
     .catch((error) => {
       dispatch({ type: RECEIVE_PAYMENT_LIST_FAIL})
@@ -127,4 +127,14 @@ export function addConfirmReceiver (payload) {
   }
 }
 
-
+export function getReceivedPaymentList (payload) {
+  return dispatch => {
+    return postService('payments/myReceivedPaymentList', payload)
+    .then((resp) => {
+      dispatch({data: resp, type: RECEIVED_PAYMENT_LIST_SUCCESS})
+    })
+    .catch((error) => {
+      dispatch({ type: MY_PAYMENT_LIST_FAIL})
+    })
+  }
+}
