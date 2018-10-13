@@ -41,7 +41,7 @@ export class ReceivePendingList extends React.Component {
 
   handleChange = (event) => {
     this.setState({ selectedValue: event.target.value });
-    const pay_info = _.find(this.props.receivePaymentsList,(o) => o.payment_id === event.target.value)
+    const pay_info = _.find(this.props.confirmPendingList,(o) => o.payment_id === event.target.value)
     this.setState({ paymentInfo: { 
       payment_id : event.target.value,
       user_id: pay_info.from_id,
