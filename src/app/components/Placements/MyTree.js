@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { getMyTree, getMyTopLevel } from '../../store/Placements/actionCreator'
+import DisplayTreeInfo from './DisplayTreeInfo'
 
 const styles = {
   root: {
@@ -51,21 +52,16 @@ export class MyTree extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
+    console.log('nextProps my tree')
+    console.log(nextProps.MyTree)
   }
 
   render() {
     const { classes, myTree } = this.props
     const group_levels = _.groupBy(myTree, 'level')
-    console.log(group_levels)
-    Object.keys(group_levels).forEach(function(key) {
-        console.log('key >> '+key)
-    })
     return (
       <div id="mainContainer">
-        <Paper className={classes.paper}>
-          <h2>My Tree</h2>
-        </Paper>
+        <h2>My Tree</h2>
         <Paper className={classes.paper}>
             <Grid item xs={12} className={classes.rowHead}>
                 <Grid container>
@@ -85,16 +81,13 @@ export class MyTree extends React.Component {
                             Level{key}
                         </Grid>
                         <Grid item xs={10}>
-                            {group_levels[key].map((option) => {
-                                return (
-                                    <div>
-                                        {option.nodeInfo.username} ({option.nodeInfo.user_id}) || placed under : {option.parent_id} || Sponsor Id : {option.nodeInfo.sponsor_id}
-                                    </div>
-                                )
-                            })}
+                            <DisplayTreeInfo 
+                                details={group_levels[key]}
+                            />
                         </Grid>
                     </Grid>
-                </Grid>)
+                </Grid>
+                )
             })}
         </Paper>
       </div>)

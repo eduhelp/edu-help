@@ -98,7 +98,7 @@ export class SmartSpreader extends React.Component {
     this.setState({
         dialogOpenStatus: true,
         dialogTitle: "User Details",
-        dialogContent: <UserDetails details={userInfo} />
+        dialogContent: <UserDetails details={userInfo} mode='show' />
     })
   }
   showPaymentDetails = (paymentInfo) => event => {

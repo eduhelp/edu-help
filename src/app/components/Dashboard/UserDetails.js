@@ -1,7 +1,10 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { getFormatedDate } from '../Common/Utils'
+import { getUserDetails } from '../../store/Registration/actionCreator'
 
 const styles = {
   root: {
@@ -20,14 +23,34 @@ const styles = {
 
 
 export class UserDetails extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+    this.state = {
+        details: ''
+    }
     
   }
-  
+
+  componentDidMount() {
+      if (this.props.mode === 'get') {
+          const sendData = {
+              user_id: this.props.user_id
+          }
+          this.props.getUserDetails(sendData)
+      } else {
+        this.setState({ details: this.props.details })
+      }
+  }
+
+  componentWillReceiveProps(nextProps) {
+      if (nextProps.userDetails) {
+          this.setState({ details: nextProps.userDetails })
+      }
+  }
 
   render() {
-    const { classes, details } = this.props
+    const { classes } = this.props
+    const { details } = this.state
     return (
       <div id="mainContainer">
         <Grid container>
@@ -126,4 +149,12 @@ export class UserDetails extends React.Component {
   }
 }
 
-export default withStyles(styles)(UserDetails)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({
+    getUserDetails,
+  }, dispatch)
+
+const mapStateToProps = state => ({
+    userDetails: state.getIn(['RegistrationContainer', 'userDetails']).toJS(),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(UserDetails))

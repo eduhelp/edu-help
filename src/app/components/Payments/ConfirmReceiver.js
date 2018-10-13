@@ -66,6 +66,10 @@ class ConfirmReceiver extends React.Component {
         })
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log('nextProps >>>> confirm receiver')
+        console.log(nextProps.smartSpreaderInfo)
+    }
     submitPaymentDetails = (paymentEntryInfo) => {
         this.setState({
             paymentEntryInfo
@@ -116,8 +120,6 @@ class ConfirmReceiver extends React.Component {
     const { activeStep } = this.state;
     let { skipped, receiverInfo } = this.state;
     if( activeStep === 1) {
-        console.log("ready to submit")
-        console.log(receiverInfo)
         const receiver_type = receiverInfo.level_eligibility ? 'RootParent' : 'SmartSpreader'
         const sendData = {
             payment_level: receiverInfo.payment_level,
@@ -299,4 +301,4 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   smartSpreaderInfo: state.getIn(['PlcementsContainer', 'smartSpreaderInfo']).toJS(),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(LoadingHOC('smartSpreaderInfo')(withStyles(styles)(ConfirmReceiver)))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ConfirmReceiver))
