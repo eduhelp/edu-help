@@ -28,7 +28,7 @@ router.post('/makeLevelPayment', async function(req, res) {
     }
 });
 
-router.post('/receivePaymentList', async function(req, res) {
+router.post('/myConfirmPendingList', async function(req, res) {
     var curQuery = "select * from payments where payment_level="+req.body.payment_level+" and to_id="+req.body.user_id+" and confirm_status='Pending'"
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
@@ -199,7 +199,7 @@ router.post('/myPaymentList', async function(req, res) {
     await getPaymentList(curQuery, res)
 });
 
-router.post('/receivedPaymentList', async function(req, res) {
+router.post('/myReceivedPaymentList', async function(req, res) {
     var curQuery = "select * from payments where to_id="+req.body.user_id
     await getPaymentList(curQuery, res)
 });
