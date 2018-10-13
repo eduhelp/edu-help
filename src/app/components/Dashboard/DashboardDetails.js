@@ -28,6 +28,8 @@ export class DashboardDetails extends React.Component {
     console.log(nextProps.myTopLevel)
     console.log('myPaymentList')
     console.log(nextProps.myPaymentList)
+    console.log('myReceivedList')
+    console.log(nextProps.myPaymentList)
   }
 
   confirmReceiver = (levelIndex, treeParentId, levelEligibility, treeParentInfo) => event => {
@@ -60,6 +62,8 @@ export class DashboardDetails extends React.Component {
     const { classes } = this.props
     const myTreeLevels = _.groupBy(this.props.myTree, (obj) => { return obj.level })
     const level1SponsorObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == 1) })
+    let nextLevelCheck = true
+    let receivedCheck = false
     return (
       <div id="mainContainer">
         <Dialog
@@ -133,8 +137,20 @@ export class DashboardDetails extends React.Component {
                                     }
                                     {this.props.myTopLevel.map((option, key) => {
                                         const curPaymentObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == option.level) })
-                                        console.log(curPaymentObject)
-                                        if(option.level > 1)  {
+                                        if(option.level >= '3') {
+                                            const checkLevel = parseInt(option.level) - 2
+                                            const curReceivedObject = _.find(this.props.myReceivedList, (n) => { return (n.payment_level == checkLevel) })
+                                            if(curReceivedObject) {
+                                                receivedCheck = true
+                                            }
+                                        } else {
+                                            receivedCheck = true
+                                        }
+
+                                        if(option.level > 1 && nextLevelCheck && receivedCheck)  {
+                                            if(!curPaymentObject && nextLevelCheck) {
+                                                nextLevelCheck = false
+                                            }
                                             const levText = 'level '+option.level
                                             return (
                                                 <Grid container className={classes.dataRowEven} key={key}>
@@ -164,7 +180,8 @@ export class DashboardDetails extends React.Component {
                                                             </div>
                                                         ) : (
                                                             <span className={classes.navLink} onClick={this.confirmReceiver(option.level, option.nodeInfo.user_id, option.levelEligibility, option.nodeInfo)}>Confirm Receiver</span>
-                                                        )}
+                                                        )
+                                                        }
                                                     </Grid>
                                                 </Grid>
                                             )

@@ -6,7 +6,7 @@ import { DashboardDetails } from './DashboardDetails'
 
 import { getMyTree, getMyTopLevel, getActiveSmartSpreader } from '../../store/Placements/actionCreator'
 import { getUserDetails } from '../../store/Registration/actionCreator'
-import { getReceivePaymentList, getMyPaymentList, getLevelPayments } from '../../store/Payments/actionCreator'
+import { getReceivePaymentList, getMyPaymentList, getLevelPayments, getReceivedPayments } from '../../store/Payments/actionCreator'
 import ConfirmReceiver from '../Payments/ConfirmReceiver';
 import MakePayment from "../Payments/MakePayment"
 
@@ -69,6 +69,7 @@ export class Dashboard extends React.Component {
     this.props.getReceivePaymentList(listData)
     this.props.getMyPaymentList(sendData)
     this.props.getLevelPayments()
+    this.props.getReceivedPayments(sendData)
     // this.props.getActiveSmartSpreader()
 }
 
@@ -156,6 +157,7 @@ const mapDispatchToProps = dispatch =>
     getMyPaymentList,
     getLevelPayments,
     getActiveSmartSpreader,
+    getReceivedPayments,
   }, dispatch)
 
 const mapStateToProps = state => ({
@@ -166,5 +168,6 @@ const mapStateToProps = state => ({
     sponsorDetails: state.getIn(['RegistrationContainer', 'userDetails']).toJS(),
     sponsorPayments: state.getIn(['PaymentsContainer', 'receivePaymentsList']).toJS(),
     myPaymentList: state.getIn(['PaymentsContainer', 'myPaymentList']).toJS(),
+    myReceivedPayments: state.getIn(['PaymentsContainer', 'myReceivedPayments']).toJS(),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard))
