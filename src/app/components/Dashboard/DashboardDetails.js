@@ -140,7 +140,7 @@ export class DashboardDetails extends React.Component {
                                         const curPaymentObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == option.level) })
                                         if(option.level >= 3) {
                                             const checkLevel = option.level - 2
-                                            const curReceivedObject = _.find(this.props.myReceivedList, (n) => { return (n.payment_level == checkLevel) })
+                                            const curReceivedObject = _.find(this.props.myReceivedList, (n) => { return (n.payment_level == checkLevel && n.confirm_status == 'Completed') })
                                             if(curReceivedObject) {
                                                 receivedCheck = true
                                             }
