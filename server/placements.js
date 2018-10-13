@@ -57,15 +57,22 @@ async function getTopLevelArray(user_id, retArr, getLevel, max_level, res) {
     var findRootLevelId = await getMyParentLevelWise(user_id, getLevel, res)
     var eligibility = ''
     if (findRootLevelId) {
-        var eliQuery = "select * from payments where from_id="+user_id+" and payment_level='"+getLevel+"'"
-        var eliResult = await pg_connect.connectDB(eliQuery, res)
-        if(eliResult) {
-            if(eliResult.length === 0) {
-                eligibility = false
-            } else {
-                eligibility = true
+        var firstQuery = "select * from payments where from_id="+user_id+" and payment_level=1"
+        var firstResult = await pg_connect.connectDB(firstQuery, res)
+        if(firstResult.length === 0) {
+            var eliQuery = "select * from payments where from_id="+user_id+" and payment_level='"+getLevel+"'"
+            var eliResult = await pg_connect.connectDB(eliQuery, res)
+            if(eliResult) {
+                if(eliResult.length === 0) {
+                    eligibility = false
+                } else {
+                    eligibility = true
+                }
             }
+        } else {
+            eligibility = false
         }
+
     } else {
         eligibility = true
     }
