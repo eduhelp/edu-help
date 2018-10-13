@@ -116,7 +116,7 @@ class ReceivePayment extends React.Component {
     let { skipped, paymentInfo } = this.state;
     if( activeStep === 2) {
         console.log('place to make api call')
-        var paymentObj = _.find(this.props.receivePaymentsList, (n) => { return n.payment_id == paymentInfo.payment_id })
+        var paymentObj = _.find(this.props.confirmPendingList, (n) => { return n.payment_id == paymentInfo.payment_id })
         var sendData = {
             payment_id: paymentInfo.payment_id,
             to_id: paymentObj.to_id,
