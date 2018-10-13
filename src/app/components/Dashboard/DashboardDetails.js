@@ -31,6 +31,7 @@ export class DashboardDetails extends React.Component {
   }
 
   confirmReceiver = (levelIndex, treeParentId, levelEligibility, treeParentInfo) => event => {
+      console.log('calling confirmReceiver')
     this.props.confirmReceiverCB('ConfirmReceiver',levelIndex, treeParentId, levelEligibility, treeParentInfo)
   }
 
@@ -118,8 +119,10 @@ export class DashboardDetails extends React.Component {
                                                 )}
                                             </Grid>
                                             <Grid item xs={3}>
-                                                {(level1SponsorObject.paid_status == 'Completed') ? (
-                                                    <span>Done</span>
+                                                {(level1SponsorObject.paid_status == 'Completed' && level1SponsorObject.confirm_status == 'Pending') ? (
+                                                    <span>Payment Done and Waiting to receiver confirmation</span>
+                                                ) : (level1SponsorObject.paid_status == 'Completed' && level1SponsorObject.confirm_status == 'Confirmed') ? (
+                                                    <span>Payment Done and receiver confirmed</span>
                                                 ) : (level1SponsorObject.paid_status == 'Pending') ? (
                                                     <span className={classes.navLink} onClick={this.makePayment(level1SponsorObject)}>Make Payment</span>
                                                 ) : (
@@ -149,8 +152,10 @@ export class DashboardDetails extends React.Component {
                                                     <Grid item xs={3}>
                                                         {(curPaymentObject) ? (
                                                             <div>
-                                                                {(curPaymentObject.paid_status == 'Completed') ? (
-                                                                    <span>Done</span>
+                                                                {(curPaymentObject.paid_status == 'Completed' && curPaymentObject.confirm_status == 'Pending') ? (
+                                                                    <span>Payment Done and Waiting to receiver confirmation</span>
+                                                                ) : (curPaymentObject.paid_status == 'Completed' && curPaymentObject.confirm_status == 'Confirmed') ? (
+                                                                    <span>Payment Done and receiver confirmed</span>
                                                                 ) : (curPaymentObject.paid_status == 'Pending') ? (
                                                                     <span className={classes.navLink} onClick={this.makePayment(curPaymentObject)}>Make Payment</span>
                                                                 ) : (

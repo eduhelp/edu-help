@@ -73,6 +73,7 @@ export class Dashboard extends React.Component {
 }
 
 confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, treeParentInfo) => {
+    console.log('confirm receiver - dashboard')
     if(!levelEligibility) {
         var sendData = {
             payment_level: levelIndex
