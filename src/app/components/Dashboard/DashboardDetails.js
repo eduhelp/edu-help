@@ -61,6 +61,7 @@ export class DashboardDetails extends React.Component {
   render() {
     const { classes } = this.props
     const myTreeLevels = _.groupBy(this.props.myTree, (obj) => { return obj.level })
+    const myReceivedListGroup = _.groupBy(this.props.myReceivedList, (obj) => { return obj.payment_level })
     const level1SponsorObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == 1) })
     let nextLevelCheck = true
     let receivedCheck = false
@@ -141,8 +142,6 @@ export class DashboardDetails extends React.Component {
                                         if(option.level >= 3) {
                                             const checkLevel = option.level - 2
                                             const curReceivedObject = _.find(this.props.myReceivedList, (n) => { return (n.payment_level == checkLevel && n.confirm_status == 'Confirmed') })
-                                            console.log('curReceivedObject')
-                                            console.log(curReceivedObject)
                                             if(curReceivedObject) {
                                                 receivedCheck = true
                                             }
@@ -225,7 +224,7 @@ export class DashboardDetails extends React.Component {
                                             </Grid>
                                         </Grid>
                                     */}
-                                    {Object.keys(myTreeLevels).map((key) => {
+                                    {Object.keys(myReceivedListGroup).map((key) => {
                                         //if (key > 1) {
                                             const receivePaymentLink = '/receive_payment/'+key
                                             return (
@@ -234,7 +233,7 @@ export class DashboardDetails extends React.Component {
                                                         <Link className={classes.navLink} to={receivePaymentLink}>Level {key}</Link>
                                                     </Grid>
                                                     <Grid item xs={6}>
-                                                        {myTreeLevels[key].length}
+                                                        {myReceivedListGroup[key].length}
                                                     </Grid>
                                                     <Grid item xs={3}>
                                                         -- Status --
