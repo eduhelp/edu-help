@@ -301,4 +301,5 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   smartSpreaderInfo: state.getIn(['PlcementsContainer', 'smartSpreaderInfo']).toJS(),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ConfirmReceiver))
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoadingHOC('smartSpreaderInfo')(withStyles(styles)(ConfirmReceiver)))

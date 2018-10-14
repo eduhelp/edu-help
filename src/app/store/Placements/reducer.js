@@ -8,7 +8,9 @@ import {
 export const initialState = fromJS({
   myTree: [],
   myTopLevel: [],
-  smartSpreaderInfo: [],
+  smartSpreaderInfo: [{
+    message: 'Root'
+  }],
 })
 
 export default function grouperReducer (state = initialState, action) {
