@@ -149,8 +149,14 @@ export class DashboardDetails extends React.Component {
                                             receivedCheck = true
                                         }
                                         if(option.level > 1 && nextLevelCheck && receivedCheck)  {
-                                            if(!curPaymentObject && nextLevelCheck) {
+                                            /*if(!curPaymentObject && nextLevelCheck) {
                                                 nextLevelCheck = false
+                                            }*/
+                                            if(nextLevelCheck) {
+                                                const curfirstObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == '1') })
+                                                if(!curfirstObject) {
+                                                    nextLevelCheck = false
+                                                }
                                             }
                                             const levText = 'level '+option.level
                                             return (
