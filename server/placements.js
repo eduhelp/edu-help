@@ -113,7 +113,7 @@ router.post('/activeSmartSpreader', async function(req, res) {
     var result = await pg_connect.connectDB(curQuery, res)
     console.log(result)
     //if(result) {
-        if(result.length > 0) {
+        if(result.length === 0) {
             res.status(200).send([{message: 'no smart spreader'}])
         } else {
             var bnkQuery = "select * from user_bank_details where user_id="+result[0].user_id
