@@ -104,7 +104,7 @@ export class FindReceiver extends React.Component {
                         </div>
                     ) : (
                         <div>
-                            {smartSpreaderInfo[0].message === 'no smart spreader' ? (
+                            {(smartSpreaderInfo.message !== 'undefined' && smartSpreaderInfo.message === 'no smart spreader') ? (
                                 <div>
                                     As per your parent tree, your Level-{this.props.receiverInfo.payment_level} parent {userDetails.username} is not eleigible <br />
                                     to receive any payment from level-{this.props.receiverInfo.payment_level}, you can wait till {userDetails.username} is get eleigible

@@ -190,6 +190,7 @@ class ConfirmReceiver extends React.Component {
     const steps = this.getSteps(this.props);
     const { activeStep, paymentInfo, curPaymentObject } = this.state;
     let nextBtnDisabledState = false
+    console.log(this.props.smartSpreaderInfo)
     /* if (this.state.receiverInfo && this.state.receiverInfo.receiver_id) {
         nextBtnDisabledState = false
     } */
@@ -249,7 +250,7 @@ class ConfirmReceiver extends React.Component {
                                 >
                                 Bank to Dashboard
                                 </Button>
-                                {this.props.smartSpreaderInfo[0].message !== 'no smart spreader' &&
+                                {(this.props.smartSpreaderInfo.message !== 'undefined' && this.props.smartSpreaderInfo.message !== 'no smart spreader') ? (
                                     <span>
                                         <Button
                                         disabled={activeStep === 0}
@@ -278,6 +279,7 @@ class ConfirmReceiver extends React.Component {
                                         {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                                         </Button>
                                     </span>
+                                ) : ''
                                 }
                             </div>
                             </div>
