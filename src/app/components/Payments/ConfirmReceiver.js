@@ -249,35 +249,36 @@ class ConfirmReceiver extends React.Component {
                                 >
                                 Bank to Dashboard
                                 </Button>
-
-                                <Button
-                                disabled={activeStep === 0}
-                                onClick={this.handleBack}
-                                className={classes.button}
-                                >
-                                Back
-                                </Button>
-                                {this.isStepOptional(activeStep) && (
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={this.handleSkip}
-                                    className={classes.button}
-                                >
-                                    Skip
-                                </Button>
-                                )}
-                                <Button
-                                disabled={nextBtnDisabledState}
-                                variant="contained"
-                                color="primary"
-                                onClick={this.handleNext}
-                                className={classes.button}
-                                >
-                                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                                </Button>
-                                
-                                
+                                {this.props.smartSpreaderInfo[0].message !== 'no smart spreader' &&
+                                    <span>
+                                        <Button
+                                        disabled={activeStep === 0}
+                                        onClick={this.handleBack}
+                                        className={classes.button}
+                                        >
+                                        Back
+                                        </Button>
+                                        {this.isStepOptional(activeStep) && (
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={this.handleSkip}
+                                            className={classes.button}
+                                        >
+                                            Skip
+                                        </Button>
+                                        )}
+                                        <Button
+                                        disabled={nextBtnDisabledState}
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={this.handleNext}
+                                        className={classes.button}
+                                        >
+                                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                        </Button>
+                                    </span>
+                                }
                             </div>
                             </div>
                         )}
