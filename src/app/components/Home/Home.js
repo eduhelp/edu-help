@@ -7,6 +7,22 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
+
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 const styles = {
   root: {
@@ -23,38 +39,44 @@ const styles = {
   	textAlign: 'center',
     paddingTop: 30,
     fontFamily: 'Arial',
-    color: '#2196f3',
+    color: '#FF4500',
   },
   maincont: {
   	textAlign: 'center',
     fontFamily: 'Edwardian Script ITC',
-    fontSize: 36,
+    fontSize: 50,
     lineHeight: 1,
   },
   mainspan:{
   	textAlign: 'center',
     fontFamily: 'Edwardian Script ITC',
-    fontSize: 36,
+    fontSize: 50,
     lineHeight: 1,
-    color: '#2196f3',
+    color: '#FF4500',
   },
   subheading: {
-  	padding: 10,
+  	padding: 15,
   	fontFamily: 'Arial',
-  	color: '#2196f3',
+  	color: '#FF4500',
   },
   listing: {
   	fontFamily: 'Arial',
+  	lineHeight: 2,
   },
   listing1: {
   	
   	fontFamily: 'Arial',
-  	padding:'10',
-  	color: '#2196f3',
+  	color: '#FF4500',
+  	lineHeight: 2,
   },
   plink: {
-  	padding:'10',
+  	padding:'20',
   },
+  tabbar: {
+  	backgroundColor: '#FF4500',
+  	fontFamily: 'Arial',
+  	color: '#ffffff',
+  }
 };
 
 
@@ -62,12 +84,20 @@ const styles = {
 export class Home extends React.Component {
   constructor() {
     super()
+    this.state = {
+    	value: 0,
+  	}
     
   }
+
+  handleChange = (event, value) => {
+    this.setState({ value });
+  };
   
 
   render() {
     const { classes } = this.props
+    const { value } = this.state
     return (
       <div id="mainContainer">
       	<Paper className={classes.paper}>
@@ -75,7 +105,15 @@ export class Home extends React.Component {
         <h1 className={classes.heading}>About Us</h1>
         <p className={classes.maincont}>Over years an effluent broadminded<br /><span className={classes.mainspan}> NRI’s & Entrepreneurs</span> were<br/> thinking on a <span className={classes.mainspan}>“Idea”</span> that could change &<br /> solve millions of people Education expense,<br /> issue through an innovative idea that flashed<br /> out in minds, that’s the <span className={classes.mainspan}>birth story</span> of<br /> <span className={classes.mainspan}>“EduHelp”</span></p>
         
-        <h2 className={classes.subheading}>Why this community</h2>
+        <AppBar position="static">
+          <Tabs value={value} onChange={this.handleChange} className={classes.tabbar}>
+            <Tab label="Why this community" />
+            <Tab label="How it works" />
+            <Tab label="SMART SPREADERS" />
+            <Tab label="Contact us" />
+          </Tabs>
+        </AppBar>
+        {value === 0 && <TabContainer><h2 className={classes.subheading}>Why this community</h2>
         <ul className={classes.listing}>
         	<li>WE believe that <strong>education</strong> is the most important tool you can receive, that can bring you most <strong>success</strong> in society today</li>
         	<li>Education is definitely important in one's life.  A gift of knowledge can bring us to the top of our dreams. It leads us to the right path and gives us a chance to have a wonderful life. </li>
@@ -89,22 +127,26 @@ export class Home extends React.Component {
         	</li>
 
 
-        </ul>
-       	<h2 className={classes.subheading}>How it works</h2>
+        </ul></TabContainer>}
+        {value === 1 && <TabContainer><h2 className={classes.subheading}>How it works</h2>
        	<ul className={classes.listing}>
         	<li>Since this community is created for a good cause of supporting peer to peer helping community for educational expenses, so every individual one ID for one mobile & AADHAR number</li>
         	<li>You need to have an invitation link from the sponsor to get in to this community. Once you receive the link update the mandatory field details and get started </li>
         	<li>I don’t have anyone to sponsor please email us @ </li>
         </ul>
-		<p className={classes.plink}>More details: PDF.link</p>
-
-		<h2 className={classes.subheading}>SMART SPREADERS</h2>
+		<p className={classes.plink}>More details: PDF.link</p></TabContainer>}
+        {value === 2 && <TabContainer><h2 className={classes.subheading}>SMART SPREADERS</h2>
 		<ul className={classes.listing}>
         	<li>Smart Spreaders are the one who takes more initiative to explain and promote EduHelp good cause community to people in sponsoring many Help givers& receivers</li>
         	<li>SMART SPREADER gets an additional help benefit from others also where receiver’s are not eligible to receive from level below, then helper can wait till upline sponsor get eligible or he can pay to "smart spreaders" according to the queue of that level</li>
-        </ul>
-        <h2 className={classes.subheading}>Contact us</h2>
-        <p className={classes.plink}>Reach us @ …………@gmail.com</p>
+        </ul></TabContainer>}
+        {value === 3 && <TabContainer><h2 className={classes.subheading}>Contact us</h2>
+        <p className={classes.plink}>Reach us @ …………@gmail.com</p></TabContainer>}
+        
+       	
+
+		
+        
         </Typography>
 
         </Paper>
@@ -119,4 +161,9 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
     // usersList: state.getIn(['RegistrationContainer', 'usersList']).toJS(),
 })
+
+Home.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Home))
