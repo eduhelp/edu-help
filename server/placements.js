@@ -57,15 +57,22 @@ async function getTopLevelArray(user_id, retArr, getLevel, max_level, res) {
     var findRootLevelId = await getMyParentLevelWise(user_id, getLevel, res)
     var eligibility = ''
     if (findRootLevelId) {
-        var eliQuery = "select * from payments where from_id="+user_id+" and payment_level='"+getLevel+"'"
-        var eliResult = await pg_connect.connectDB(eliQuery, res)
-        if(eliResult) {
-            if(eliResult.length === 0) {
-                eligibility = false
-            } else {
-                eligibility = true
+        var firstQuery = "select * from payments where to_id="+user_id+" and payment_level=1"
+        var firstResult = await pg_connect.connectDB(firstQuery, res)
+        if(firstResult.length >= 1) { 
+            var eliQuery = "select * from payments where from_id="+user_id+" and payment_level="+getLevel
+            var eliResult = await pg_connect.connectDB(eliQuery, res)
+            if(eliResult) {
+                if(eliResult.length === 0) {
+                    eligibility = false
+                } else {
+                    eligibility = true
+                }
             }
+        } else {
+            eligibility = false
         }
+
     } else {
         eligibility = true
     }
@@ -104,7 +111,9 @@ async function getMyParentLevelWise(user_id, maxLevel, res) {
 router.post('/activeSmartSpreader', async function(req, res) {
     var curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id  where t1.current_status='Active' and t1.payment_level="+req.body.payment_level+" order by t1.spreader_id limit 1"
     var result = await pg_connect.connectDB(curQuery, res)
-    if(result) {
+    if(result.length === 0) {
+        res.status(200).send({message: 'no smart spreader'})
+    } else {
         var bnkQuery = "select * from user_bank_details where user_id="+result[0].user_id
         var bnkresult = await pg_connect.connectDB(bnkQuery, res)
         result[0]['bank_details'] = bnkresult[0]

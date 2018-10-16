@@ -190,6 +190,7 @@ class ConfirmReceiver extends React.Component {
     const steps = this.getSteps(this.props);
     const { activeStep, paymentInfo, curPaymentObject } = this.state;
     let nextBtnDisabledState = false
+    console.log(this.props.smartSpreaderInfo)
     /* if (this.state.receiverInfo && this.state.receiverInfo.receiver_id) {
         nextBtnDisabledState = false
     } */
@@ -249,35 +250,37 @@ class ConfirmReceiver extends React.Component {
                                 >
                                 Bank to Dashboard
                                 </Button>
-
-                                <Button
-                                disabled={activeStep === 0}
-                                onClick={this.handleBack}
-                                className={classes.button}
-                                >
-                                Back
-                                </Button>
-                                {this.isStepOptional(activeStep) && (
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={this.handleSkip}
-                                    className={classes.button}
-                                >
-                                    Skip
-                                </Button>
-                                )}
-                                <Button
-                                disabled={nextBtnDisabledState}
-                                variant="contained"
-                                color="primary"
-                                onClick={this.handleNext}
-                                className={classes.button}
-                                >
-                                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                                </Button>
-                                
-                                
+                                {(this.props.smartSpreaderInfo.message !== 'undefined' && this.props.smartSpreaderInfo.message !== 'no smart spreader') ? (
+                                    <span>
+                                        <Button
+                                        disabled={activeStep === 0}
+                                        onClick={this.handleBack}
+                                        className={classes.button}
+                                        >
+                                        Back
+                                        </Button>
+                                        {this.isStepOptional(activeStep) && (
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={this.handleSkip}
+                                            className={classes.button}
+                                        >
+                                            Skip
+                                        </Button>
+                                        )}
+                                        <Button
+                                        disabled={nextBtnDisabledState}
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={this.handleNext}
+                                        className={classes.button}
+                                        >
+                                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                        </Button>
+                                    </span>
+                                ) : ''
+                                }
                             </div>
                             </div>
                         )}
@@ -301,4 +304,5 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   smartSpreaderInfo: state.getIn(['PlcementsContainer', 'smartSpreaderInfo']).toJS(),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ConfirmReceiver))
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoadingHOC('smartSpreaderInfo')(withStyles(styles)(ConfirmReceiver)))

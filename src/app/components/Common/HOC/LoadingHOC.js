@@ -15,6 +15,8 @@ const LoadingHOC = (loadingProp) => (WrappedComponent) => {
     }
 
     render () {
+        console.log('loadingProp')
+        console.log(this.props[loadingProp])
       const myProps = {
         loadingTime: ((this.endTimer - this.startTimer) / 1000).toFixed(2),
       }

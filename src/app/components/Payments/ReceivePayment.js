@@ -12,7 +12,7 @@ import ReceivePendingList from './ReceivePendingList'
 import ReceiveDetails from './ReceiveDetails'
 import ReceiveConfirm from './ReceiveConfirm'
 import Paper from '@material-ui/core/Paper';
-import { getLevelPayments, getReceivePaymentList, confirmLevelPayment } from '../../store/Payments/actionCreator'
+import { getLevelPayments, myConfirmPendingList, confirmLevelPayment } from '../../store/Payments/actionCreator'
 
 // import { addUser } from '../../store/Registration/actionCreator'
 
@@ -55,7 +55,7 @@ class ReceivePayment extends React.Component {
           payment_level: this.props.match.params.levelIndex,
           user_id: this.props.authInfo.data.user_id
         }
-        this.props.getReceivePaymentList(recData)
+        this.props.myConfirmPendingList(recData)
     }
 
     submitPaymentDetails = (paymentInfo) => {
@@ -77,7 +77,7 @@ class ReceivePayment extends React.Component {
               <ReceivePendingList
                 paymentInfo={this.state.paymentInfo}
                 submitCB = {this.submitPaymentDetails}
-                receivePaymentsList={this.props.receivePaymentsList}
+                confirmPendingList={this.props.confirmPendingList}
               />
             </div>
           )
@@ -86,7 +86,7 @@ class ReceivePayment extends React.Component {
             <div>
               <ReceiveDetails 
                 paymentInfo={this.state.paymentInfo}
-                receivePaymentsList={this.props.receivePaymentsList}
+                confirmPendingList={this.props.confirmPendingList}
               />
             </div>
           )
@@ -95,7 +95,7 @@ class ReceivePayment extends React.Component {
             <div>
               <ReceiveConfirm 
                 paymentInfo={this.state.paymentInfo}
-                receivePaymentsList={this.props.receivePaymentsList}
+                confirmPendingList={this.props.confirmPendingList}
               />
             </div>
           )
@@ -116,7 +116,7 @@ class ReceivePayment extends React.Component {
     let { skipped, paymentInfo } = this.state;
     if( activeStep === 2) {
         console.log('place to make api call')
-        var paymentObj = _.find(this.props.receivePaymentsList, (n) => { return n.payment_id == paymentInfo.payment_id })
+        var paymentObj = _.find(this.props.confirmPendingList, (n) => { return n.payment_id == paymentInfo.payment_id })
         var sendData = {
             payment_id: paymentInfo.payment_id,
             to_id: paymentObj.to_id,
@@ -182,7 +182,7 @@ class ReceivePayment extends React.Component {
   }
 
   render() {
-    const { classes, receivePaymentsList } = this.props;
+    const { classes, confirmPendingList } = this.props;
     const steps = this.getSteps(this.props);
     const { activeStep, SponsorInfo } = this.state;
     let nextBtnDisabledState = false
@@ -198,7 +198,7 @@ class ReceivePayment extends React.Component {
         <Paper className={classes.paper}>
           <h2>Level {this.props.match.params.levelIndex} - Received payment confirm process.</h2>
         </Paper>
-        {(receivePaymentsList.length === 0) ? (
+        {(confirmPendingList.length === 0) ? (
           <Paper className={classes.paper}>
             No pending payemnts to confirm
           </Paper>
@@ -282,13 +282,13 @@ ReceivePayment.propTypes = {
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
     getLevelPayments,
-    getReceivePaymentList,
+    myConfirmPendingList,
     confirmLevelPayment,
   }, dispatch)
 
 const mapStateToProps = state => ({
   authInfo: state.getIn(['RegistrationContainer', 'authInfo']).toJS(),
   levelPayments: state.getIn(['PaymentsContainer', 'levelPayments']).toJS(),
-  receivePaymentsList: state.getIn(['PaymentsContainer', 'receivePaymentsList']).toJS(),
+  confirmPendingList: state.getIn(['PaymentsContainer', 'confirmPendingList']).toJS(),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ReceivePayment))

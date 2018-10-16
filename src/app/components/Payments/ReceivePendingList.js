@@ -41,7 +41,7 @@ export class ReceivePendingList extends React.Component {
 
   handleChange = (event) => {
     this.setState({ selectedValue: event.target.value });
-    const pay_info = _.find(this.props.receivePaymentsList,(o) => o.payment_id === event.target.value)
+    const pay_info = _.find(this.props.confirmPendingList,(o) => o.payment_id === event.target.value)
     this.setState({ paymentInfo: { 
       payment_id : event.target.value,
       user_id: pay_info.from_id,
@@ -75,7 +75,7 @@ export class ReceivePendingList extends React.Component {
                         </Grid>
                     </Grid>
                 </Grid>
-                {this.props.receivePaymentsList.map((option) => {
+                {this.props.confirmPendingList.map((option) => {
                     return (
                         <Grid item xs={12} className={classes.grid}>
                             <Grid container>

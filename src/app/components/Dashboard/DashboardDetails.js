@@ -20,14 +20,16 @@ export class DashboardDetails extends React.Component {
   componentWillReceiveProps(nextProps) {
     console.log('authInfo')
     console.log(nextProps.authInfo)
-    console.log('sponsorPayments')
-    console.log(nextProps.sponsorPayments)
+    //console.log('sponsorPayments')
+    //console.log(nextProps.sponsorPayments)
     console.log('myTree')
     console.log(nextProps.myTree)
     console.log('myTopLevel')
     console.log(nextProps.myTopLevel)
     console.log('myPaymentList')
     console.log(nextProps.myPaymentList)
+    console.log('myReceivedList')
+    console.log(nextProps.myReceivedList)
   }
 
   confirmReceiver = (levelIndex, treeParentId, levelEligibility, treeParentInfo) => event => {
@@ -59,7 +61,10 @@ export class DashboardDetails extends React.Component {
   render() {
     const { classes } = this.props
     const myTreeLevels = _.groupBy(this.props.myTree, (obj) => { return obj.level })
+    const myReceivedListGroup = _.groupBy(this.props.myReceivedList, (obj) => { return obj.payment_level })
     const level1SponsorObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == 1) })
+    let nextLevelCheck = true
+    let receivedCheck = false
     return (
       <div id="mainContainer">
         <Dialog
@@ -132,9 +137,27 @@ export class DashboardDetails extends React.Component {
                                         </Grid>
                                     }
                                     {this.props.myTopLevel.map((option, key) => {
+                                        receivedCheck = false
                                         const curPaymentObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == option.level) })
-                                        console.log(curPaymentObject)
-                                        if(option.level > 1)  {
+                                        if(option.level >= 3) {
+                                            const checkLevel = option.level - 2
+                                            const curReceivedObject = _.find(this.props.myReceivedList, (n) => { return (n.payment_level == checkLevel && n.confirm_status == 'Confirmed') })
+                                            if(curReceivedObject) {
+                                                receivedCheck = true
+                                            }
+                                        } else {
+                                            receivedCheck = true
+                                        }
+                                        if(option.level > 1 && nextLevelCheck && receivedCheck)  {
+                                            /*if(!curPaymentObject && nextLevelCheck) {
+                                                nextLevelCheck = false
+                                            }*/
+                                            if(nextLevelCheck) {
+                                                const curfirstObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == '1') })
+                                                if(!curfirstObject) {
+                                                    nextLevelCheck = false
+                                                }
+                                            }
                                             const levText = 'level '+option.level
                                             return (
                                                 <Grid container className={classes.dataRowEven} key={key}>
@@ -164,7 +187,8 @@ export class DashboardDetails extends React.Component {
                                                             </div>
                                                         ) : (
                                                             <span className={classes.navLink} onClick={this.confirmReceiver(option.level, option.nodeInfo.user_id, option.levelEligibility, option.nodeInfo)}>Confirm Receiver</span>
-                                                        )}
+                                                        )
+                                                        }
                                                     </Grid>
                                                 </Grid>
                                             )
@@ -193,7 +217,7 @@ export class DashboardDetails extends React.Component {
                                             Status
                                         </Grid>
                                     </Grid>
-                                    {this.props.sponsorPayments.length > 0 &&
+                                    {/*this.props.sponsorPayments.length > 0 &&
                                         <Grid container className={classes.dataRowEven}>
                                             <Grid item xs={3}>
                                                 <Link className={classes.navLink} to="/receive_payment/1">From Referrals</Link>
@@ -205,9 +229,9 @@ export class DashboardDetails extends React.Component {
                                                 -- Status --
                                             </Grid>
                                         </Grid>
-                                    }
-                                    {Object.keys(myTreeLevels).map((key) => {
-                                        if (key > 1) {
+                                    */}
+                                    {Object.keys(myReceivedListGroup).map((key) => {
+                                        //if (key > 1) {
                                             const receivePaymentLink = '/receive_payment/'+key
                                             return (
                                                 <Grid container className={classes.dataRowEven} key={key}>
@@ -215,14 +239,14 @@ export class DashboardDetails extends React.Component {
                                                         <Link className={classes.navLink} to={receivePaymentLink}>Level {key}</Link>
                                                     </Grid>
                                                     <Grid item xs={6}>
-                                                        {myTreeLevels[key].length}
+                                                        {myReceivedListGroup[key].length}
                                                     </Grid>
                                                     <Grid item xs={3}>
                                                         -- Status --
                                                     </Grid>
                                                 </Grid>
                                             )
-                                        }
+                                       // }
                                     })
                                     }
                                 </Grid>

@@ -25,8 +25,8 @@ export class ReceiveConfirm extends React.Component {
   
 
   render() {
-    const { classes, paymentInfo, receivePaymentsList } = this.props
-    const pay_info = _.find(receivePaymentsList,(o) => o.payment_id === paymentInfo.payment_id)
+    const { classes, paymentInfo, confirmPendingList } = this.props
+    const pay_info = _.find(confirmPendingList,(o) => o.payment_id === paymentInfo.payment_id)
     return (
       <div id="mainContainer">
         <Paper className={classes.paper}>

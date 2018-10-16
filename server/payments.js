@@ -28,7 +28,7 @@ router.post('/makeLevelPayment', async function(req, res) {
     }
 });
 
-router.post('/receivePaymentList', async function(req, res) {
+router.post('/myConfirmPendingList', async function(req, res) {
     var curQuery = "select * from payments where payment_level="+req.body.payment_level+" and to_id="+req.body.user_id+" and confirm_status='Pending'"
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
@@ -177,9 +177,8 @@ async function getMyParentLevelWise(user_id, maxLevel, res) {
     return haveRootLevel
 }
 
-router.post('/myPaymentList', async function(req, res) {
-    var curQuery = "select * from payments where from_id="+req.body.user_id
-    var result = await pg_connect.connectDB(curQuery, res)
+async function getPaymentList(query, res) {
+    var result = await pg_connect.connectDB(query, res)
     if(result) {
         for(var i=0; i<result.length; i++) {
             var selQuery = "select "+userInfoList+" from users where user_id="+result[i].to_id
@@ -193,6 +192,16 @@ router.post('/myPaymentList', async function(req, res) {
         }
         res.status(200).send(result)
     }
+}
+
+router.post('/myPaymentList', async function(req, res) {
+    var curQuery = "select * from payments where from_id="+req.body.user_id
+    await getPaymentList(curQuery, res)
+});
+
+router.post('/myReceivedPaymentList', async function(req, res) {
+    var curQuery = "select * from payments where to_id="+req.body.user_id
+    await getPaymentList(curQuery, res)
 });
 
 router.post('/levelEligibility', async function(req, res) {
