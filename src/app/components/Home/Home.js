@@ -23,7 +23,7 @@ export class Home extends React.Component {
     const { classes } = this.props
     return (
       <div id="mainContainer">
-        Home page content comes here -world Hello
+        Home page content comes here -Tamil
       </div>)
   }
 }
