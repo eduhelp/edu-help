@@ -66,10 +66,6 @@ class ConfirmReceiver extends React.Component {
         })
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log('nextProps >>>> confirm receiver')
-        console.log(nextProps.smartSpreaderInfo)
-    }
     submitPaymentDetails = (paymentEntryInfo) => {
         this.setState({
             paymentEntryInfo
@@ -119,12 +115,22 @@ class ConfirmReceiver extends React.Component {
   handleNext = () => {
     const { activeStep } = this.state;
     let { skipped, receiverInfo } = this.state;
+    let receiver_type = ''
+    let sel_user_id = ''
     if( activeStep === 1) {
-        const receiver_type = receiverInfo.level_eligibility ? 'RootParent' : 'SmartSpreader'
+        
+        if(receiverInfo.level_eligibility) {
+            receiver_type = 'RootParent'
+            sel_user_id = this.props.treeParentInfo.user_id
+        } else {
+            receiver_type = 'SmartSpreader'
+            sel_user_id = this.props.smartSpreaderInfo.user_id
+        }
+        
         const sendData = {
             payment_level: receiverInfo.payment_level,
             from_id: receiverInfo.from_id,
-            to_id: receiverInfo.receiver_id,
+            to_id: sel_user_id,
             payment_value: receiverInfo.payment_value,
             paid_status: 'Pending',
             receiver_type: receiver_type
