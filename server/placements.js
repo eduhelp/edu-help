@@ -8,7 +8,10 @@ router.post('/myTree', async function(req, res) {
     var retArr = []
     var curLevel = 0
     var resultArray = await getMyTreeArray(req.body.user_id, retArr, curLevel, res)
-    res.status(200).send(resultArray)
+    if(resultArray) {
+        res.status(200).send(resultArray)
+    }
+    
 });
 
 async function getMyTreeArray(sp_id, retArr, getLevel, res) {
@@ -18,11 +21,17 @@ async function getMyTreeArray(sp_id, retArr, getLevel, res) {
     for(var i=0; i<curResult.length; i++) {
         var curQuery = "select "+userInfoList+" from users where user_id="+curResult[i].user_id
         var result = await pg_connect.connectDB(curQuery, res)
+        var payQuery = "select * from payments where from_id="+curResult[i].user_id+" and payment_level=1"
+        var payResult = await pg_connect.connectDB(payQuery, res)
+        var levQuery = "select * from payments where from_id="+curResult[i].user_id+" and payment_level="+curLevel
+        var levResult = await pg_connect.connectDB(levQuery, res) 
         var nodeObj = {
             level: curLevel,
             parent_id: sp_id,
             user_id: result[0].user_id,
-            nodeInfo: result[0]
+            nodeInfo: result[0],
+            sponsorPayment: payResult[0],
+            levelPayment: levResult[0]
         }
         retArr.push(nodeObj)
     }

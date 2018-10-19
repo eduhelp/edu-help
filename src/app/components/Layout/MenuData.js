@@ -22,6 +22,7 @@ const getmenu = (props) => {
     menuDefinitions.push({ title: 'My Dashboard', to: '/dashboard', icon: <DashboardIcon className={props.color} /> })
     menuDefinitions.push({ title: 'My Profile', to: '/profile', icon: <MaintainIcon className={props.color} /> })
     menuDefinitions.push({ title: 'My Tree', to: '/my_tree', icon: <AdminIcon className={props.color} /> })
+    menuDefinitions.push({ title: 'Disputes', to: '/disputes', icon: <AdminIcon className={props.color} /> })
     if(props.authInfo.data.user_id == '1') {
         menuDefinitions.push({ title: 'Smart Spreaders', to: '/smart_spreaders', icon: <DemoIcon className={props.color} /> })
     }

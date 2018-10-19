@@ -1,18 +1,25 @@
 var express = require('express');
 var pg = require('pg');
 
-/*
-//Local
+//server info
+var dbName =  'EduHelp'
+var pwd = 'fgjgo874nvj7hv'
+
+//local info
+//var dbName =  'eduhelp'
+//var pwd = '1234'
+
+//pool connect
 let pool = new pg.Pool({
     port: 5432,
-    password: '1234',
-    database: 'eduhelp',
+    password: pwd,
+    database: dbName,
     max: 10,
     host: 'localhost',
     user: 'postgres'
 })
-*/
 
+/*
 //server
 let pool = new pg.Pool({
     port: 5432,
@@ -22,10 +29,10 @@ let pool = new pg.Pool({
     host: 'localhost',
     user: 'postgres'
 })
-
+*/
 
 /*
-//server
+//server - test
 let pool = new pg.Pool({
     port: 5432,
     password: 'dbPwd247',
