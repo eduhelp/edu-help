@@ -25,8 +25,11 @@ router.post('/addUser', async function(req, res) {
 });
 
 router.post('/userLogin', async function(req, res) {
+    console.log('reached')
     var curQuery = "select * from users where (username='"+req.body.username+"' or mobile='"+req.body.username+"') and pwd='"+req.body.pwd+"'"
     var result = await pg_connect.connectDB(curQuery, res)
+    console.log('result')
+    console.log(result)
     if(result) {
         if(result.length === 0) {
             res.status(403).send({status: true, variant: 'error', message: 'Invalid username or password'})
@@ -106,6 +109,29 @@ router.post('/checkAvailability', async function(req, res) {
 
 router.post('/getSmartSpreaders', async function(req, res) {
     curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id left join payments t3 on t1.payment_id = t3.payment_id where t1.payment_level="+req.body.payment_level+" order by t1.spreader_id"
+    var result = await pg_connect.connectDB(curQuery, res)
+    if(result) {
+        res.status(200).send(result)
+    }
+});
+
+router.post('/myReferrals', async function(req, res) {
+    curQuery = "select "+userInfoList+" from users where sponsor_id="+req.body.user_id
+    var result = await pg_connect.connectDB(curQuery, res)
+    if(result) {
+        for(var i=0; i<result.length; i++) {
+            var selQuery = "select * from payments where from_id="+result[i].user_id+" and payment_level=1"
+            var selResult = await pg_connect.connectDB(selQuery, res)
+            if (selResult) {
+                result[i]['paymentInfo'] = selResult[0]
+            }
+        }
+        res.status(200).send(result)
+    }
+});
+
+router.post('/getMySmartSpreadersList', async function(req, res) {
+    curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id left join payments t3 on t1.payment_id = t3.payment_id where t1.user_id="+req.body.user_id+" order by t1.spreader_id"
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
         res.status(200).send(result)

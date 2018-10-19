@@ -8,6 +8,8 @@ import {
   GET_AUTH_INFO_SUCCESS,
   CHECK_AVAILABLE_SUCCESS,
   SMART_SPREADERS_SUCCESS,
+  MY_REFERRALS_SUCCESS,
+  MY_SMART_SPREADER_LIST_SUCCESS,
 } from './actionType'
 import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
 // import config from './../../config/apiConfig'
@@ -161,6 +163,32 @@ export function getSmartSpreaders(payload) {
     .catch((error) => {
       console.log('catch clock')
       const errMsg = {status: true, variant: 'error', message: 'problem while get the smart spreaders'}
+      dispatch({ snackMessage: errMsg, type: TOGGLE_SNACKBAR })
+    })
+  }
+}
+
+export function getMyReferrals(payload) {
+  return dispatch => {
+    return postService('users/myReferrals', payload)
+    .then((resp) => {
+      dispatch({ data: resp, type: MY_REFERRALS_SUCCESS })
+    })
+    .catch((error) => {
+      const errMsg = {status: true, variant: 'error', message: 'problem while retieve my referrals'}
+      dispatch({ snackMessage: errMsg, type: TOGGLE_SNACKBAR })
+    })
+  }
+}
+
+export function getMySmartSpreadersList(payload) {
+  return dispatch => {
+    return postService('users/getMySmartSpreadersList', payload)
+    .then((resp) => {
+      dispatch({ data: resp, type: MY_SMART_SPREADER_LIST_SUCCESS })
+    })
+    .catch((error) => {
+      const errMsg = {status: true, variant: 'error', message: 'problem while retieve my referrals'}
       dispatch({ snackMessage: errMsg, type: TOGGLE_SNACKBAR })
     })
   }

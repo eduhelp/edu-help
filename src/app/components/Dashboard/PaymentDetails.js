@@ -91,6 +91,16 @@ export class PaymentDetails extends React.Component {
                     </Grid>
                 </Grid>
             </Grid>
+            <Grid item xs={12} className={classes.rowHead}>
+                <Grid container>
+                    <Grid item xs={6}>
+                        Confirm Status
+                    </Grid>
+                    <Grid item xs={6}>
+                        {details.confirm_status}
+                    </Grid>
+                </Grid>
+            </Grid>
         </Grid>
       </div>)
   }
