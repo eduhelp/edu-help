@@ -23,7 +23,7 @@ router.post('/open', async function(req, res) {
 async function uploadFileToFolder(fileData, res) {
     console.log(fileData)
     console.log(__dirname)
-    let imageFile = fileData.file;
+   /* let imageFile = fileData.file;
 
   imageFile.mv(path.join(__dirname+"./../src/dispute_files"), function(err) {
     if (err) {
@@ -31,6 +31,6 @@ async function uploadFileToFolder(fileData, res) {
     }
 
     //res.json({file: `public/${fileData.fileName}.jpg`});
-  });
+  }); */
 }
 module.exports = router
