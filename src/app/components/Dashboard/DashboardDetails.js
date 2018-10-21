@@ -11,6 +11,8 @@ import MyReferrals from './MyReferrals'
 import GiveHelp from './GiveHelp'
 import ReceiveHelp from './ReceiveHelp'
 import MySmartSpreader from './MySmartSpreader'
+import MyDisputes from '../Disputes/MyDisputes'
+import DisputeDetails from '../Disputes/DisputeDetails'
 
 function TabContainer(props) {
     return (
@@ -26,9 +28,14 @@ export class DashboardDetails extends React.Component {
     this.state = {
         myTreeLevels: [],
         tabValue:0,
+        disputeObj: '',
+        disputePage: ''
     }
   }
 
+  componentWillMount() {
+      this.setState({disputePage: ''})
+  }
   componentWillReceiveProps(nextProps) {
     console.log('authInfo')
     console.log(nextProps.authInfo)
@@ -42,10 +49,12 @@ export class DashboardDetails extends React.Component {
     console.log(nextProps.myPaymentList)
     console.log('myReceivedList')
     console.log(nextProps.myReceivedList)
+    console.log('myDisputes')
+    console.log(nextProps.myDisputes)
   }
 
   handleChange = (event, tabValue) => {
-    this.setState({ tabValue });
+    this.setState({ tabValue, disputeObj: '', disputePage: '' });
   };
 
   confirmReceiver = (levelIndex, treeParentId, levelEligibility, treeParentInfo) => event => {
@@ -59,9 +68,24 @@ export class DashboardDetails extends React.Component {
     this.props.makePaymentCB('MakePayment', paymentObject)
   }
 
+  openDispute = (paymentObject) => event => {
+    console.log('ready to make open dispute to ')
+    console.log(paymentObject)
+    this.props.openDisputeCB('OpenDispute', paymentObject)
+  }
+
+  showDisputeDetails = (disputeObj) => {
+      this.setState({disputeObj: disputeObj, disputePage: 'details'})
+  }
+
+  cancelDetailsPage = () => {
+    this.setState({disputeObj: '', disputePage: ''})
+  }
+
   render() {
     const { classes } = this.props
-    const { tabValue } = this.state
+    const { tabValue, disputePage, disputeObj } = this.state
+    console.log(disputePage)
     return (
         <div>
         <UserStatus 
@@ -76,6 +100,7 @@ export class DashboardDetails extends React.Component {
                 <Tab label="Give help" />
                 <Tab label="Receive help" />
                 <Tab label="Smart Spreader" />
+                <Tab label="Disputes" />
             </Tabs>
         </AppBar>
         {tabValue === 0 && 
@@ -109,6 +134,7 @@ export class DashboardDetails extends React.Component {
                     sponsorDetails={this.props.sponsorDetails}
                     confirmReceiverCB={this.props.confirmReceiverCB}
                     makePaymentCB={this.props.makePaymentCB}
+                    openDisputeCB={this.props.openDisputeCB}
                     classes={classes}
                 />
             </TabContainer>
@@ -136,6 +162,27 @@ export class DashboardDetails extends React.Component {
                     mySmartSpreadersList={this.props.mySmartSpreadersList}
                     classes={classes}
                 />
+            </TabContainer>
+        }
+        {tabValue === 6 && 
+            <TabContainer>
+                {disputePage == 'details' ? (
+                    <DisputeDetails
+                        authInfo={this.props.authInfo}
+                        disputeObj={disputeObj}
+                        cancelCB={this.cancelDetailsPage}
+                        classes={classes}
+                    />
+                ) : (
+                    <MyDisputes
+                        authInfo={this.props.authInfo}
+                        title='My Disputes'
+                        myDisputes = {this.props.myDisputes}
+                        detailsCB={this.showDisputeDetails}
+                        classes={classes}
+                    />
+                )}
+                
             </TabContainer>
         }
     </div>)

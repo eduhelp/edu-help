@@ -1,7 +1,6 @@
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
-// const fileUpload = require('express-fileupload');
 var app = express();
 
 var users = require('./users')
@@ -16,11 +15,16 @@ app.use(function(req, res, next) {
   });
 
 app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, '../screenshots')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// app.use(fileUpload());
 
 var router = express.Router();
+
+router.get('/screenshots/:name', function(req,res) {
+    var name = req.params.name;
+    res.sendFile(path.join(__dirname+"./../screenshots/"+name));
+});
 
 router.get('/*', function(req,res) {
     res.sendFile(path.join(__dirname+"./../src/index.html"));
@@ -31,6 +35,7 @@ app.use("/users", users)
 app.use("/payments", payments)
 app.use("/placements", placements)
 app.use("/disputes", disputes)
+
 
 app.listen(9000);
 console.log('server started... ');

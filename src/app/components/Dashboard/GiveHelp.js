@@ -65,14 +65,15 @@ export class GiveHelp extends React.Component {
 
 
   confirmReceiver = (levelIndex, treeParentId, levelEligibility, treeParentInfo) => event => {
-    console.log('calling confirmReceiver')
     this.props.confirmReceiverCB('ConfirmReceiver',levelIndex, treeParentId, levelEligibility, treeParentInfo)
    }
 
    makePayment = (paymentObject) => event => {
-    console.log('ready to make payemnt to ')
-    console.log(paymentObject)
     this.props.makePaymentCB('MakePayment', paymentObject)
+  }
+
+  openDispute = (paymentObject) => event => {
+    this.props.openDisputeCB('OpenDispute', paymentObject)
   }
 
   showUserDetails = (userInfo) => event => {
@@ -94,13 +95,6 @@ export class GiveHelp extends React.Component {
         dialogOpenStatus: true,
         dialogTitle: "Payment Details",
         dialogContent: <PaymentDetails details={paymentInfo} />
-    })
-  }
-  openDispute = (paymentInfo) => event => {
-    this.setState({
-        dialogOpenStatus: true,
-        dialogTitle: "Open Dispute",
-        dialogContent: <OpenDispute details={paymentInfo} authInfo={this.props.authInfo} />
     })
   }
   closeDialog = () => {
@@ -165,7 +159,7 @@ export class GiveHelp extends React.Component {
                                     <div>
                                         <div>Payment Done and Waiting to receiver confirmation</div>
                                         <div className={classes.navLink} onClick={this.showPaymentDetails(level1SponsorObject)}>Payment Details</div>
-                                        <div className={classes.navLink} onClick={this.createDispute(level1SponsorObject)}>Create Dispute</div>
+                                        <div className={classes.navLink} onClick={this.openDispute(level1SponsorObject)}>Open Dispute</div>
                                     </div>
                                 ) : (level1SponsorObject.paid_status == 'Completed' && level1SponsorObject.confirm_status == 'Confirmed') ? (
                                     <div>

@@ -13,7 +13,7 @@ export const initialState = fromJS({
   }],
 })
 
-export default function grouperReducer (state = initialState, action) {
+export default function placementsReducer (state = initialState, action) {
   switch (action.type) {
     case MY_TREE_SUCCESS:
       return state
