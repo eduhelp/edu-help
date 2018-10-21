@@ -4,7 +4,13 @@ body {
 }
 .paper {
   margin: 20px;
-  color: #ccc;
+  color: yellow;
+  background-color:blue !Important;
+}
+.heading{
+  
+
+
 }
 .slide {
   float: left;
