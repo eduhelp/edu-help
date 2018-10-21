@@ -9,12 +9,12 @@ import Tab from '@material-ui/core/Tab';
 import createPalette from '@material-ui/icons/Palette';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import ScrollableAnchor from 'react-scrollable-anchor';
 import ReallySmoothScroll from 'really-smooth-scroll';
 import Community from './whyThisCommunity'
 import Works from './howItWorks'
 import Smart from './smartSpreaders'
 import Contact from './contactUs'
+
 
 
 
@@ -142,6 +142,7 @@ export class Home extends React.Component {
       
       <div id="mainContainer" className={classes.hgt} >
           <Paper className={classes.paper}>
+
               <Typography className={classes.paper1}>
               <div className={classes.papers} > 
                  <center><span className={classes.hed}>About Us</span> <br/>Over years an effluent broadminded<br /><span className={classes.spa}> NRI’s & Entrepreneurs</span> were<br />thinking on a <span className={classes.spa}>“Idea”</span> that could change & <br /> solve millions of people Education expense<br /> issue through an innovative idea that flashed<br /> out in minds, that’s the birth story of <br /><span className={classes.spa}> “EduHelp”</span>
