@@ -25,11 +25,8 @@ router.post('/addUser', async function(req, res) {
 });
 
 router.post('/userLogin', async function(req, res) {
-    console.log('reached')
     var curQuery = "select * from users where (username='"+req.body.username+"' or mobile='"+req.body.username+"') and pwd='"+req.body.pwd+"'"
     var result = await pg_connect.connectDB(curQuery, res)
-    console.log('result')
-    console.log(result)
     if(result) {
         if(result.length === 0) {
             res.status(403).send({status: true, variant: 'error', message: 'Invalid username or password'})

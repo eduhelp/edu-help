@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import { getFormatedDate } from '../Common/Utils'
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { openDispute } from '../../store/Disputes/actionCreator'
+import { addScreenshot } from '../../store/Disputes/actionCreator'
 
 import axios from 'axios'
 import Dropzone from 'react-dropzone'
@@ -41,7 +41,7 @@ const styles = {
 };
 
 
-export class OpenDispute extends React.Component {
+export class AddScreenshot extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -54,20 +54,17 @@ export class OpenDispute extends React.Component {
     this.setState({ [stName] : event.target.value })
   }
 
-  disputeSubmit = (ev) => {
+  submitScreenshot = (ev) => {
     ev.preventDefault();
-    const { disputePaymentObj, authInfo } = this.props
+    const { disputeObj, authInfo } = this.props
 
     const sendData = {
-        dispute_from: authInfo.data.user_id,
-        dispute_to: disputePaymentObj.receiverInfo.user_id,
-        dispute_type: 'Receiver not yet confirmed',
-        payment_id: disputePaymentObj.payment_id,
-        message: this.state.disputeMsg,
+        dispute_id: disputeObj.dispute_id,
+        dispute_from:  authInfo.data.user_id,
         fileInfo: this.state.screenshots
     }
-    this.props.openDispute(sendData)
-    window.location.replace('/dashboard')
+    this.props.addScreenshot(sendData)
+    this.props.closeCB()
   }
 
   handleUploadImage = (files) => {
@@ -96,7 +93,7 @@ export class OpenDispute extends React.Component {
   }
 
   render() {
-    const { classes, disputePaymentObj } = this.props
+    const { classes, disputeObj } = this.props
     const { screenshots } = this.state
     const images = screenshots.map((image, index) => {
         const url = `screenshots/${image}`
@@ -104,57 +101,15 @@ export class OpenDispute extends React.Component {
     })
     return (
       <div id="mainContainer">
-        <Paper className={classes.paperCenter}>
-            <h3>Open Dispute</h3>
-        </Paper>
         <Paper className={classes.paper}>
             <Grid container>
                 <Grid item xs={12} className={classes.rowHead}>
                     <Grid container>
                         <Grid item xs={6}>
-                            Payment Id
+                            Dispute Id
                         </Grid>
                         <Grid item xs={6}>
-                            {disputePaymentObj.payment_id}
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={12} className={classes.rowDetails}>
-                    <Grid container>
-                        <Grid item xs={6}>
-                            Receiver Name
-                        </Grid>
-                        <Grid item xs={6}>
-                            {disputePaymentObj.receiverInfo.username} ({disputePaymentObj.receiverInfo.user_id})
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={12} className={classes.rowDetails}>
-                    <Grid container>
-                        <Grid item xs={6}>
-                            Receiver Type
-                        </Grid>
-                        <Grid item xs={6}>
-                            {disputePaymentObj.receiver_type}
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={12} className={classes.rowDetails}>
-                    <Grid container>
-                        <Grid item xs={6}>
-                            Dispute Message
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                id="standard-multiline-flexible"
-                                label="Multiline"
-                                multiline
-                                rowsMax="4"
-                                value={this.state.disputeMsg}
-                                onChange={this.handleChange('disputeMsg')}
-                                className={classes.textField}
-                                margin="normal"
-                            />
+                            {disputeObj.dispute_id}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -175,20 +130,12 @@ export class OpenDispute extends React.Component {
                 </Grid>
                 <Grid item xs={12} className={classes.rowDetails}>
                     <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={this.props.cancelCB}
-                        className={classes.button}
-                        >
-                        Back to Dashboard
-                    </Button>
-                    <Button
                       variant="contained"
                       color="primary"
-                      onClick={this.disputeSubmit}
+                      onClick={this.submitScreenshot}
                       className={classes.button}
                     >
-                      Open Dispute
+                      Add Screenshots
                     </Button>
                 </Grid>
             </Grid>
@@ -199,9 +146,9 @@ export class OpenDispute extends React.Component {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    openDispute,
+    addScreenshot,
   }, dispatch)
 
 const mapStateToProps = state => ({
 })
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(OpenDispute))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AddScreenshot))
