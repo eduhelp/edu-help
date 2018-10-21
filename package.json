@@ -12,7 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
-    "get-google-fonts": "^1.1.1",
     "immutable": "^3.8.2",
     "pg": "^7.4.3",
     "promise-pg": "^0.1.1",
@@ -22,7 +21,6 @@
     "react-native-material-cards": "^1.0.9",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
-    "react-scrollable-anchor": "^0.6.1",
     "really-smooth-scroll": "^2.1.1",
     "redux": "3.7.2",
     "redux-devtools-extension": "2.13.2",
