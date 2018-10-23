@@ -9,9 +9,9 @@ import Dialog from '../Common/Dialog'
 import UserDetails from '../Dashboard/UserDetails'
 import PaymentDetails from '../Dashboard/PaymentDetails'
 import Button from '@material-ui/core/Button';
-import { getDisputePhotos, getDisputeComments } from '../../store/Disputes/actionCreator'
+import { getDisputePhotos, getDisputeComments, cancelTransaction } from '../../store/Disputes/actionCreator'
 import { getFormatedDate } from '../Common/Utils'
-
+import { confirmLevelPayment } from '../../store/Payments/actionCreator'
 import AddScreenshot from './AddScreenshot'
 import AddComment from './AddComment'
 
@@ -54,6 +54,9 @@ const styles = {
   },
   photoRow: {
       padding: 5,
+  },
+  button: {
+      margin: 5,
   },
 };
 
@@ -147,8 +150,35 @@ export class DisputeDetails extends React.Component {
         })
     } 
 
+    cancelTransaction = event => {
+        const sendData = {
+            payment_id: this.props.disputeObj.payment_id,
+            dispute_id: this.props.disputeObj.dispute_id,
+            user_id: this.props.authInfo.data.user_id,
+            receiver_type: this.props.disputeObj.paymentInfo.receiver_type,
+            payment_level: this.props.disputeObj.paymentInfo.payment_level,
+            receiver_id: this.props.disputeObj.paymentInfo.to_id
+        }
+        this.props.cancelTransaction(sendData)
+        window.location.replace('/dashboard')
+    }
+
+    confirmTransaction = event => {
+        const sendData = {
+            payment_id: this.props.disputeObj.payment_id,
+            to_id: this.props.disputeObj.paymentInfo.to_id,
+            receiver_type: this.props.disputeObj.paymentInfo.receiver_type,
+            user_id: this.props.disputeObj.paymentInfo.from_id,
+            sponsor_id: this.props.disputeObj.paymentInfo.to_id,
+            payment_level: this.props.disputeObj.paymentInfo.payment_level,
+            confirmed_by: 'Admin'
+          }
+          this.props.confirmLevelPayment(sendData)
+          window.location.replace('/dashboard')
+    }
+
   render() {
-    const { classes, disputeObj, disputeComments } = this.props
+    const { classes, disputeObj, disputeComments, authInfo } = this.props
     return (
       <div id="mainContainer">
         <Dialog
@@ -194,17 +224,19 @@ export class DisputeDetails extends React.Component {
                                         </Grid>
                                     )
                                 })
-                                }   
-                                <Grid item xs={12} className={classes.photoRow}>
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick={this.addDisputeComment}
-                                        className={classes.button}
-                                        >
-                                        Add Comment
-                                    </Button>
-                                </Grid>
+                                }
+                                {disputeObj.dispute_status == 'Open' && 
+                                    <Grid item xs={12} className={classes.photoRow}>
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={this.addDisputeComment}
+                                            className={classes.button}
+                                            >
+                                            Add Comment
+                                        </Button>
+                                    </Grid>
+                                }
                             </Grid>
                         </Paper>
                     </Grid>
@@ -223,16 +255,18 @@ export class DisputeDetails extends React.Component {
                                     </Grid>
                                 )
                             })}
-                            <Grid item xs={12} className={classes.photoRow}>
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={this.addScreenShot}
-                                    className={classes.button}
-                                    >
-                                    Add Screenshot
-                                </Button>
-                            </Grid>
+                            {disputeObj.dispute_status == 'Open' && 
+                                <Grid item xs={12} className={classes.photoRow}>
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={this.addScreenShot}
+                                        className={classes.button}
+                                        >
+                                        Add Screenshot
+                                    </Button>
+                                </Grid>
+                            }
                         </Paper>
                     </Grid>
                 </Grid>
@@ -244,6 +278,26 @@ export class DisputeDetails extends React.Component {
                     >
                     Back to details page
                 </Button>
+                {(authInfo.data.user_id == '1' && disputeObj.dispute_status == 'Open') && 
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={this.cancelTransaction}
+                        className={classes.button}
+                        >
+                        Cancel Transaction
+                    </Button>
+                }
+                {(authInfo.data.user_id == '1' && disputeObj.dispute_status == 'Open') && 
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={this.confirmTransaction}
+                        className={classes.button}
+                        >
+                        Confirm Transaction
+                    </Button>
+                }
             </div>
         ) : (
             <Paper className={classes.paperCenter}>
@@ -262,6 +316,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators({
     getDisputePhotos,
     getDisputeComments,
+    cancelTransaction,
+    confirmLevelPayment,
   }, dispatch)
 
 const mapStateToProps = state => ({

@@ -123,7 +123,8 @@ class ReceivePayment extends React.Component {
             receiver_type: paymentObj.receiver_type,
             user_id: paymentInfo.user_id,
             sponsor_id: paymentInfo.sponsor_id,
-            payment_level: this.props.match.params.levelIndex
+            payment_level: this.props.match.params.levelIndex,
+            confirmed_by: 'Receiver'
           }
           this.props.confirmLevelPayment(sendData)
           window.location.replace('/dashboard')

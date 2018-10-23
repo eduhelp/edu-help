@@ -75,7 +75,7 @@ export class DashboardDetails extends React.Component {
   }
 
   showDisputeDetails = (disputeObj) => {
-      this.setState({disputeObj: disputeObj, disputePage: 'details'})
+      this.setState({disputeObj: disputeObj, disputePage: 'details', tabValue: 6})
   }
 
   cancelDetailsPage = () => {
@@ -135,6 +135,8 @@ export class DashboardDetails extends React.Component {
                     confirmReceiverCB={this.props.confirmReceiverCB}
                     makePaymentCB={this.props.makePaymentCB}
                     openDisputeCB={this.props.openDisputeCB}
+                    viewDisputeCB={this.showDisputeDetails}
+                    myDisputes={this.props.myDisputes}
                     classes={classes}
                 />
             </TabContainer>

@@ -76,6 +76,10 @@ export class GiveHelp extends React.Component {
     this.props.openDisputeCB('OpenDispute', paymentObject)
   }
 
+  viewDispute = (disputeObj) => event => {
+      this.props.viewDisputeCB(disputeObj)
+  }
+
   showUserDetails = (userInfo) => event => {
     this.setState({
         dialogOpenStatus: true,
@@ -187,6 +191,11 @@ export class GiveHelp extends React.Component {
                         } else {
                             receivedCheck = true
                         }
+                        let disputeObj = ''
+                        if(curPaymentObject) {
+                            disputeObj = _.find(this.props.myDisputes, (n) => { return (n.payment_id == curPaymentObject.payment_id) })
+                        }
+
                         if(option.level > 1 && nextLevelCheck && receivedCheck)  {
                             /*if(!curPaymentObject && nextLevelCheck) {
                                 nextLevelCheck = false
@@ -220,7 +229,12 @@ export class GiveHelp extends React.Component {
                                                     <div>
                                                         <div>Payment Done and Waiting to receiver confirmation</div>
                                                         <div className={classes.navLink} onClick={this.showPaymentDetails(curPaymentObject)}>Payment Details</div>
-                                                        <div className={classes.navLink} onClick={this.openDispute(curPaymentObject)}>Open Dispute</div>
+                                                        {disputeObj ? (
+                                                            <div className={classes.navLink} onClick={this.viewDispute(disputeObj)}>View Dispute</div>
+                                                        ) : (
+                                                            <div className={classes.navLink} onClick={this.openDispute(curPaymentObject)}>Open Dispute</div>
+                                                        )}
+                                                        
                                                     </div>
                                                 ) : (curPaymentObject.paid_status == 'Completed' && curPaymentObject.confirm_status == 'Confirmed') ? (
                                                     <div>
