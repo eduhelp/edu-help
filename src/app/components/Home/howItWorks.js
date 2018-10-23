@@ -9,7 +9,8 @@ import Tab from '@material-ui/core/Tab';
 import createPalette from '@material-ui/icons/Palette';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-
+import Grid from '@material-ui/core/Grid';
+import How from './how.png';
 const styles = {
   root: {
     display: 'flex',
@@ -23,6 +24,11 @@ const styles = {
    fontSize:'25px',
  },
 
+ lii:{
+   fontSize:'16px',
+   color:'black',
+   
+ },
 };
 
 
@@ -35,14 +41,28 @@ export class howItWorks extends React.Component {
     const { classes } = this.props
     return (
             <div id="mainContainer">
-            <h2 className={classes.hed}>How it works</h2>
-              <ul>
-                <li>Since this community is created for a good cause of supporting peer to peer helping community for educational expenses, so every individual one ID for one mobile & AADHAR number</li><br />
-                <li>You need to have an invitation link from the sponsor to get in to this community. Once you receive the link update the mandatory field details and get started  </li><br />
-                <li>I don’t have anyone to sponsor please email us<br />
-                </li>More details: PDF<a href='#'>&nbsp;click here</a><br />
-              </ul>
-              </div>
+              <Grid item xs={12}><h2 className={classes.hed}>How it works</h2>
+              <Grid container>
+              <Grid item xs={3}>
+                <img src={ How } />
+
+               </Grid>
+                <Grid item xs={2}>
+               
+
+               </Grid>
+               <Grid item xs={6}>
+                  
+                  <ul>
+                    <li className={classes.lii}>Since this community is created for a good cause of supporting peer to peer helping community for educational expenses, so every individual one ID for one mobile & AADHAR number</li><br />
+                    <li className={classes.lii}>You need to have an invitation link from the sponsor to get in to this community. Once you receive the link update the mandatory field details and get started  </li><br />
+                    <li className={classes.lii}>I don’t have anyone to sponsor please email us<br />
+                    </li>More details: PDF<a href='#'>&nbsp;click here</a><br />
+                  </ul>
+                 </Grid>
+              </Grid>
+              </Grid>
+            </div>
 
     )
 

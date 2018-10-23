@@ -9,6 +9,8 @@ import Tab from '@material-ui/core/Tab';
 import createPalette from '@material-ui/icons/Palette';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
+import Hello from './hello.png';
 
 const styles = {
   root: {
@@ -35,12 +37,25 @@ export class ContactUs extends React.Component {
     const { classes } = this.props
     return (
             <div id="mainContainer">
+            <Grid item xs={12}>
             <h2 className={classes.hed}>Contact Us</h2>
+            <Grid container>
+              <Grid item xs={3}>
+                <img src={ Hello } />
+
+               </Grid>
+                <Grid item xs={2}>
+               
+
+               </Grid>
+               <Grid item xs={6}>
               <ul>
-                <li>Reach us @ …………@gmail.com</li><br />
+                <li>Reach us @ Edu_help@gmail.com</li><br />
                 
               </ul>
-
+                </Grid>
+              </Grid>
+              </Grid>
 
             </div>
 
