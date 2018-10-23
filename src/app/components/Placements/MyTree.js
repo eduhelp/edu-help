@@ -68,8 +68,14 @@ export class MyTree extends React.Component {
                     <Grid item xs={2}>
                         Level
                     </Grid>
-                    <Grid item xs={10}>
-                        Node
+                    <Grid item xs={3}>
+                        User Name
+                    </Grid>
+                    <Grid item xs={3}>
+                        Sponser Name
+                    </Grid>
+                    <Grid item xs={3}>
+                        Active Level
                     </Grid>
                 </Grid>
             </Grid>
@@ -80,11 +86,13 @@ export class MyTree extends React.Component {
                         <Grid item xs={2}>
                             Level{key}
                         </Grid>
-                        <Grid item xs={10}>
+                        <Grid item xs={8}>
                             <DisplayTreeInfo 
                                 details={group_levels[key]}
                             />
                         </Grid>
+                        
+
                     </Grid>
                 </Grid>
                 )

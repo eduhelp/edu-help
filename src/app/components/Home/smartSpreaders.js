@@ -9,6 +9,9 @@ import Tab from '@material-ui/core/Tab';
 import createPalette from '@material-ui/icons/Palette';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
+import Smart from './smart.png';
+import Idea from './idea.png';
 
 const styles = {
   root: {
@@ -23,6 +26,12 @@ const styles = {
    fontSize:'25px',
  },
 
+ lii:{
+   fontSize:'16px',
+   color:'black',
+   
+ },
+
 };
 
 
@@ -35,12 +44,22 @@ export class smartSpreaders extends React.Component {
     const { classes } = this.props
     return (
             <div id="mainContainer">
-            <h2 className={classes.hed}>Smart Spreaders</h2>
+            <Grid item xs={12}><h2 className={classes.hed}>Smart Spreaders</h2>
+             <Grid container>
+            <Grid item xs={6}>
               <ul>
-                <li> Smart Spreaders are the one who takes more initiative to explain and promote EduHelp good cause community to people in sponsoring many Help givers& receivers</li><br />
-                <li> SMART SPREADER gets an additional help benefit from others also where receiver’s are not eligible to receive from level below, then helper can wait till upline sponsor get eligible or he can pay to "smart spreaders" according to the queue of that level </li><br />
+                <li className={classes.lii}> Smart Spreaders are the one who takes more initiative to explain and promote EduHelp good cause community to people in sponsoring many Help givers& receivers</li><br />
+                <li className={classes.lii}> SMART SPREADER gets an additional help benefit from others also where receiver’s are not eligible to receive from level below, then helper can wait till upline sponsor get eligible or he can pay to "smart spreaders" according to the queue of that level </li><br />
                 
               </ul>
+               </Grid>
+             
+               <Grid item xs={3}>
+                <img src={ Idea }  width='150%'/>
+
+               </Grid>
+               </Grid>
+             </Grid>
 
 
             </div>

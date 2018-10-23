@@ -14,8 +14,10 @@ import Community from './whyThisCommunity'
 import Works from './howItWorks'
 import Smart from './smartSpreaders'
 import Contact from './contactUs'
-
-
+import Grid from '@material-ui/core/Grid';
+import Background from './logo.png';
+import Background1 from './bg1.png';
+import Background2 from './kids.png';
 
 
 function TabContainer(props) {
@@ -31,11 +33,13 @@ TabContainer.propTypes = {
 };
 
 
-
+ let imgUrl = 'logo.png'
 const styles = {
   root: {
     display: 'flex',
     height: 300,
+   
+    
     
   },
   hgt:{
@@ -58,9 +62,19 @@ const styles = {
    
   },
   papers:{
-    backgroundColor:'#f9ff8a',
     color:'black',
-    backgroundImage: ``
+    backgroundImage: `url(${Background2})`,
+   
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'noRepeat',
+            backgroundOpacity: 0.6,
+},
+ paperso:{
+    color:'#f5f5f5',
+
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    
 },
 
 
@@ -89,7 +103,7 @@ const styles = {
   spa:{
     fontSize:'45px',
      fontFamily:'Edwardian Script ITC',
-    color:'#0a6cf3',
+    color:'#f4e736',
 
   },
   pad:{
@@ -102,7 +116,7 @@ const styles = {
     
  },
  hed:{
-   color:'#483C32',
+    color:'#f4e736',
    fontFamily:'Arial',
    fontSize:'25px',
  },
@@ -114,7 +128,8 @@ const styles = {
    paddingBottom:50,
  },
 apps:{
-  backgroundColor:'red',
+  backgroundColor:'orange',
+  color:'#fbfcfd',
 }
 };
 
@@ -142,12 +157,11 @@ export class Home extends React.Component {
       
       <div id="mainContainer" className={classes.hgt} >
           <Paper className={classes.paper}>
-
-              <Typography className={classes.paper1}>
+            <Typography className={classes.paper1}>
               <div className={classes.papers} > 
-                 <center><span className={classes.hed}>About Us</span> <br/>Over years an effluent broadminded<br /><span className={classes.spa}> NRI’s & Entrepreneurs</span> were<br />thinking on a <span className={classes.spa}>“Idea”</span> that could change & <br /> solve millions of people Education expense<br /> issue through an innovative idea that flashed<br /> out in minds, that’s the birth story of <br /><span className={classes.spa}> “EduHelp”</span>
-                 </center> 
-                 <br />
+                 <center className={classes.paperso}><span className={classes.hed}>About Us</span> <br/>Over years an effluent broadminded<br /><span className={classes.spa}> NRI’s & Entrepreneurs</span> were<br />thinking on a <span className={classes.spa}>“Idea”</span> that could change & <br /> solve millions of people Education expense<br /> issue through an innovative idea that flashed<br /> out in minds, that’s the birth story of <br /><span className={classes.spa}> “EduHelp”</span>
+                  
+                 </center>
                  </div> 
                   <AppBar position="static" className={classes.apps} >
                   <Tabs value={value} onChange={this.handleChange}>

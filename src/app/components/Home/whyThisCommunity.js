@@ -9,6 +9,8 @@ import Tab from '@material-ui/core/Tab';
 import createPalette from '@material-ui/icons/Palette';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
+import Why from './why.png';
 
 const styles = {
   root: {
@@ -21,6 +23,16 @@ const styles = {
    color:'#483C32',
    fontFamily:'Arial',
    fontSize:'25px',
+ },
+ para:{
+   color:'black',
+   fontSize:'16px',
+   
+ },
+ lii:{
+   fontSize:'16px',
+   color:'black',
+   
  },
 
 };
@@ -35,25 +47,36 @@ export class whyThisCommunity extends React.Component {
     const { classes } = this.props
     return (
             <div id="mainContainer">
-            <h2 className={classes.hed}>Why This Community</h2>
+            <Grid item xs={12}><h2 className={classes.hed}>Why This Community</h2>
+            <Grid container>
+            <Grid item xs={6}>
               <ul>
-                <li>WE believe that education is the most important tool you can receive, that can bring you most success in society today</li><br />
-                <li>Education is definitely important in one`s life.  A gift of knowledge can bring us to the top of our dreams. It leads us to the right path and gives us a chance to have a wonderful life. </li><br />
-                <li>Education is an important aspect that plays a huge role in the modern, industrialized world, which could transform<br />
-                <ol className={classes.hed1}>
+                <li className={classes.lii}>WE believe that education is the most important tool you can receive, that can bring you most success in society today</li><br />
+                <li className={classes.lii}>Education is definitely important in one`s life.  A gift of knowledge can bring us to the top of our dreams. It leads us to the right path and gives us a chance to have a wonderful life. </li><br />
+                <li className={classes.lii}>Education is an important aspect that plays a huge role in the modern, industrialized world, which could transform<br />
+                <ol className={classes.lii}>
                 <br />
                     
-                    <p>–  Career Advancement </p>
-                    <p>– Career Building</p>
-                    <p>– Backbone of Society</p>
+                    <p className={classes.para}>–  Career Advancement </p>
+                    <p className={classes.para}>– Career Building</p>
+                    <p className={classes.para}>– Backbone of Society</p>
                      
                 </ol>
 
 
                 </li><br />
               </ul>
+              </Grid>
+              <Grid item xs={1}>
+               
 
+               </Grid>
+               <Grid item xs={3}>
+                <img src={ Why } />
 
+               </Grid>
+               </Grid>
+             </Grid>
             </div>
 
 
