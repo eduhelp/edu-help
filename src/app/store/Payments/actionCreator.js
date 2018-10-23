@@ -76,6 +76,7 @@ export function myConfirmPendingList (payload) {
 }
 
 export function confirmLevelPayment (payload) {
+  console.log('confirmLevelPayment - action creator')
   return dispatch => {
     return postService('payments/confirmLevelPayment', payload)
     .then((resp) => {

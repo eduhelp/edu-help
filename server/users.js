@@ -117,7 +117,7 @@ router.post('/myReferrals', async function(req, res) {
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
         for(var i=0; i<result.length; i++) {
-            var selQuery = "select * from payments where from_id="+result[i].user_id+" and payment_level=1"
+            var selQuery = "select * from payments where from_id="+result[i].user_id+" and confirm_status!='Cancelled' and payment_level=1"
             var selResult = await pg_connect.connectDB(selQuery, res)
             if (selResult) {
                 result[i]['paymentInfo'] = selResult[0]

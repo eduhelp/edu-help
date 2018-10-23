@@ -21,9 +21,9 @@ async function getMyTreeArray(sp_id, retArr, getLevel, res) {
     for(var i=0; i<curResult.length; i++) {
         var curQuery = "select "+userInfoList+" from users where user_id="+curResult[i].user_id
         var result = await pg_connect.connectDB(curQuery, res)
-        var payQuery = "select * from payments where from_id="+curResult[i].user_id+" and payment_level=1"
+        var payQuery = "select * from payments where from_id="+curResult[i].user_id+" and payment_level=1  and confirm_status!='Cancelled'"
         var payResult = await pg_connect.connectDB(payQuery, res)
-        var levQuery = "select * from payments where from_id="+curResult[i].user_id+" and payment_level="+curLevel
+        var levQuery = "select * from payments where from_id="+curResult[i].user_id+" and confirm_status!='Cancelled' and payment_level="+curLevel
         var levResult = await pg_connect.connectDB(levQuery, res) 
         var nodeObj = {
             level: curLevel,
@@ -66,10 +66,10 @@ async function getTopLevelArray(user_id, retArr, getLevel, max_level, res) {
     var findRootLevelId = await getMyParentLevelWise(user_id, getLevel, res)
     var eligibility = ''
     if (findRootLevelId) {
-        var firstQuery = "select * from payments where to_id="+user_id+" and payment_level=1"
+        var firstQuery = "select * from payments where to_id="+user_id+" and payment_level=1 and confirm_status!='Cancelled'"
         var firstResult = await pg_connect.connectDB(firstQuery, res)
         if(firstResult.length >= 1) { 
-            var eliQuery = "select * from payments where from_id="+user_id+" and payment_level="+getLevel
+            var eliQuery = "select * from payments where from_id="+user_id+" and confirm_status!='Cancelled' and payment_level="+getLevel
             var eliResult = await pg_connect.connectDB(eliQuery, res)
             if(eliResult) {
                 if(eliResult.length === 0) {

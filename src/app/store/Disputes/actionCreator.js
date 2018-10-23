@@ -94,4 +94,17 @@ import {
       })
     }
   }
+
+  export function cancelTransaction (payload) {
+    return dispatch => {
+      return postService('disputes/cancelTransaction', payload)
+      .then((resp) => {
+        const succMsg = {status: true, variant: 'success', message: 'Transaction successfully cancelled...'}
+        dispatch({ snackMessage: succMsg, type: TOGGLE_SNACKBAR })
+      })
+      .catch((error) => {
+        dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
+      })
+    }
+  }
   

@@ -180,7 +180,7 @@ class MakePayment extends React.Component {
         <Paper className={classes.paper}>
           <h2>{levelText} - make payment.</h2>
         </Paper>
-        {(makePaymentObj.confirm_status !== null) ? (
+        {(makePaymentObj.confirm_status !== 'Initiated') ? (
             <Paper className={classes.paper}>
                 <h5>You are done the level{makePaymentObj.payment_level} payment - status : {makePaymentObj.confirm_status}</h5>
             </Paper>
