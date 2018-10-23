@@ -38,6 +38,9 @@ const styles = {
     padding: 10,
     textAlign: 'center',
   },
+  button: {
+      margin: 5,
+  },
 };
 
 
@@ -47,27 +50,45 @@ export class OpenDispute extends React.Component {
     this.state = {
         disputeMsg: '',
         screenshots: [],
+        msgError: false,
+        msgErrorText: '',
     }
   }
-  
+
   handleChange = (stName) => event => {
     this.setState({ [stName] : event.target.value })
   }
 
+  validateForm = () => {
+      if(!this.state.disputeMsg) {
+        this.setState({msgError: true, msgErrorText: 'Please enter your message'})
+        return false
+      }
+      return true
+  }
   disputeSubmit = (ev) => {
     ev.preventDefault();
-    const { disputePaymentObj, authInfo } = this.props
-
-    const sendData = {
-        dispute_from: authInfo.data.user_id,
-        dispute_to: disputePaymentObj.receiverInfo.user_id,
-        dispute_type: 'Receiver not yet confirmed',
-        payment_id: disputePaymentObj.payment_id,
-        message: this.state.disputeMsg,
-        fileInfo: this.state.screenshots
+    if(this.validateForm()) {
+        const { disputePaymentObj, authInfo } = this.props
+        let disputeTo ='', disputeType = ''
+        if (this.props.disputeFrom == 'Giver') {
+            disputeTo = disputePaymentObj.to_id
+            disputeType = 'Receiver not yet confirmed'
+        } else if (this.props.disputeFrom == 'Receiver') {
+            disputeTo = disputePaymentObj.from_id
+            disputeType = 'Giver did not make payment'
+        }
+        const sendData = {
+            dispute_from: authInfo.data.user_id,
+            dispute_to: disputeTo,
+            dispute_type: disputeType,
+            payment_id: disputePaymentObj.payment_id,
+            message: this.state.disputeMsg,
+            fileInfo: this.state.screenshots
+        }
+        this.props.openDispute(sendData)
+        window.location.replace('/dashboard')
     }
-    this.props.openDispute(sendData)
-    window.location.replace('/dashboard')
   }
 
   handleUploadImage = (files) => {
@@ -122,10 +143,30 @@ export class OpenDispute extends React.Component {
                 <Grid item xs={12} className={classes.rowDetails}>
                     <Grid container>
                         <Grid item xs={6}>
-                            Receiver Name
+                            Giver ID
                         </Grid>
                         <Grid item xs={6}>
-                            {disputePaymentObj.receiverInfo.username} ({disputePaymentObj.receiverInfo.user_id})
+                            {disputePaymentObj.from_id}
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item xs={12} className={classes.rowDetails}>
+                    <Grid container>
+                        <Grid item xs={6}>
+                            Receiver ID
+                        </Grid>
+                        <Grid item xs={6}>
+                            {disputePaymentObj.to_id}
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item xs={12} className={classes.rowDetails}>
+                    <Grid container>
+                        <Grid item xs={6}>
+                            Payment Level
+                        </Grid>
+                        <Grid item xs={6}>
+                            {disputePaymentObj.payment_level}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -154,6 +195,8 @@ export class OpenDispute extends React.Component {
                                 onChange={this.handleChange('disputeMsg')}
                                 className={classes.textField}
                                 margin="normal"
+                                error={this.state.msgError}
+                                helperText={this.state.msgErrorText}
                             />
                         </Grid>
                     </Grid>

@@ -127,6 +127,16 @@ export class ReceiveHelp extends React.Component {
     })
 }
 
+openDispute = (paymentObject) => event => {
+    console.log('receiver - payment obj')
+    console.log(paymentObject)
+    this.props.openDisputeCB('OpenDispute', paymentObject, 'Receiver')
+  }
+
+  viewDispute = (disputeObj) => event => {
+    this.props.viewDisputeCB(disputeObj)
+ }
+
   render() {
     const { classes, authInfo, levelPayments } = this.props
     const { selectedLevel, displayList } = this.state
@@ -256,6 +266,12 @@ export class ReceiveHelp extends React.Component {
                                 userObj = option.nodeInfo
                             }
                             const receivePaymentLink = '/receive_payment/'+selectedLevel
+
+                            let disputeObj = ''
+                            if(paymentObj) {
+                                disputeObj = _.find(this.props.myDisputes, (n) => { return (n.payment_id == paymentObj.payment_id) })
+                            }
+
                             return (
                                 <Grid item xs={12} className={index % 2 ? classes.rowOdd : classes.rowEven} key={index}>
                                     <Grid container>
@@ -277,6 +293,11 @@ export class ReceiveHelp extends React.Component {
                                                         <div>
                                                             <div>Payment paid on {getFormatedDate(paymentObj.paid_date)} | status : {paymentObj.confirm_status}</div>
                                                             <div><Link className={classes.navLink} to={receivePaymentLink}> Confirm Payment </Link></div>
+                                                            {disputeObj ? (
+                                                                <div className={classes.navLink} onClick={this.viewDispute(disputeObj)}>View Dispute</div>
+                                                            ) : (
+                                                                <div className={classes.navLink} onClick={this.openDispute(paymentObj)}>Open Dispute</div>
+                                                            )}
                                                         </div>
                                                     }
                                                     <div className={classes.navLink} onClick={this.showPaymentDetails(paymentObj)}>Payment Details</div>
