@@ -50,8 +50,13 @@ router.post('/confirmLevelPayment', async function(req, res) {
         if(req.body.receiver_type === "SmartSpreader") {
             var updQuery = "update smart_spreaders set current_status='Completed', completed_date='"+pg_connect.getCurrentDate()+"', payment_id="+req.body.payment_id+" where user_id="+req.body.to_id+" and current_status='InProgress' and payment_level="+req.body.payment_level
             var updRes = await pg_connect.connectDB(updQuery, res)
-            var insQuery = "insert into smart_spreaders(user_id, added_date, current_status, payment_level) values("+req.body.to_id+",'"+pg_connect.getCurrentDate()+"','Active',"+req.body.payment_level+")"
-            var insRes = await pg_connect.connectDB(insQuery, res)
+            // select smart spreader count level wise and check if it is reached 10 or not
+            var countSSQuery = "select count(*) smart_spreaders where current_status='Completed' and user_id="+req.body.to_id+" and payment_level="+req.body.payment_level
+            var countSSRes = await pg_connect.connectDB(countSSQuery, res)
+            if(countSSRes[0].count < 10) {
+                var insQuery = "insert into smart_spreaders(user_id, added_date, current_status, payment_level) values("+req.body.to_id+",'"+pg_connect.getCurrentDate()+"','Active',"+req.body.payment_level+")"
+                var insRes = await pg_connect.connectDB(insQuery, res)
+            }
         }
         if(req.body.payment_level === "1") {
             var retArr = []

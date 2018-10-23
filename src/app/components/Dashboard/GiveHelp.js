@@ -73,7 +73,9 @@ export class GiveHelp extends React.Component {
   }
 
   openDispute = (paymentObject) => event => {
-    this.props.openDisputeCB('OpenDispute', paymentObject)
+    console.log('giver - payment obj')
+    console.log(paymentObject)
+    this.props.openDisputeCB('OpenDispute', paymentObject, 'Giver')
   }
 
   viewDispute = (disputeObj) => event => {
@@ -114,6 +116,10 @@ export class GiveHelp extends React.Component {
     const level1SponsorObject = _.find(myPaymentList, (n) => { return (n.payment_level == 1) })
     let nextLevelCheck = true
     let receivedCheck = false
+    let level1DisputeObj = ''
+    if(level1SponsorObject) {
+        level1DisputeObj = _.find(this.props.myDisputes, (n) => { return (n.payment_id == level1SponsorObject.payment_id) })
+    }
     return (
       <div id="mainContainer">
         <Dialog
@@ -163,7 +169,11 @@ export class GiveHelp extends React.Component {
                                     <div>
                                         <div>Payment Done and Waiting to receiver confirmation</div>
                                         <div className={classes.navLink} onClick={this.showPaymentDetails(level1SponsorObject)}>Payment Details</div>
-                                        <div className={classes.navLink} onClick={this.openDispute(level1SponsorObject)}>Open Dispute</div>
+                                        {level1DisputeObj ? (
+                                            <div className={classes.navLink} onClick={this.viewDispute(level1DisputeObj)}>View Dispute</div>
+                                        ) : (
+                                            <div className={classes.navLink} onClick={this.openDispute(level1SponsorObject)}>Open Dispute</div>
+                                        )}
                                     </div>
                                 ) : (level1SponsorObject.paid_status == 'Completed' && level1SponsorObject.confirm_status == 'Confirmed') ? (
                                     <div>

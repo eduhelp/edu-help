@@ -59,6 +59,7 @@ export class Dashboard extends React.Component {
         levelEligibility: false,
         makePaymentObj: {},
         disputePaymentObj: {},
+        disputeFrom: '',
     }
     
   }
@@ -116,10 +117,11 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
     })
   }
 
-  openDispute = (currentPage,disputePaymentObj) => {
+  openDispute = (currentPage,disputePaymentObj,disputeFrom) => {
     this.setState({
         currentPage,
-        disputePaymentObj
+        disputePaymentObj,
+        disputeFrom
     })
   }
 
@@ -172,6 +174,7 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
         DisplayPage = <OpenDispute
             authInfo={this.props.authInfo}
             disputePaymentObj={this.state.disputePaymentObj}
+            disputeFrom={this.state.disputeFrom}
             cancelCB={this.cancelCallBack}
         />
     }

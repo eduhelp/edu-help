@@ -63,14 +63,10 @@ export class DashboardDetails extends React.Component {
   }
 
   makePayment = (paymentObject) => event => {
-    console.log('ready to make payemnt to ')
-    console.log(paymentObject)
     this.props.makePaymentCB('MakePayment', paymentObject)
   }
 
   openDispute = (paymentObject) => event => {
-    console.log('ready to make open dispute to ')
-    console.log(paymentObject)
     this.props.openDisputeCB('OpenDispute', paymentObject)
   }
 
@@ -149,6 +145,9 @@ export class DashboardDetails extends React.Component {
                     myReceivedList = {this.props.myReceivedList}
                     myReferrals = {this.props.myReferrals}
                     levelPayments={this.props.levelPayments}
+                    openDisputeCB={this.props.openDisputeCB}
+                    viewDisputeCB={this.showDisputeDetails}
+                    myDisputes={this.props.myDisputes}
                     classes={classes}
                 />
             </TabContainer>
