@@ -47,7 +47,7 @@ router.post('/confirmLevelPayment', async function(req, res) {
     var updateQuery = "update payments set confirm_status='Confirmed', confirm_date='"+pg_connect.getCurrentDate()+"', confirmed_by='"+req.body.confirmed_by+"' where payment_id="+req.body.payment_id
     var updateRes = await pg_connect.connectDB(updateQuery, res)
     if(updateRes) {
-        if(req.body.receiver_type === "SmartSpreader") {
+        if(req.body.receiver_type == "SmartSpreader") {
             var updQuery = "update smart_spreaders set current_status='Completed', completed_date='"+pg_connect.getCurrentDate()+"', payment_id="+req.body.payment_id+" where user_id="+req.body.to_id+" and current_status='InProgress' and payment_level="+req.body.payment_level
             var updRes = await pg_connect.connectDB(updQuery, res)
             // select smart spreader count level wise and check if it is reached 10 or not
@@ -58,7 +58,9 @@ router.post('/confirmLevelPayment', async function(req, res) {
                 var insRes = await pg_connect.connectDB(insQuery, res)
             }
         }
-        if(req.body.payment_level === "1") {
+        console.log('checkkkkk')
+        if(req.body.payment_level == "1") {
+            console.log('inside check....')
             var retArr = []
             var curLevel = 0
             var nodeObj = {
@@ -184,7 +186,7 @@ async function getMyParentLevelWise(user_id, maxLevel, res) {
         var curQuery = "select * from positions where user_id="+cur_user_id
         var curResult = await pg_connect.connectDB(curQuery, res)
         if (curResult) {
-            if (curResult[0].parent_id === '0' && i<=maxLevel) {
+            if (curResult[0].parent_id == '0' && i<=maxLevel) {
                 haveRootLevel = false
                 break outerLoop;
             } else {
