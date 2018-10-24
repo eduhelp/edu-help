@@ -51,16 +51,14 @@ router.post('/confirmLevelPayment', async function(req, res) {
             var updQuery = "update smart_spreaders set current_status='Completed', completed_date='"+pg_connect.getCurrentDate()+"', payment_id="+req.body.payment_id+" where user_id="+req.body.to_id+" and current_status='InProgress' and payment_level="+req.body.payment_level
             var updRes = await pg_connect.connectDB(updQuery, res)
             // select smart spreader count level wise and check if it is reached 10 or not
-            var countSSQuery = "select count(*) smart_spreaders where current_status='Completed' and user_id="+req.body.to_id+" and payment_level="+req.body.payment_level
+            var countSSQuery = "select count(*) from smart_spreaders where current_status='Completed' and user_id="+req.body.to_id+" and payment_level="+req.body.payment_level
             var countSSRes = await pg_connect.connectDB(countSSQuery, res)
             if(countSSRes[0].count < 10) {
                 var insQuery = "insert into smart_spreaders(user_id, added_date, current_status, payment_level) values("+req.body.to_id+",'"+pg_connect.getCurrentDate()+"','Active',"+req.body.payment_level+")"
                 var insRes = await pg_connect.connectDB(insQuery, res)
             }
         }
-        console.log('checkkkkk')
         if(req.body.payment_level == "1") {
-            console.log('inside check....')
             var retArr = []
             var curLevel = 0
             var nodeObj = {
@@ -83,11 +81,6 @@ router.post('/confirmLevelPayment', async function(req, res) {
                 res.status(200).send({message: 'Confirmaton status successfully updated for level-'+req.body.payment_level})
             }
         }
-        /* var usersCountQuery = "select count(*) from users where sponsor_id="+req.body.user_id+" and status='Active'"
-        var usersCountResult = await pg_connect.connectDB(usersCountQuery, res)
-        if(usersCountResult[0].count >= 6) {
-            await placementToSmartSpreaderBucket(req.body.user_id, req.body.payment_level, res)
-        } */ 
     }
 });
 
