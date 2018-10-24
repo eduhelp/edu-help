@@ -270,10 +270,10 @@ export class MySmartSpreader extends React.Component {
             <Paper className={classes.paperCenter}>
                 <Grid container>
                     <Grid item xs={12}>
-                        You are not into any smart spreader bucket, if you wish become a smart spreader please do the followig steps
+                        Sorry ! You are not into any smart spreader bucket, if you wish to become a smart spreader please do the following
                     </Grid>
                     <Grid item xs={12}>
-                        Know about smart spreader | smart spreader bucket process
+                        You need to Refer 6 people.
                     </Grid>
                 </Grid>
             </Paper>

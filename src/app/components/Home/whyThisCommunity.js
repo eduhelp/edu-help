@@ -51,13 +51,13 @@ export class whyThisCommunity extends React.Component {
             <Grid container>
             <Grid item xs={6}>
               <ul>
-                <li className={classes.lii}>WE believe that education is the most important tool you can receive, that can bring you most success in society today</li><br />
-                <li className={classes.lii}>Education is definitely important in one`s life.  A gift of knowledge can bring us to the top of our dreams. It leads us to the right path and gives us a chance to have a wonderful life. </li><br />
+                <li className={classes.lii}>We believe that education is the most important tool you can receive, that can bring you  Success in society today</li><br />
+                <li className={classes.lii}>Education is definitely important  anyone`s life.  A gift of knowledge can bring us to the top of our dreams. It leads us to the right path and gives us a chance to have a wonderful life. </li><br />
                 <li className={classes.lii}>Education is an important aspect that plays a huge role in the modern, industrialized world, which could transform<br />
                 <ol className={classes.lii}>
                 <br />
                     
-                    <p className={classes.para}>–  Career Advancement </p>
+                    <p className={classes.para}>– Career Advancement </p>
                     <p className={classes.para}>– Career Building</p>
                     <p className={classes.para}>– Backbone of Society</p>
                      

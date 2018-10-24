@@ -224,7 +224,7 @@ openDispute = (paymentObject) => event => {
                                     Received: {receivedPayment} / {maxReceivable}
                                 </Grid>
                                 <Grid item xs={2} className={classes.col2}>
-                                    Pending: {pendingPayment}
+                                    Waiting: {pendingPayment}
                                 </Grid>
                                 <Grid item xs={2} className={classes.col1}>
                                     Missed : {missedPayment}
@@ -241,7 +241,7 @@ openDispute = (paymentObject) => event => {
                                     Level
                                 </Grid>
                                 <Grid item xs={3}>
-                                    User Id
+                                    User Name
                                 </Grid>
                                 <Grid item xs={8} className={classes.leftAlign}>
                                     Received Status
@@ -280,7 +280,7 @@ openDispute = (paymentObject) => event => {
                                         </Grid>
                                         <Grid item xs={3}>
                                             <span className={classes.navLink} onClick={this.showUserDetails(userObj)}>
-                                                {userObj.username} ({userObj.user_id})
+                                                {userObj.username} 
                                             </span>
                                         </Grid>
                                         <Grid item xs={8} className={classes.leftAlign}>
@@ -322,7 +322,7 @@ openDispute = (paymentObject) => event => {
                     </Grid>
                 ) : (
                     <Grid item xs={12} className={classes.marginTop10}>
-                        user not added into level - {this.state.selectedLevel}
+                     Select Level From DropDown {this.state.selectedLevel}
                     </Grid>
                 )
                 }
