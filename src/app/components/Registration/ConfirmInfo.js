@@ -77,7 +77,7 @@ handleChange = (stName) => (event) => {
                       Sponsor ID : 
                     </Grid>
                     <Grid item xs={9}>
-                      {this.props.sponsorInfo.sponsor_id} 
+                      {this.props.sponsorDetails.user_id} 
                     </Grid>
                     <Grid item xs={3}>
                       Sponsor Name : 
@@ -110,20 +110,20 @@ handleChange = (stName) => (event) => {
                 <Grid item xs={6}>
                   <Grid container>
                     <Grid item xs={3}>
-                      User Name : 
+                      Full Name : 
                     </Grid>
                     <Grid item xs={9}>
-                      {this.props.userInfo.username} 
+                      {this.props.userInfo.fullname} 
                     </Grid>
                   </Grid> 
                 </Grid>
                 <Grid item xs={6}>
                   <Grid container>
                     <Grid item xs={3}>
-                      Email : 
+                      User Name : 
                     </Grid>
                     <Grid item xs={9}>
-                      {this.props.userInfo.email} 
+                      {this.props.userInfo.username} 
                     </Grid>
                   </Grid>
                 </Grid>
@@ -144,10 +144,10 @@ handleChange = (stName) => (event) => {
                 <Grid item xs={6}>
                   <Grid container>
                     <Grid item xs={3}>
-                      DOB : 
+                      Email : 
                     </Grid>
                     <Grid item xs={9}>
-                      {this.props.userInfo.dob} 
+                      {this.props.userInfo.email} 
                     </Grid>
                   </Grid>
                 </Grid>
@@ -168,6 +168,55 @@ handleChange = (stName) => (event) => {
                 <Grid item xs={6}>
                   <Grid container>
                     <Grid item xs={3}>
+                      dob : 
+                    </Grid>
+                    <Grid item xs={9}>
+                      {this.props.userInfo.dob}
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12} className={classes.marginLeft20}>
+              <Grid container>
+                <Grid item xs={6}>
+                  <Grid container>
+                    <Grid item xs={3}>
+                      Country : 
+                    </Grid>
+                    <Grid item xs={9}>
+                      {this.props.userInfo.country} 
+                    </Grid>
+                  </Grid> 
+                </Grid>
+                <Grid item xs={6}>
+                  <Grid container>
+                    <Grid item xs={3}>
+                      State : 
+                    </Grid>
+                    <Grid item xs={9}>
+                      {this.props.userInfo.state}
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12} className={classes.marginLeft20}>
+              <Grid container>
+                <Grid item xs={6}>
+                  <Grid container>
+                    <Grid item xs={3}>
+                      city : 
+                    </Grid>
+                    <Grid item xs={9}>
+                      {this.props.userInfo.city} 
+                    </Grid>
+                  </Grid> 
+                </Grid>
+                <Grid item xs={6}>
+                  <Grid container>
+                    <Grid item xs={3}>
                       Address : 
                     </Grid>
                     <Grid item xs={9}>
@@ -177,6 +226,7 @@ handleChange = (stName) => (event) => {
                 </Grid>
               </Grid>
             </Grid>
+
           </Grid>
         </Paper>
       </div>)

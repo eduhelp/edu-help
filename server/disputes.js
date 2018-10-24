@@ -4,7 +4,7 @@ var path = require('path');
 var pg_connect = require('./pg_connect');
 var router = express.Router();
 let multer = require('multer')
-var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status"
+var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status, fullname, country, state, city"
 
 router.post('/open', async function(req, res) {
     var curQuery = "insert into disputes(dispute_from, dispute_to, dispute_type, payment_id, message, dispute_status, added_date) values("+req.body.dispute_from+","+req.body.dispute_to+",'"+req.body.dispute_type+"',"+req.body.payment_id+",'"+req.body.message+"','Open','"+pg_connect.getCurrentDate()+"') returning dispute_id"

@@ -2,7 +2,7 @@ var express = require('express');
 var _ = require('lodash')
 var pg_connect = require('./pg_connect');
 var router = express.Router();
-var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status"
+var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status, fullname, country, state, city"
 
 router.post('/levelPayments', async function(req, res) {
     var curQuery = "select * from level_payments"

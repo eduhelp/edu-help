@@ -17,7 +17,6 @@ const getmenu = (props) => {
   menuDefinitions = [
     { title: 'Home', to: '/', exact: true, icon: <HomeIcon className={props.color} /> },
     { title: 'Know about Plan', to: '/about_plan', icon: <SearchIcon className={props.color} /> },
-    { title: 'Registration', to: '/registration', icon: <CreateIcon className={props.color} /> }
   ]
   if(props.authInfo.isAuth) {
     menuDefinitions.push({ title: 'My Dashboard', to: '/dashboard', icon: <DashboardIcon className={props.color} /> })
