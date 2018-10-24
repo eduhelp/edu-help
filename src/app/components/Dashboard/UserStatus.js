@@ -30,11 +30,12 @@ export class UserStatus extends React.Component {
             currentStatus = 'Inactive - Give Help Pending'
         }
     }
-    
+    const regLink = window.location.origin+"/registration?n="+authInfo.data.username
     return (
       <div id="mainContainer">
         <Grid item xs={12}>
             <h3> Account Status : {currentStatus} </h3>
+            <h5> Refer Link : {regLink} </h5>
         </Grid>
       </div>)
   }

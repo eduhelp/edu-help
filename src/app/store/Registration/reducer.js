@@ -23,7 +23,8 @@ export const initialState = fromJS({
   userDetails: {},
   availableStatus: {
     username: false,
-    mobile: false
+    mobile: false,
+    email: false,
   },
   smartSpreadersList: [],
   myReferrals: [],
