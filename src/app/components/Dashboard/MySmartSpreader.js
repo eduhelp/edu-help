@@ -1,5 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
+import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -71,11 +72,15 @@ export class MySmartSpreader extends React.Component {
     this.setState({displayList: activeList, selectedStatus: 'Active', selectedLevel: event.target.value })
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillMount () {
     console.log('mySmartSpreadersList')
-    console.log(nextProps.mySmartSpreadersList)
-    const activeList = _.filter(nextProps.mySmartSpreadersList, (n) => { return (n.current_status == 'Active' && n.payment_level == this.state.selectedLevel)})
-    console.log('activeList')
+    console.log(this.props.mySmartSpreadersList)
+    let activeList = _.filter(this.props.mySmartSpreadersList, (n) => { return (n.payment_level == this.state.selectedLevel)})
+    console.log('activeList - filter1')
+    console.log(activeList)
+    activeList = _.filter(activeList, (n) => { return (n.current_status == 'Active')})
+    //const activeList = _.filter(this.props.mySmartSpreadersList, { 'current_status': 'Active', 'payment_level': this.state.selectedLevel });
+    console.log('activeList - filter2')
     console.log(activeList)
     this.setState({displayList: activeList,selectedStatus: 'Active'})
   }
@@ -83,7 +88,7 @@ export class MySmartSpreader extends React.Component {
   handleStatusChange = event => {
     this.setState({ selectedStatus: event.target.value })
     if(event.target.value !== 'All') {
-        const activeList = _.filter(this.props.mySmartSpreadersList, (n) => { return n.current_status == event.target.value})
+        const activeList = _.filter(this.props.mySmartSpreadersList, (n) => { return n.current_status == event.target.value && n.payment_level == this.state.selectedLevel})
         this.setState({displayList: activeList})
     } else {
         this.setState({displayList: this.props.mySmartSpreadersList})
@@ -204,9 +209,12 @@ export class MySmartSpreader extends React.Component {
                         <Grid item xs={12} className={classes.rowHead}>
                             <Grid container>
                                 <Grid item xs={1}>
+                                    Level
+                                </Grid>
+                                <Grid item xs={1}>
                                     ID
                                 </Grid>
-                                <Grid item xs={3}>
+                                <Grid item xs={2}>
                                     User Id
                                 </Grid>
                                 <Grid item xs={2}>
@@ -229,19 +237,26 @@ export class MySmartSpreader extends React.Component {
                             </Grid>
                         </Grid>
                         {this.state.displayList.map((option, index) => {
+                            const receivePaymentLink = '/receive_payment/'+option.payment_level
                             return (
                                 <Grid item xs={12} className={index % 2 ? classes.rowOdd : classes.rowEven}>
                                     <Grid container>
                                         <Grid item xs={1}>
+                                            {option.payment_level}
+                                        </Grid>
+                                        <Grid item xs={1}>
                                             {option.spreader_id}
                                         </Grid>
-                                        <Grid item xs={3}>
+                                        <Grid item xs={2}>
                                             <span className={classes.navLink} onClick={this.showUserDetails(option)}>
                                                 {option.username} ({option.user_id})
                                             </span>
                                         </Grid>
                                         <Grid item xs={2}>
                                             {option.current_status}
+                                            {option.current_status == 'InProgress' && 
+                                                <div><Link className={classes.navLink} to={receivePaymentLink}> Confirm Payment </Link></div>
+                                            }
                                         </Grid>
                                         <Grid item xs={2}>
                                             {getFormatedDate(option.added_date)}
