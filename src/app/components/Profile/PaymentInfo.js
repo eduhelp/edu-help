@@ -6,6 +6,10 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
 import { updatePaymentInfo } from '../../store/Registration/actionCreator'
 
 const styles = {
@@ -28,6 +32,9 @@ const styles = {
           padding: 5,
           marginTop: 5,
       },
+       formControl: {
+      width: 250,
+  },
  
 };
 
@@ -55,6 +62,7 @@ export class PaymentInfo extends React.Component {
                 bank_ac_number: bank_details.bank_ac_number,
                 bank_name: bank_details.bank_name,
                 bank_branch: bank_details.bank_branch,
+                account_type: this.state.account_type,
                 bank_ifsc_code: bank_details.bank_ifsc_code,
                 wallet_paytm_number: bank_details.wallet_paytm_number,
                 wallet_gp_number: bank_details.wallet_gp_number,
@@ -86,6 +94,7 @@ export class PaymentInfo extends React.Component {
             bank_ac_number: this.state.bank_ac_number,
             bank_name: this.state.bank_name,
             bank_branch: this.state.bank_branch,
+            account_type: this.state.account_type,
             bank_ifsc_code: this.state.bank_ifsc_code,
             wallet_paytm_number: this.state.wallet_paytm_number,
             wallet_gp_number: this.state.wallet_gp_number,
@@ -169,9 +178,24 @@ export class PaymentInfo extends React.Component {
                         onChange={this.handleChange('bank_branch')}
                     /> 
                 </Grid>
-                <Grid item xs={12} className={classes.marginLeft20}>
-                    
+                 <Grid item xs={12} className={classes.marginLeft20}>
+                 <FormControl className={classes.formControl}>
+                        <InputLabel htmlFor="select-Account-type">Select Account Type</InputLabel>
+                        <Select
+                            value={this.state.account_type}
+                            onChange={this.handleLevelChange}
+                        >
+                            <MenuItem value='current'>
+                             Current
+                            </MenuItem>
+                            <MenuItem value='savings'>
+                            Savings
+                            </MenuItem>
+                           
+                        </Select>
+                    </FormControl>
                 </Grid>
+                
               </Grid>
             </Grid>
           </Grid>

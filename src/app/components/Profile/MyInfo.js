@@ -55,6 +55,7 @@ export class MyInfo extends React.Component {
         dob: dob,
         gender: this.props.authInfo.gender,
         address: this.props.authInfo.address,
+        state: this.props.authInfo.state,
         pincode: this.props.authInfo.pincode
     })
   }
@@ -72,6 +73,7 @@ export class MyInfo extends React.Component {
             dob: this.state.dob,
             gender: this.state.gender,
             address: this.state.address,
+            state: this.state.state,
             pincode: this.state.pincode
         }
         this.props.updateUserInfo(sendData)
@@ -88,6 +90,7 @@ export class MyInfo extends React.Component {
                 <Grid item xs={12} className={classes.marginLeft20}>
                   Username : {this.props.authInfo.username} 
                 </Grid>
+
                 <Grid item xs={12} className={classes.marginLeft20}>
                   <TextField
                     id="outlined-with-placeholder"
@@ -150,6 +153,22 @@ export class MyInfo extends React.Component {
                       <FormControlLabel value="male" control={<Radio />} label="Male" />
                     </RadioGroup>
                   </FormControl>
+                </Grid>
+                <Grid item xs={12} className={classes.marginLeft20}>
+                  <TextField
+                    id="outlined-with-placeholder"
+                    label="Enter state"
+                    placeholder="Placeholder"
+                    type='text'
+                    className={classes.textField}
+                    margin="normal"
+                    variant="outlined"
+                    inputProps={{
+                      maxLength: 20,
+                    }}
+                    value={this.state.state}
+                    onChange={this.handleChange('state')}
+                  /> 
                 </Grid>
                 <Grid item xs={12} className={classes.marginLeft20}>
                   <TextField
