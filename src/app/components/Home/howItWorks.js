@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import How from './how.png';
+import Pdf from './EduHelp_6.pdf';
 const styles = {
   root: {
     display: 'flex',
@@ -56,8 +57,14 @@ export class howItWorks extends React.Component {
                   <ul>
                     <li className={classes.lii}>Since this community is created for a good cause of supporting peer to peer helping community for educational expenses, so every individual one ID for one mobile & AADHAR number</li><br />
                     <li className={classes.lii}>You need to have an invitation link from the sponsor to get in to this community. Once you receive the link update the mandatory field details and get started  </li><br />
-                    <li className={classes.lii}>I don’t have anyone to sponsor please email us<br />
-                    </li>More details: PDF<a href='#'>&nbsp;click here</a><br />
+                    <li className={classes.lii}>If you don’t have anyone to sponsor please email us<br />
+                    </li><br />
+                   <li className={classes.lii}>For more details:<a href = {Pdf} target = "_blank">Download Pdf</a>
+
+                   
+
+                   </li><br />
+                   <br />
                   </ul>
                  </Grid>
               </Grid>

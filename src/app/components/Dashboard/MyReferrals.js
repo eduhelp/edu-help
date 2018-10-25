@@ -128,7 +128,7 @@ export class MyReferrals extends React.Component {
                                     Level
                                 </Grid>
                                 <Grid item xs={3}>
-                                    User Id
+                                    User Name
                                 </Grid>
                                 <Grid item xs={2}>
                                     Status
@@ -147,7 +147,7 @@ export class MyReferrals extends React.Component {
                                         </Grid>
                                         <Grid item xs={3}>
                                             <span className={classes.navLink} onClick={this.showUserDetails(option)}>
-                                                {option.username} ({option.user_id})
+                                                {option.username} 
                                             </span>
                                         </Grid>
                                         <Grid item xs={2}>

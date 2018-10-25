@@ -15,9 +15,9 @@ import Works from './howItWorks'
 import Smart from './smartSpreaders'
 import Contact from './contactUs'
 import Grid from '@material-ui/core/Grid';
-import Background from './logo.png';
+import Background2 from './logow.png';
 import Background1 from './bg1.png';
-import Background2 from './kids.png';
+import Background from './kidsf.png';
 
 
 function TabContainer(props) {
@@ -68,12 +68,13 @@ const styles = {
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'noRepeat',
-            backgroundOpacity: 0.6,
+            backgroundOpacity:'30%',
 },
  paperso:{
-    color:'#f5f5f5',
+    color:'black',
+    lineHeight:1.5,
 
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+   
     
 },
 
@@ -103,7 +104,7 @@ const styles = {
   spa:{
     fontSize:'45px',
      fontFamily:'Edwardian Script ITC',
-    color:'#f4e736',
+    color:'#92d219',
 
   },
   pad:{
@@ -116,7 +117,7 @@ const styles = {
     
  },
  hed:{
-    color:'#f4e736',
+    color:'orange',
    fontFamily:'Arial',
    fontSize:'25px',
  },
@@ -130,6 +131,7 @@ const styles = {
 apps:{
   backgroundColor:'orange',
   color:'#fbfcfd',
+
 }
 };
 
@@ -159,7 +161,7 @@ export class Home extends React.Component {
           <Paper className={classes.paper}>
             <Typography className={classes.paper1}>
               <div className={classes.papers} > 
-                 <center className={classes.paperso}><span className={classes.hed}>About Us</span> <br/>Over years an effluent broadminded<br /><span className={classes.spa}> NRI’s & Entrepreneurs</span> were<br />thinking on a <span className={classes.spa}>“Idea”</span> that could change & <br /> solve millions of people Education expense<br /> issue through an innovative idea that flashed<br /> out in minds, that’s the birth story of <br /><span className={classes.spa}> “EduHelp”</span>
+                 <center className={classes.paperso}><span className={classes.hed}>About Us<br /></span>Over years an effluent broadminded<br /><span className={classes.spa}> NRI’s & Entrepreneurs</span> were<br />thinking on a <span className={classes.spa}>“Idea”</span> that could change & <br />solve millions of people Education expense<br />issue through an innovative idea that flashed<br /> out in minds, that’s the birth story of <br /><span className={classes.spa}>“EduHelp”</span>
                   
                  </center>
                  </div> 
