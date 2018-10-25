@@ -8,10 +8,12 @@ import {
 export const initialState = fromJS({
   myTree: [],
   myTopLevel: [],
-  smartSpreaderInfo: [],
+  smartSpreaderInfo: [{
+    message: 'Root'
+  }],
 })
 
-export default function grouperReducer (state = initialState, action) {
+export default function placementsReducer (state = initialState, action) {
   switch (action.type) {
     case MY_TREE_SUCCESS:
       return state

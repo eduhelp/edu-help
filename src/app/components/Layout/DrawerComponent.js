@@ -27,8 +27,11 @@ import { Dialog } from '@material-ui/core';
 import Login from './Login'
 import SideDrawer from '../Common/SideDrawer'
 import SmartSpreader from '../SmartSpreader/SmartSpreader';
+import Disputes from '../Disputes/Disputes'
 // import NotFound from '../NotFoundPage/NotFoundPage'
 // import { ReactComponent as Logo } from '../../images/logo.svg'
+import Main from './Picture1.png';
+
 
 const drawerWidth = 240
 
@@ -236,14 +239,15 @@ class MiniDrawer extends React.Component {
                 {/* routes */}
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/registration" component={Registration} />
-                    <Route exact path="/dashboard" component={Dashboard} />
-                    <Route exact path="/confirm_receiver/:levelIndex/:paymentTo" component={ConfirmReceiver} />
-                    <Route exact path="/make_payment/:levelIndex/:paymentTo" component={MakePayment} />
-                    <Route exact path="/receive_payment/:levelIndex" component={ReceivePayment} />
-                    <Route exact path="/my_tree" component={MyTree} />
-                    <Route exact path='/profile' component={Profile} />
-                    <Route exact path='/smart_spreaders' component={SmartSpreader} />
+                    <Route path="/registration" component={Registration} />
+                    <Route path="/dashboard" component={Dashboard} />
+                    <Route path="/confirm_receiver/:levelIndex/:paymentTo" component={ConfirmReceiver} />
+                    <Route path="/make_payment/:levelIndex/:paymentTo" component={MakePayment} />
+                    <Route path="/receive_payment/:levelIndex" component={ReceivePayment} />
+                    <Route path="/my_tree" component={MyTree} />
+                    <Route path='/profile' component={Profile} />
+                    <Route path='/smart_spreaders' component={SmartSpreader} />
+                    <Route path='/disputes' component={Disputes} />
                 </Switch>
               </Grid>
             </Grid>

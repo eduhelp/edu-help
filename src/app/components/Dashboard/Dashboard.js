@@ -2,13 +2,17 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withStyles } from '@material-ui/core/styles';
+
+
 import { DashboardDetails } from './DashboardDetails'
 
 import { getMyTree, getMyTopLevel, getActiveSmartSpreader } from '../../store/Placements/actionCreator'
-import { getUserDetails } from '../../store/Registration/actionCreator'
-import { getReceivePaymentList, getMyPaymentList, getLevelPayments } from '../../store/Payments/actionCreator'
+import { getUserDetails, getMyReferrals, getMySmartSpreadersList } from '../../store/Registration/actionCreator'
+import { getReceivedPaymentList, getMyPaymentList, getLevelPayments, getReceivedPayments } from '../../store/Payments/actionCreator'
+import { getMyDisputes } from '../../store/Disputes/actionCreator'
 import ConfirmReceiver from '../Payments/ConfirmReceiver';
 import MakePayment from "../Payments/MakePayment"
+import OpenDispute from '../Disputes/OpenDispute'
 
 const styles = {
   root: {
@@ -34,6 +38,13 @@ const styles = {
     textDecoration: 'underline',
     cursor: 'pointer',
   },
+  tabs: {
+    backgroundColor: '#ebebeb',
+    color: '#000',
+  },
+  margin0: {
+      margin: 0,
+  },
 };
 
 
@@ -47,10 +58,15 @@ export class Dashboard extends React.Component {
         treeParentInfo: '',
         levelEligibility: false,
         makePaymentObj: {},
+        disputePaymentObj: {},
+        disputeFrom: '',
     }
     
   }
+
   
+
+
   componentWillMount() {
     var sendData = {
         user_id: this.props.authInfo.data.user_id,
@@ -66,9 +82,13 @@ export class Dashboard extends React.Component {
       user_id: this.props.authInfo.data.user_id,
       payment_level: 1
     }
-    this.props.getReceivePaymentList(listData)
+    // this.props.getReceivePaymentList(listData)
     this.props.getMyPaymentList(sendData)
     this.props.getLevelPayments()
+    this.props.getReceivedPaymentList(sendData)
+    this.props.getMyReferrals(sendData)
+    this.props.getMySmartSpreadersList(sendData)
+    this.props.getMyDisputes(sendData)
     // this.props.getActiveSmartSpreader()
 }
 
@@ -97,6 +117,14 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
     })
   }
 
+  openDispute = (currentPage,disputePaymentObj,disputeFrom) => {
+    this.setState({
+        currentPage,
+        disputePaymentObj,
+        disputeFrom
+    })
+  }
+
   cancelCallBack = () => {
     this.setState({
         currentPage: 'Dashboard'
@@ -112,12 +140,17 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
             myTree={this.props.myTree}
             myTopLevel={this.props.myTopLevel}
             sponsorDetails={this.props.sponsorDetails}
-            sponsorPayments={this.props.sponsorPayments}
+            myReferrals={this.props.myReferrals}
             myPaymentList={this.props.myPaymentList}
+            myReceivedList={this.props.myReceivedList}
             classes={classes}
             confirmReceiverCB={this.confirmReceiver}
             makePaymentCB={this.makePayment}
-            />
+            openDisputeCB={this.openDispute}
+            levelPayments={this.props.levelPayments}
+            mySmartSpreadersList={this.props.mySmartSpreadersList}
+            myDisputes={this.props.myDisputes}
+        />
     } else if (this.state.currentPage === 'ConfirmReceiver') {
         var levelObj = _.find(this.props.levelPayments, (n) => { return n.level_index == this.state.levelIndex} )
         DisplayPage = <ConfirmReceiver
@@ -137,7 +170,15 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
             makePaymentObj={this.state.makePaymentObj}
             cancelCB={this.cancelCallBack}
         />
+    } else if (this.state.currentPage === 'OpenDispute') {
+        DisplayPage = <OpenDispute
+            authInfo={this.props.authInfo}
+            disputePaymentObj={this.state.disputePaymentObj}
+            disputeFrom={this.state.disputeFrom}
+            cancelCB={this.cancelCallBack}
+        />
     }
+    
     
     return (
         <div>
@@ -152,10 +193,14 @@ const mapDispatchToProps = dispatch =>
     getMyTree,
     getMyTopLevel,
     getUserDetails,
-    getReceivePaymentList,
+    getReceivedPaymentList,
     getMyPaymentList,
     getLevelPayments,
     getActiveSmartSpreader,
+    getReceivedPayments,
+    getMyReferrals,
+    getMySmartSpreadersList,
+    getMyDisputes,
   }, dispatch)
 
 const mapStateToProps = state => ({
@@ -164,7 +209,11 @@ const mapStateToProps = state => ({
     myTree: state.getIn(['PlcementsContainer', 'myTree']).toJS(),
     myTopLevel: state.getIn(['PlcementsContainer', 'myTopLevel']).toJS(),
     sponsorDetails: state.getIn(['RegistrationContainer', 'userDetails']).toJS(),
-    sponsorPayments: state.getIn(['PaymentsContainer', 'receivePaymentsList']).toJS(),
+    // sponsorPayments: state.getIn(['PaymentsContainer', 'receivePaymentsList']).toJS(),
     myPaymentList: state.getIn(['PaymentsContainer', 'myPaymentList']).toJS(),
+    myReceivedList: state.getIn(['PaymentsContainer', 'myReceivedList']).toJS(),
+    myReferrals: state.getIn(['RegistrationContainer', 'myReferrals']).toJS(),
+    mySmartSpreadersList: state.getIn(['RegistrationContainer', 'mySmartSpreadersList']).toJS(),
+    myDisputes: state.getIn(['DisputesContainer', 'myDisputes']).toJS(),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard))

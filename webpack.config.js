@@ -34,8 +34,15 @@ var config = {
             }
           }
         ])  
+
+      },
+      {
+        test: /\.(pdf|gif|png|jpe?g|svg)$/i,
+        use:'file-loader', 
+        
       }
     ]
+     
   }
 
 }

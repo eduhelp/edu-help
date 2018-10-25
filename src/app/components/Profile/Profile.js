@@ -51,7 +51,7 @@ class Profile extends React.Component {
         <AppBar position="static">
           <Tabs value={value} onChange={this.handleChange} className={classes.tabs}>
             <Tab label="My Info" />
-            <Tab label="Payemnt Info" />
+            <Tab label="Bank Info" />
             <Tab label="Change Password" />
           </Tabs>
         </AppBar>

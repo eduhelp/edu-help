@@ -66,10 +66,6 @@ class ConfirmReceiver extends React.Component {
         })
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log('nextProps >>>> confirm receiver')
-        console.log(nextProps.smartSpreaderInfo)
-    }
     submitPaymentDetails = (paymentEntryInfo) => {
         this.setState({
             paymentEntryInfo
@@ -119,12 +115,22 @@ class ConfirmReceiver extends React.Component {
   handleNext = () => {
     const { activeStep } = this.state;
     let { skipped, receiverInfo } = this.state;
+    let receiver_type = ''
+    let sel_user_id = ''
     if( activeStep === 1) {
-        const receiver_type = receiverInfo.level_eligibility ? 'RootParent' : 'SmartSpreader'
+        
+        if(receiverInfo.level_eligibility) {
+            receiver_type = 'RootParent'
+            sel_user_id = this.props.treeParentInfo.user_id
+        } else {
+            receiver_type = 'SmartSpreader'
+            sel_user_id = this.props.smartSpreaderInfo.user_id
+        }
+        
         const sendData = {
             payment_level: receiverInfo.payment_level,
             from_id: receiverInfo.from_id,
-            to_id: receiverInfo.receiver_id,
+            to_id: sel_user_id,
             payment_value: receiverInfo.payment_value,
             paid_status: 'Pending',
             receiver_type: receiver_type
@@ -190,6 +196,7 @@ class ConfirmReceiver extends React.Component {
     const steps = this.getSteps(this.props);
     const { activeStep, paymentInfo, curPaymentObject } = this.state;
     let nextBtnDisabledState = false
+    console.log(this.props.smartSpreaderInfo)
     /* if (this.state.receiverInfo && this.state.receiverInfo.receiver_id) {
         nextBtnDisabledState = false
     } */
@@ -249,35 +256,37 @@ class ConfirmReceiver extends React.Component {
                                 >
                                 Bank to Dashboard
                                 </Button>
-
-                                <Button
-                                disabled={activeStep === 0}
-                                onClick={this.handleBack}
-                                className={classes.button}
-                                >
-                                Back
-                                </Button>
-                                {this.isStepOptional(activeStep) && (
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={this.handleSkip}
-                                    className={classes.button}
-                                >
-                                    Skip
-                                </Button>
-                                )}
-                                <Button
-                                disabled={nextBtnDisabledState}
-                                variant="contained"
-                                color="primary"
-                                onClick={this.handleNext}
-                                className={classes.button}
-                                >
-                                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                                </Button>
-                                
-                                
+                                {(this.props.smartSpreaderInfo.message !== 'undefined' && this.props.smartSpreaderInfo.message !== 'no smart spreader') ? (
+                                    <span>
+                                        <Button
+                                        disabled={activeStep === 0}
+                                        onClick={this.handleBack}
+                                        className={classes.button}
+                                        >
+                                        Back
+                                        </Button>
+                                        {this.isStepOptional(activeStep) && (
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={this.handleSkip}
+                                            className={classes.button}
+                                        >
+                                            Skip
+                                        </Button>
+                                        )}
+                                        <Button
+                                        disabled={nextBtnDisabledState}
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={this.handleNext}
+                                        className={classes.button}
+                                        >
+                                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                        </Button>
+                                    </span>
+                                ) : ''
+                                }
                             </div>
                             </div>
                         )}
@@ -301,4 +310,5 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   smartSpreaderInfo: state.getIn(['PlcementsContainer', 'smartSpreaderInfo']).toJS(),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ConfirmReceiver))
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoadingHOC('smartSpreaderInfo')(withStyles(styles)(ConfirmReceiver)))

@@ -20,6 +20,22 @@ const styles = {
     textAlign: 'left',
     padding: 10,
   },
+  rowOdd: {
+    padding: 10,
+    background: '#ebebeb',
+  },
+  rowEven: {
+    padding: 10,
+    background: '#fbfbfb',
+  },
+  textRight: {
+    textAlign: 'right',
+    paddingRgiht: 5,
+  },
+  textLeft: {
+    textAlign: 'left',
+    paddingLeft: 5,
+  },
 };
 
 
@@ -34,64 +50,62 @@ export class SponsorInfo extends React.Component {
     }
   }
 
-  componentWillMount(){
-    this.setState({ sponsorInfo: this.props.sponsorInfo })
-  }
-
-handleChange = (event) => {
-  this.setState({ sponsorInfo: { 
-    sponsor_id : event.target.value
-  }})
-  if (!event.target.value) {
-    this.props.getUserCB(this.state.sponsorInfo)
-    setTimeout(()=> {
-      this.props.submitCB(this.state.sponsorInfo)
-    }, 100)
-  }
-}
-
-handleSubmit = (event) => {
-  this.props.getUserCB(this.state.sponsorInfo)
-  setTimeout(()=> {
-    this.props.submitCB(this.state.sponsorInfo)
-  }, 100)
-}
-
   render() {
-    const { classes } = this.props
+    const { classes, sponsorDetails } = this.props
     return (
       <div>
         <Paper className={classes.paper}>
-          <Grid container>
-            <Grid item xs={6}>
-              <TextField
-                id="outlined-with-placeholder"
-                label="Enter Sponsor ID"
-                type='number'
-                className={classes.textField}
-                margin="normal"
-                variant="outlined"
-                value={this.state.sponsorInfo.sponsor_id}
-                onChange={this.handleChange}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={this.handleSubmit}
-                className={classes.button}
-              >
-                Go
-              </Button>
-            </Grid>
-            {(this.props.sponsorDetails && this.state.sponsorInfo.sponsor_id) && 
-              <Grid item xs={6} className={classes.sponsorBox}>
-                Sponsor Id : {this.props.sponsorDetails.user_id} <br />
-                Sponsor Name : {this.props.sponsorDetails.username} <br />
-                Sponsor Mobile: {this.props.sponsorDetails.mobile} <br />
+          {(sponsorDetails.user_id) ? (
+            <div>
+              {(sponsorDetails.status == 'Active') ? (
+                <Grid container>
+                  <Grid item xs={12} className={classes.rowOdd}>
+                    <Grid container>
+                        <Grid item xs={6} className={classes.textRight}>
+                          Sponsor Id :
+                        </Grid>
+                        <Grid item xs={6} className={classes.textLeft}>
+                          {sponsorDetails.user_id}
+                        </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} className={classes.rowEven}>
+                    <Grid container>
+                        <Grid item xs={6} className={classes.textRight}>
+                          Sponsor Name :
+                        </Grid>
+                        <Grid item xs={6} className={classes.textLeft}>
+                            {sponsorDetails.username}
+                        </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} className={classes.rowOdd}>
+                    <Grid container>
+                        <Grid item xs={6} className={classes.textRight}>
+                          Sponsor Mobile :
+                        </Grid>
+                        <Grid item xs={6} className={classes.textLeft}>
+                            {sponsorDetails.mobile}
+                        </Grid>
+                    </Grid>
+                  </Grid> 
+                </Grid>
+              ) : (
+                <Grid container>
+                  <Grid item xs={12}>
+                    {sponsorDetails.username} not in Active state, please as your sponsor to activate the account or try with another sponsor.
+                  </Grid>
+                </Grid>
+              )}
+            </div>
+          ) : (
+            <Grid container>
+              <Grid item xs={12} >
+                Invalid Sponsor details, please try with another sponsor.
               </Grid>
-            }
-          </Grid>
-           
+            </Grid>
+          )
+          }
         </Paper>
       </div>)
   }

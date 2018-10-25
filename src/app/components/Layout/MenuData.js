@@ -8,21 +8,22 @@ import CreateIcon from '@material-ui/icons/Add'
 import MaintainIcon from '@material-ui/icons/Edit'
 import DashboardIcon from '@material-ui/icons/Explore'
 import SearchIcon from '@material-ui/icons/Search'
-import AdminIcon from '@material-ui/icons/Settings'
 import DemoIcon from '@material-ui/icons/Style'
+import ShareIcon from '@material-ui/icons/Share'
+import AccountCircle from '@material-ui/icons/AccountCircle'
 
 let menuDefinitions = []
 const getmenu = (props) => {
   menuDefinitions = [
     { title: 'Home', to: '/', exact: true, icon: <HomeIcon className={props.color} /> },
     { title: 'Know about Plan', to: '/about_plan', icon: <SearchIcon className={props.color} /> },
-    { title: 'Registration', to: '/registration', icon: <CreateIcon className={props.color} /> }
   ]
   if(props.authInfo.isAuth) {
     menuDefinitions.push({ title: 'My Dashboard', to: '/dashboard', icon: <DashboardIcon className={props.color} /> })
-    menuDefinitions.push({ title: 'My Profile', to: '/profile', icon: <MaintainIcon className={props.color} /> })
-    menuDefinitions.push({ title: 'My Tree', to: '/my_tree', icon: <AdminIcon className={props.color} /> })
+    menuDefinitions.push({ title: 'My Profile', to: '/profile', icon: <AccountCircle className={props.color} /> })
+    menuDefinitions.push({ title: 'My Tree', to: '/my_tree', icon: <ShareIcon className={props.color} /> })
     if(props.authInfo.data.user_id == '1') {
+        menuDefinitions.push({ title: 'Disputes', to: '/disputes', icon: <MaintainIcon className={props.color} /> })
         menuDefinitions.push({ title: 'Smart Spreaders', to: '/smart_spreaders', icon: <DemoIcon className={props.color} /> })
     }
   }

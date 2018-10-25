@@ -66,4 +66,18 @@ export function getFormatedDate (dt) {
       return ''
     }
 }
-  
+
+export function getUserStatus(userStatus, paymentStatus) {
+    let currentStatus = ''
+    if (userStatus == 'Active') {
+        currentStatus = 'Active'
+    } else if (userStatus == 'Inactive') {
+        if(paymentStatus == 'Pending') {
+            currentStatus = 'Inactive - Receiver Confirmation Pending'
+        } else {
+            currentStatus = 'Inactive - Give Help Pending'
+        }
+    }
+    return currentStatus
+}
+                            

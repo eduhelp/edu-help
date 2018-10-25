@@ -2,13 +2,16 @@ var express = require('express');
 var _ = require('lodash')
 var pg_connect = require('./pg_connect');
 var router = express.Router();
-var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status"
+var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status, fullname, country, state, city"
 
 router.post('/myTree', async function(req, res) {
     var retArr = []
     var curLevel = 0
     var resultArray = await getMyTreeArray(req.body.user_id, retArr, curLevel, res)
-    res.status(200).send(resultArray)
+    if(resultArray) {
+        res.status(200).send(resultArray)
+    }
+    
 });
 
 async function getMyTreeArray(sp_id, retArr, getLevel, res) {
@@ -18,11 +21,17 @@ async function getMyTreeArray(sp_id, retArr, getLevel, res) {
     for(var i=0; i<curResult.length; i++) {
         var curQuery = "select "+userInfoList+" from users where user_id="+curResult[i].user_id
         var result = await pg_connect.connectDB(curQuery, res)
+        var payQuery = "select * from payments where from_id="+curResult[i].user_id+" and payment_level=1  and confirm_status!='Cancelled'"
+        var payResult = await pg_connect.connectDB(payQuery, res)
+        var levQuery = "select * from payments where from_id="+curResult[i].user_id+" and confirm_status!='Cancelled' and payment_level="+curLevel
+        var levResult = await pg_connect.connectDB(levQuery, res) 
         var nodeObj = {
             level: curLevel,
             parent_id: sp_id,
             user_id: result[0].user_id,
-            nodeInfo: result[0]
+            nodeInfo: result[0],
+            sponsorPayment: payResult[0],
+            levelPayment: levResult[0]
         }
         retArr.push(nodeObj)
     }
@@ -57,15 +66,22 @@ async function getTopLevelArray(user_id, retArr, getLevel, max_level, res) {
     var findRootLevelId = await getMyParentLevelWise(user_id, getLevel, res)
     var eligibility = ''
     if (findRootLevelId) {
-        var eliQuery = "select * from payments where from_id="+user_id+" and payment_level='"+getLevel+"'"
-        var eliResult = await pg_connect.connectDB(eliQuery, res)
-        if(eliResult) {
-            if(eliResult.length === 0) {
-                eligibility = false
-            } else {
-                eligibility = true
+        var firstQuery = "select * from payments where to_id="+user_id+" and payment_level=1 and confirm_status!='Cancelled'"
+        var firstResult = await pg_connect.connectDB(firstQuery, res)
+        if(firstResult.length >= 1) { 
+            var eliQuery = "select * from payments where from_id="+user_id+" and confirm_status!='Cancelled' and payment_level="+getLevel
+            var eliResult = await pg_connect.connectDB(eliQuery, res)
+            if(eliResult) {
+                if(eliResult.length === 0) {
+                    eligibility = false
+                } else {
+                    eligibility = true
+                }
             }
+        } else {
+            eligibility = false
         }
+
     } else {
         eligibility = true
     }
@@ -104,7 +120,9 @@ async function getMyParentLevelWise(user_id, maxLevel, res) {
 router.post('/activeSmartSpreader', async function(req, res) {
     var curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id  where t1.current_status='Active' and t1.payment_level="+req.body.payment_level+" order by t1.spreader_id limit 1"
     var result = await pg_connect.connectDB(curQuery, res)
-    if(result) {
+    if(result.length === 0) {
+        res.status(200).send({message: 'no smart spreader'})
+    } else {
         var bnkQuery = "select * from user_bank_details where user_id="+result[0].user_id
         var bnkresult = await pg_connect.connectDB(bnkQuery, res)
         result[0]['bank_details'] = bnkresult[0]

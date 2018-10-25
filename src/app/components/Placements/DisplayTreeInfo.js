@@ -79,40 +79,29 @@ export class DisplayTreeInfo extends React.Component {
                 dialogContent = {this.state.dialogContent}
                 closeCB = {this.closeDialog}
             />
-            <Grid item xs={12} className={classes.rowHead}>
-                <Grid container>
-                    <Grid item xs={4}>
-                        Placed User
-                    </Grid>
-                    <Grid item xs={4}>
-                        Placed Under
-                    </Grid>
-                    <Grid item xs={4}>
-                        Sponsor User
-                    </Grid>
-                </Grid>
-            </Grid>
+           
             {details.map((option, index) => {
                 return (
                     <Grid item xs={12} className={index %2 ? classes.rowEven : classes.rowOdd} key={index}>
                         <Grid container>
                             <Grid item xs={4}>
                                 <span className={classes.navLink} onClick={this.showUserDetails(option.nodeInfo)}>
-                                    {option.nodeInfo.username} ({option.nodeInfo.user_id})
+                                    {option.nodeInfo.username} 
                                 </span>
                             </Grid>
-                            <Grid item xs={4}>
-                                <span className={classes.navLink} onClick={this.getUserDetails(option.parent_id)}>
-                                    {option.parent_id}
-                                </span>
-                            </Grid>
-                            <Grid item xs={4}>
+                             <Grid item xs={4}>
                                 <span className={classes.navLink} onClick={this.getUserDetails(option.nodeInfo.sponsor_id)}>
                                     {option.nodeInfo.sponsor_id}
                                 </span>
                             </Grid>
+                            
+                            
                         </Grid>
                     </Grid>
+                    
+                                         
+                           
+                        
                 )
             })}
       </Grid>)

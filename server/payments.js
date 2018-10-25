@@ -2,7 +2,7 @@ var express = require('express');
 var _ = require('lodash')
 var pg_connect = require('./pg_connect');
 var router = express.Router();
-var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status"
+var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status, fullname, country, state, city"
 
 router.post('/levelPayments', async function(req, res) {
     var curQuery = "select * from level_payments"
@@ -28,7 +28,7 @@ router.post('/makeLevelPayment', async function(req, res) {
     }
 });
 
-router.post('/receivePaymentList', async function(req, res) {
+router.post('/myConfirmPendingList', async function(req, res) {
     var curQuery = "select * from payments where payment_level="+req.body.payment_level+" and to_id="+req.body.user_id+" and confirm_status='Pending'"
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
@@ -44,16 +44,21 @@ router.post('/receivePaymentList', async function(req, res) {
 });
 
 router.post('/confirmLevelPayment', async function(req, res) {
-    var updateQuery = "update payments set confirm_status='Confirmed', confirm_date='"+pg_connect.getCurrentDate()+"' where payment_id="+req.body.payment_id
+    var updateQuery = "update payments set confirm_status='Confirmed', confirm_date='"+pg_connect.getCurrentDate()+"', confirmed_by='"+req.body.confirmed_by+"' where payment_id="+req.body.payment_id
     var updateRes = await pg_connect.connectDB(updateQuery, res)
     if(updateRes) {
-        if(req.body.receiver_type === "SmartSpreader") {
+        if(req.body.receiver_type == "SmartSpreader") {
             var updQuery = "update smart_spreaders set current_status='Completed', completed_date='"+pg_connect.getCurrentDate()+"', payment_id="+req.body.payment_id+" where user_id="+req.body.to_id+" and current_status='InProgress' and payment_level="+req.body.payment_level
             var updRes = await pg_connect.connectDB(updQuery, res)
-            var insQuery = "insert into smart_spreaders(user_id, added_date, current_status, payment_level) values("+req.body.to_id+",'"+pg_connect.getCurrentDate()+"','Active',"+req.body.payment_level+")"
-            var insRes = await pg_connect.connectDB(insQuery, res)
+            // select smart spreader count level wise and check if it is reached 10 or not
+            var countSSQuery = "select count(*) from smart_spreaders where current_status='Completed' and user_id="+req.body.to_id+" and payment_level="+req.body.payment_level
+            var countSSRes = await pg_connect.connectDB(countSSQuery, res)
+            if(countSSRes[0].count < 10) {
+                var insQuery = "insert into smart_spreaders(user_id, added_date, current_status, payment_level) values("+req.body.to_id+",'"+pg_connect.getCurrentDate()+"','Active',"+req.body.payment_level+")"
+                var insRes = await pg_connect.connectDB(insQuery, res)
+            }
         }
-        if(req.body.payment_level === "1") {
+        if(req.body.payment_level == "1") {
             var retArr = []
             var curLevel = 0
             var nodeObj = {
@@ -64,21 +69,29 @@ router.post('/confirmLevelPayment', async function(req, res) {
             var resultArray = await getRootArray(req.body.sponsor_id, retArr, curLevel, res)
             var insResult = await insertToPosition(req.body.user_id, resultArray, res)
             var updResult = await updateUser(req.body.user_id, res)
-            var entResult = await entryToSmartSpreaderBucket(req.body.user_id, req.body.payment_level, res)
+            await checkDisputes(req.body.payment_id, res)
+            var entResult = await entryToSmartSpreaderBucket(req.body.sponsor_id, req.body.payment_level, res)
             if(entResult) {
                 res.status(200).send({message: 'Confirmaton status successfully updated for level-'+req.body.payment_level})
             }
         } else {
-            res.status(200).send({message: 'Confirmaton status successfully updated for level-'+req.body.payment_level})
-        }
-        var usersCountQuery = "select count(*) from users where sponsor_id="+req.body.user_id+" and status='Active'"
-        var usersCountResult = await pg_connect.connectDB(usersCountQuery, res)
-        if(usersCountResult[0].count >= 6) {
-            await placementToSmartSpreaderBucket(req.body.user_id, req.body.payment_level, res)
+            await checkDisputes(req.body.payment_id, res)
+            var entResult = await entryToSmartSpreaderBucket(req.body.user_id, req.body.payment_level, res)
+            if(entResult) {
+                res.status(200).send({message: 'Confirmaton status successfully updated for level-'+req.body.payment_level})
+            }
         }
     }
 });
 
+async function checkDisputes(payment_id, res) {
+    var curQuery = "select * from disputes where dispute_status='Open' and payment_id="+payment_id
+    var curResult = await pg_connect.connectDB(curQuery, res)
+    if(curResult.length >= 1) {
+        var disQuery = "update disputes set dispute_status='Closed', reply_message='payment confirmed by receiver', replied_date='"+pg_connect.getCurrentDate()+"' where dispute_id="+curResult[0].dispute_id
+        var disResult = await pg_connect.connectDB(disQuery, res)
+    }
+}
 async function getRootArray(sp_id, retArr, getLevel, res) {
     var curQuery = "select * from positions where parent_id="+sp_id
     var curResult = await pg_connect.connectDB(curQuery, res)
@@ -129,7 +142,7 @@ async function entryToSmartSpreaderBucket(user_id, payment_level, res) {
             var findRootLevelId = await getMyParentLevelWise(user_id, i, res)
             var eligibility = ''
             if (findRootLevelId) {
-                var eliQuery = "select * from payments where from_id="+user_id+" and payment_level='"+i+"'"
+                var eliQuery = "select * from payments where from_id="+user_id+" and confirm_status!='Cancelled' and payment_level='"+i+"'"
                 var eliResult = await pg_connect.connectDB(eliQuery, res)
                 if(eliResult) {
                     if(eliResult.length === 0) {
@@ -166,7 +179,7 @@ async function getMyParentLevelWise(user_id, maxLevel, res) {
         var curQuery = "select * from positions where user_id="+cur_user_id
         var curResult = await pg_connect.connectDB(curQuery, res)
         if (curResult) {
-            if (curResult[0].parent_id === '0' && i<=maxLevel) {
+            if (curResult[0].parent_id == '0' && i<=maxLevel) {
                 haveRootLevel = false
                 break outerLoop;
             } else {
@@ -177,9 +190,8 @@ async function getMyParentLevelWise(user_id, maxLevel, res) {
     return haveRootLevel
 }
 
-router.post('/myPaymentList', async function(req, res) {
-    var curQuery = "select * from payments where from_id="+req.body.user_id
-    var result = await pg_connect.connectDB(curQuery, res)
+async function getPaymentList(query, res) {
+    var result = await pg_connect.connectDB(query, res)
     if(result) {
         for(var i=0; i<result.length; i++) {
             var selQuery = "select "+userInfoList+" from users where user_id="+result[i].to_id
@@ -193,10 +205,20 @@ router.post('/myPaymentList', async function(req, res) {
         }
         res.status(200).send(result)
     }
+}
+
+router.post('/myPaymentList', async function(req, res) {
+    var curQuery = "select * from payments where from_id="+req.body.user_id+" and confirm_status!='Cancelled'"
+    await getPaymentList(curQuery, res)
+});
+
+router.post('/myReceivedPaymentList', async function(req, res) {
+    var curQuery = "select * from payments where to_id="+req.body.user_id+" and confirm_status!='Cancelled'"
+    await getPaymentList(curQuery, res)
 });
 
 router.post('/levelEligibility', async function(req, res) {
-    var curQuery = "select * from payments where from_id="+req.body.user_id+" and payment_level='"+req.body.payment_level+"'"
+    var curQuery = "select * from payments where from_id="+req.body.user_id+" and confirm_status!='Cancelled' and payment_level='"+req.body.payment_level+"'"
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
         if(result.length === 0) {
@@ -208,7 +230,7 @@ router.post('/levelEligibility', async function(req, res) {
 });
 
 router.post('/addConfirmReceiver', async function(req, res) {
-    var insQuery = "insert into payments(from_id, to_id, payment_level, payment_value, paid_status, receiver_type, receiver_confirm_date) values("+req.body.from_id+","+req.body.to_id+","+req.body.payment_level+","+req.body.payment_value+",'Pending','"+req.body.receiver_type+"','"+pg_connect.getCurrentDate()+"')"
+    var insQuery = "insert into payments(from_id, to_id, payment_level, payment_value, paid_status, receiver_type, receiver_confirm_date, confirm_status) values("+req.body.from_id+","+req.body.to_id+","+req.body.payment_level+","+req.body.payment_value+",'Pending','"+req.body.receiver_type+"','"+pg_connect.getCurrentDate()+"', 'Initiated')"
     if(req.body.receiver_type == 'RootParent') {
         var result = await pg_connect.connectDB(insQuery, res)
         if(result) {

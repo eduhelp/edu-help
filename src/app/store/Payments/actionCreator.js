@@ -2,10 +2,11 @@ import {
   GET_PAYMENTS_SUCCESS,
   GET_PAYMENTS_FAIL,
   GET_LEVEL_PAYMENTS_SUCCESS,
-  RECEIVE_PAYMENT_LIST_SUCCESS,
+  MY_CONFIRM_PENDING_LIST,
   MY_PAYMENT_LIST_SUCCESS,
   LEVEL_ELIGIBILIY_SUCCESS,
   CONFIRM_RECEIVER_SUCCESS,
+  RECEIVED_PAYMENT_LIST_SUCCESS,
 } from './actionType'
 // import config from './../../config/apiConfig'
 import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
@@ -36,6 +37,18 @@ export function getLevelPayments () {
   }
 }
 
+export function getReceivedPayments () {
+  return dispatch => {
+    return postService('payments/receivedPayments')
+    .then((resp) => {
+      dispatch({data: resp, type: GET_RECEIVED_PAYMENTS_SUCCESS})
+    })
+    .catch((error) => {
+      dispatch({ type: GET_PAYMENTS_FAIL})
+    })
+  }
+}
+
 export function makeLevelPayment (payload) {
   return dispatch => {
     return postService('payments/makeLevelPayment', payload)
@@ -50,11 +63,11 @@ export function makeLevelPayment (payload) {
   }
 }
 
-export function getReceivePaymentList (payload) {
+export function myConfirmPendingList (payload) {
   return dispatch => {
-    return postService('payments/receivePaymentList', payload)
+    return postService('payments/myConfirmPendingList', payload)
     .then((resp) => {
-      dispatch({data: resp, type: RECEIVE_PAYMENT_LIST_SUCCESS})
+      dispatch({data: resp, type: MY_CONFIRM_PENDING_LIST})
     })
     .catch((error) => {
       dispatch({ type: RECEIVE_PAYMENT_LIST_FAIL})
@@ -63,6 +76,7 @@ export function getReceivePaymentList (payload) {
 }
 
 export function confirmLevelPayment (payload) {
+  console.log('confirmLevelPayment - action creator')
   return dispatch => {
     return postService('payments/confirmLevelPayment', payload)
     .then((resp) => {
@@ -114,4 +128,14 @@ export function addConfirmReceiver (payload) {
   }
 }
 
-
+export function getReceivedPaymentList (payload) {
+  return dispatch => {
+    return postService('payments/myReceivedPaymentList', payload)
+    .then((resp) => {
+      dispatch({data: resp, type: RECEIVED_PAYMENT_LIST_SUCCESS})
+    })
+    .catch((error) => {
+      dispatch({ type: MY_PAYMENT_LIST_FAIL})
+    })
+  }
+}
