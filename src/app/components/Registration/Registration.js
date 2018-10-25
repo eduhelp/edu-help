@@ -45,28 +45,32 @@ class Registration extends React.Component {
             }
     }
     
+    componentWillMount() {
+      var uname = this.getParameterByName('n'); // "lorem"
+      const sponsorInfo = {
+        username: uname,
+      }
+      this.props.getUserDetails(sponsorInfo)
+    }
+
+    getParameterByName = (name, url) => {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+
     getSteps() {
       return ['Sponsor Info', 'Your Info', 'Confirm'];
     }
-    
-    submitSponsorInfo = (sponsorInfo) => {
-      this.setState({
-        sponsorInfo
-      })
-    }
 
     submitUserInfo = (userInfo) => {
-      console.log(userInfo)
       this.setState({
         userInfo
       })
-    }
-    
-    getSponsorInfo = (sponsorInfo) => {
-      const sendData = {
-        user_id: sponsorInfo.sponsor_id
-      }
-      this.props.getUserDetails(sendData)
     }
 
     checkAvailability = (field_name, field_value) => {
@@ -82,9 +86,6 @@ class Registration extends React.Component {
           return (
             <div>
               <SponsorInfo 
-                submitCB = {this.submitSponsorInfo}
-                sponsorInfo={this.state.sponsorInfo}
-                getUserCB={this.getSponsorInfo}
                 sponsorDetails = {this.props.userDetails}
               />
             </div>
@@ -116,10 +117,6 @@ class Registration extends React.Component {
       }
     }
 
-    componentWillMount() {
-        console.log('step1 props')
-        console.log(this.props.step1)
-    }
   isStepOptional = step => {
     // return step === 1;
     return false
@@ -137,7 +134,7 @@ class Registration extends React.Component {
     const { activeStep } = this.state;
     let { skipped } = this.state;
     if( activeStep === 2) {
-      this.state.userInfo['sponsor_id'] = this.state.sponsorInfo.sponsor_id
+      this.state.userInfo['sponsor_id'] = this.props.userDetails.user_id
       this.props.addUser(this.state.userInfo);
       this.setState({
         activeStep: activeStep + 1,
@@ -202,12 +199,11 @@ class Registration extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, userDetails } = this.props;
     const steps = this.getSteps(this.props);
     const { activeStep, sponsorInfo, userInfo } = this.state;
     let nextBtnDisabledState = true
-    console.log(activeStep, sponsorInfo.sponsor_id)
-    if (activeStep === 0 && sponsorInfo.sponsor_id !== undefined && sponsorInfo.sponsor_id !== '') {
+    if (activeStep === 0 && userDetails && userDetails.status == 'Active') {
       nextBtnDisabledState = false
     } else if (activeStep === 1 && userInfo !== 'undefined' && userInfo !== '') {
       nextBtnDisabledState = false

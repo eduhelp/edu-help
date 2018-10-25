@@ -37,5 +37,5 @@ app.use("/placements", placements)
 app.use("/disputes", disputes)
 
 
-app.listen(9000);
+app.listen(80);
 console.log('server started... ');
