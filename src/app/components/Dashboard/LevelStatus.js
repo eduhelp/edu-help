@@ -149,7 +149,7 @@ export class LevelStatus extends React.Component {
                                     Level
                                 </Grid>
                                 <Grid item xs={3}>
-                                    User Id
+                                    User Name
                                 </Grid>
                                 <Grid item xs={2}>
                                     Status
@@ -165,7 +165,7 @@ export class LevelStatus extends React.Component {
                                         </Grid>
                                         <Grid item xs={3}>
                                             <span className={classes.navLink} onClick={this.showUserDetails(option.nodeInfo)}>
-                                                {option.nodeInfo.username} ({option.user_id})
+                                                {option.nodeInfo.username} 
                                             </span>
                                         </Grid>
                                         <Grid item xs={2}>
@@ -178,7 +178,7 @@ export class LevelStatus extends React.Component {
                     </Grid>
                 ) : (
                     <Grid item xs={12} className={classes.marginTop10}>
-                        user not added into level - {this.state.selectedLevel}
+                    Select Level From Dropdown{this.state.selectedLevel}
                     </Grid>
                 )
                 }

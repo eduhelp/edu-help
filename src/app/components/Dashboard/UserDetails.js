@@ -95,37 +95,8 @@ export class UserDetails extends React.Component {
                     </Grid>
                 </Grid>
             </Grid>
+           
             <Grid item xs={12} className={classes.rowHead}>
-                <Grid container>
-                    <Grid item xs={6}>
-                        DOB
-                    </Grid>
-                    <Grid item xs={6}>
-                        {getFormatedDate(details.dob)}
-                    </Grid>
-                </Grid>
-            </Grid>
-            <Grid item xs={12} className={classes.rowDetails}>
-                <Grid container>
-                    <Grid item xs={6}>
-                        Gender
-                    </Grid>
-                    <Grid item xs={6}>
-                        {details.gender}
-                    </Grid>
-                </Grid>
-            </Grid>
-            <Grid item xs={12} className={classes.rowHead}>
-                <Grid container>
-                    <Grid item xs={6}>
-                        Address
-                    </Grid>
-                    <Grid item xs={6}>
-                        {details.address}
-                    </Grid>
-                </Grid>
-            </Grid>
-            <Grid item xs={12} className={classes.rowDetails}>
                 <Grid container>
                     <Grid item xs={6}>
                         Pincode
@@ -135,7 +106,7 @@ export class UserDetails extends React.Component {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12} className={classes.rowHead}>
+            <Grid item xs={12} className={classes.rowDetails}>
                 <Grid container>
                     <Grid item xs={6}>
                         Sponsor Id

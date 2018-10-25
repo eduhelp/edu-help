@@ -38,7 +38,7 @@ export class ContactUs extends React.Component {
     return (
             <div id="mainContainer">
             <Grid item xs={12}>
-            <h2 className={classes.hed}>Contact Us</h2>
+            
             <Grid container>
               <Grid item xs={3}>
                 <img src={ Hello } />
@@ -49,10 +49,9 @@ export class ContactUs extends React.Component {
 
                </Grid>
                <Grid item xs={6}>
-              <ul>
-                <li>Reach us @ Edu_help@gmail.com</li><br />
-                
-              </ul>
+               <h2 className={classes.hed}>Contact Us</h2>
+               <p>- Reach Us @ Edu_help@gmail.com</p>
+              
                 </Grid>
               </Grid>
               </Grid>

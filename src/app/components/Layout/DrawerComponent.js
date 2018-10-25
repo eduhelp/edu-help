@@ -30,6 +30,7 @@ import SmartSpreader from '../SmartSpreader/SmartSpreader';
 import Disputes from '../Disputes/Disputes'
 // import NotFound from '../NotFoundPage/NotFoundPage'
 // import { ReactComponent as Logo } from '../../images/logo.svg'
+import Main from './Picture1.png';
 
 
 const drawerWidth = 240
