@@ -22,6 +22,7 @@ import MakePayment from '../Payments/MakePayment'
 import ReceivePayment from '../Payments/ReceivePayment'
 import Profile from '../Profile/Profile'
 import MyTree from '../Placements/MyTree'
+import Faq from '../Placements/Faq'
 import Button from '@material-ui/core/Button';
 import { Dialog } from '@material-ui/core';
 import Login from './Login'
@@ -245,6 +246,7 @@ class MiniDrawer extends React.Component {
                     <Route path="/make_payment/:levelIndex/:paymentTo" component={MakePayment} />
                     <Route path="/receive_payment/:levelIndex" component={ReceivePayment} />
                     <Route path="/my_tree" component={MyTree} />
+                    <Route path="/faq" component={Faq} />
                     <Route path='/profile' component={Profile} />
                     <Route path='/smart_spreaders' component={SmartSpreader} />
                     <Route path='/disputes' component={Disputes} />
