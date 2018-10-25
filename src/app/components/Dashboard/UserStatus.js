@@ -1,6 +1,7 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import { Link } from 'react-router-dom'
 
 const styles = {
   root: {
@@ -35,7 +36,7 @@ export class UserStatus extends React.Component {
       <div id="mainContainer">
         <Grid item xs={12}>
             <h3> Account Status : {currentStatus} </h3>
-            <h5> Refer Link : {regLink} </h5>
+            <h5> Refer Link : <a href={regLink} target='_blank'>{regLink}</a> </h5>
         </Grid>
       </div>)
   }
