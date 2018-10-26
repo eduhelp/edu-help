@@ -40,15 +40,21 @@ export class ContactUs extends React.Component {
             <Grid item xs={12}>
             
             <Grid container>
-              <Grid item xs={3}>
-                <img src={ Hello } />
-
-               </Grid>
-                <Grid item xs={2}>
+             <Grid item xs={1}>
                
 
                </Grid>
-               <Grid item xs={6}>
+              <Grid item xs={3}>
+                <img src={ Hello } width="125%" />
+
+               </Grid>
+               <Grid item xs={2}>
+               
+
+               </Grid>
+               
+               <Grid item xs={4}>
+               <br /><br /><br />
                <h2 className={classes.hed}>Contact Us</h2>
                <p>- Reach Us @ Edu_help@gmail.com</p>
               
