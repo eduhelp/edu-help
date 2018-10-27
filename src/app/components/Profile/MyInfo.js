@@ -11,6 +11,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Button from '@material-ui/core/Button';
+
 import { changeDateFormat } from '../../components/Common/Utils'
 import { updateUserInfo } from '../../store/Registration/actionCreator'
 
@@ -28,6 +29,12 @@ const styles = {
   },
   textField: {
     width:200,
+  },
+  textField1: {
+      width:200,
+      borderTop: 'none',
+    borderLeft: 'none',
+    borderRight: 'none',
   },
   btnRow: {
       textAlign: 'center',
@@ -175,7 +182,8 @@ export class MyInfo extends React.Component {
                     id="outlined-with-placeholder"
                     label="Enter pincode"
                     placeholder="Placeholder"
-                    type='number'
+                    type="number"
+                    format="######" mask="_"
                     className={classes.textField}
                     margin="normal"
                     variant="outlined"

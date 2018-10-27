@@ -315,6 +315,9 @@ export class PaymentInfo extends React.Component {
                         className={classes.textField}
                         margin="normal"
                         variant="outlined"
+                       inputProps={{
+                      maxLength: 15,
+                    }}
                         value={this.state.confirm_bank_ac_number}
                         onChange={this.handleChange('confirm_bank_ac_number')}
                         onBlur={this.handleBlurChange('confirm_bank_ac_number')}

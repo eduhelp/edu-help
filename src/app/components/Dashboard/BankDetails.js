@@ -50,7 +50,17 @@ export class BankDetails extends React.Component {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12} className={classes.rowHead}>
+             <Grid item xs={12} className={classes.rowHead}>
+                <Grid container>
+                    <Grid item xs={6}>
+                        Account Type 
+                    </Grid>
+                    <Grid item xs={6}>
+                        {details.account_type}
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid item xs={12} className={classes.rowDetails}>
                 <Grid container>
                     <Grid item xs={6}>
                         Bank Name 
@@ -60,7 +70,7 @@ export class BankDetails extends React.Component {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12} className={classes.rowDetails}>
+            <Grid item xs={12} className={classes.rowHead}>
                 <Grid container>
                     <Grid item xs={6}>
                         Branch Name 
@@ -70,7 +80,7 @@ export class BankDetails extends React.Component {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12} className={classes.rowHead}>
+            <Grid item xs={12} className={classes.rowDetails}>
                 <Grid container>
                     <Grid item xs={6}>
                         IFSC Code
