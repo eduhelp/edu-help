@@ -25,9 +25,7 @@ const styles = theme => ({
     
   },
   paper:{
-    margin: '10',
-    width: '100%',
-   
+    margin: '10',   
     padding:'10',
  
 },
