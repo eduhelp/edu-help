@@ -215,7 +215,7 @@ export class MySmartSpreader extends React.Component {
                                     ID
                                 </Grid>
                                 <Grid item xs={2}>
-                                    User Id
+                                    User Name
                                 </Grid>
                                 <Grid item xs={2}>
                                     Status
@@ -249,7 +249,7 @@ export class MySmartSpreader extends React.Component {
                                         </Grid>
                                         <Grid item xs={2}>
                                             <span className={classes.navLink} onClick={this.showUserDetails(option)}>
-                                                {option.username} ({option.user_id})
+                                                {option.username} 
                                             </span>
                                         </Grid>
                                         <Grid item xs={2}>

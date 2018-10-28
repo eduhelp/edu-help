@@ -29,6 +29,12 @@ const styles = {
   textField: {
     width:200,
   },
+  textField1: {
+      width:200,
+      borderTop: 'none',
+    borderLeft: 'none',
+    borderRight: 'none',
+  },
   btnRow: {
       textAlign: 'center',
       padding: 5,
@@ -330,6 +336,7 @@ export class MyInfo extends React.Component {
                   </Grid>
                 </Grid>
               </Grid>
+
               <Grid item xs={6}>
               <Grid container>
                   <Grid item xs={12} className={classes.marginLeft20}>

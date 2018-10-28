@@ -12,6 +12,7 @@ import DemoIcon from '@material-ui/icons/Style'
 import ShareIcon from '@material-ui/icons/Share'
 import HelpIcon from '@material-ui/icons/HelpOutline'
 import AccountCircle from '@material-ui/icons/AccountCircle'
+import Notification from '@material-ui/icons/NotificationsNone'
 
 let menuDefinitions = []
 const getmenu = (props) => {
@@ -24,6 +25,7 @@ const getmenu = (props) => {
     menuDefinitions.push({ title: 'My Profile', to: '/profile', icon: <AccountCircle className={props.color} /> })
     menuDefinitions.push({ title: 'My Tree', to: '/my_tree', icon: <ShareIcon className={props.color} /> })
     menuDefinitions.push({ title: 'FAQ', to: '/faq', icon: <HelpIcon className={props.color} /> })
+     menuDefinitions.push({ title: 'NOTE', to: '/note', icon: <Notification className={props.color} /> })
     if(props.authInfo.data.user_id == '1') {
         menuDefinitions.push({ title: 'Disputes', to: '/disputes', icon: <MaintainIcon className={props.color} /> })
         menuDefinitions.push({ title: 'Smart Spreaders', to: '/smart_spreaders', icon: <DemoIcon className={props.color} /> })
