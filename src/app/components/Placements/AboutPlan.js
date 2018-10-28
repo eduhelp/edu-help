@@ -7,6 +7,11 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Pdf from '../Home/EduHelp.pdf';
+import How from './sample.png';
+import Background2 from '../Home/logow.png';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   root: {
@@ -22,8 +27,35 @@ const styles = theme => ({
   paper:{
     margin: '10',
     width: '100%',
+   
     padding:'10',
+ 
+},
+pic:{
+   backgroundImage: `url(${Background2})`,
+   
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'noRepeat',
+            backgroundOpacity:'30%',
+            height:'299px',
+},
+  hed:{
+    color:'#92d219',
+   fontFamily:'Edwardian Script ITC',
+   fontSize:'75px',
+ },
+  spa:{
+    fontSize:'46px',
+     fontFamily:'',
+    color:'#92d219',
+
   },
+  paperso:{
+    fontFamily:'Arial',
+    fontSize:'25px',
+  
+  }
   
 });
 
@@ -35,8 +67,20 @@ class AboutPlan extends React.Component {
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
-          About plan iext
+         <center className={classes.paperso}><span className={classes.hed}>Helping Plan<br /></span>
+
+         <br />For more details<br /><a href = {Pdf} target = "_blank">Click Here</a>
+         <br />
+              
+            </center>
+                 
         
+        
+        </Paper>
+        <Paper className={classes.paper}>
+        <div className={classes.pic}>
+         
+        </div>
         </Paper>
       </div>
     );
