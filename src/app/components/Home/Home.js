@@ -18,6 +18,7 @@ import Grid from '@material-ui/core/Grid';
 import Background2 from './logow.png';
 import Background1 from './bg1.png';
 import Background from './kidsf.png';
+import Faq from './Faq'
 
 
 function TabContainer(props) {
@@ -44,6 +45,7 @@ const styles = {
   },
   hgt:{
     height:'1000px',
+     height:'auto',
   },
   bck:{
     backgroundColor:'#add8e6',
@@ -59,6 +61,13 @@ const styles = {
   tab:{
     textAlign:'left',
     color:'#1967d2',
+    overflowY: 'scroll',
+   
+  },
+   tab1:{
+    textAlign:'left',
+    color:'#1967d2',
+   
    
   },
   papers:{
@@ -102,7 +111,7 @@ const styles = {
     
   },
   spa:{
-    fontSize:'45px',
+    fontSize:'46px',
      fontFamily:'Edwardian Script ITC',
     color:'#92d219',
 
@@ -170,7 +179,9 @@ export class Home extends React.Component {
                     <Tab Scrollchor  label="Why This Community" onClick={() =>window.scrollTo(20,500)} />
                     <Tab label="How it works" onClick={() =>window.scrollTo(20,500)} />
                     <Tab label="Smart Spreaders" onClick={() =>window.scrollTo(20,500)}/>
+                    <Tab label="FAQ" onClick={() =>window.scrollTo(20,500)} />
                     <Tab label="Contact Us" onClick={() =>window.scrollTo(20,500)} />
+
                   </Tabs>
                 </AppBar>
                     
@@ -184,7 +195,9 @@ export class Home extends React.Component {
             {value === 2 && <TabContainer className={classes.tab}>
              <Smart/>
             </TabContainer>}
-            {value === 3 && <TabContainer className={classes.tab}> <Contact/>
+            {value === 3 && <TabContainer className={classes.tab1}> <Faq/>
+             </TabContainer>}
+            {value === 4 && <TabContainer className={classes.tab}> <Contact/>
              </TabContainer>}
             
             </Typography>

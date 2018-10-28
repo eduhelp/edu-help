@@ -87,7 +87,7 @@ export class PaymentDetails extends React.Component {
                         Receiver Type
                     </Grid>
                     <Grid item xs={6}>
-                        {'Level of'} {details.receiver_type} {'/ Smart Spreaders'}
+                        {'Level of'} {details.receiver_type}
                     </Grid>
                 </Grid>
             </Grid>

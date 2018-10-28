@@ -139,7 +139,7 @@ export class GiveHelp extends React.Component {
                                     Level
                                 </Grid>
                                 <Grid item xs={3}>
-                                    Parent (User ID)
+                                    Parent User Name
                                 </Grid>
                                 <Grid item xs={3}>
                                     Bank Details
@@ -157,7 +157,7 @@ export class GiveHelp extends React.Component {
                                 </Grid>
                                 <Grid item xs={3}>
                                     <span className={classes.navLink} onClick={this.showUserDetails(this.props.sponsorDetails)}>
-                                        {this.props.sponsorDetails.username} ({this.props.sponsorDetails.user_id})
+                                        {this.props.sponsorDetails.username} 
                                     </span>
                                 </Grid>
                                 <Grid item xs={3}>
@@ -225,7 +225,8 @@ export class GiveHelp extends React.Component {
                                         </Grid>
                                         <Grid item xs={3}>
                                             <span className={classes.navLink} onClick={this.showUserDetails(option.nodeInfo)}>
-                                                {option.nodeInfo.username} ({option.nodeInfo.user_id})
+                                                {option.nodeInfo.username} 
+                                                
                                             </span>
                                         </Grid>
                                         <Grid item xs={3}>

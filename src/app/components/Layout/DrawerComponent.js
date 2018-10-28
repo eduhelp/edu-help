@@ -25,6 +25,7 @@ import MyTree from '../Placements/MyTree'
 import Faq from '../Placements/Faq'
 import Button from '@material-ui/core/Button';
 import { Dialog } from '@material-ui/core';
+import Notification from '@material-ui/icons/NotificationsNone'
 import Login from './Login'
 import SideDrawer from '../Common/SideDrawer'
 import SmartSpreader from '../SmartSpreader/SmartSpreader';
@@ -186,15 +187,21 @@ class MiniDrawer extends React.Component {
               onClick={this.handleDrawerOpen}
               className={classNames(classes.menuButton, this.state.open && classes.hide)}
             >
+            
               <MenuIcon />
+
             </IconButton>
             <div className={classes.companyTitle}>Edu Help</div>
+
             <div className={classes.userInfo}>
                 {(isAuth) ? (
                     <div className={classes.userNameDisp}> 
                         Welcome {data.username} 
+                        <Button color="black" className={classes.companyTitle} >
+                        <Notification/>
+                        </Button> 
                         <Button color="primary" className={classes.button} onClick={this.confirmLogout}>
-                            Logout
+                             Logout
                         </Button>
                     </div>
                 ) : (

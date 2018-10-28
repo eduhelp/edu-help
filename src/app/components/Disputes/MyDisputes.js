@@ -209,12 +209,12 @@ export class MyDisputes extends React.Component {
                                         </Grid>
                                         <Grid item xs={2}>
                                             <span className={classes.navLink} onClick={this.showUserDetails(option.disputeFromUserInfo)}>
-                                                {option.disputeFromUserInfo.username} - ({option.disputeFromUserInfo.user_id})
+                                                {option.disputeFromUserInfo.username} 
                                             </span>
                                         </Grid>
                                         <Grid item xs={2}>
                                             <span className={classes.navLink} onClick={this.showUserDetails(option.disputeToUserInfo)}>
-                                                {option.disputeToUserInfo.username} - ({option.disputeToUserInfo.user_id})
+                                                {option.disputeToUserInfo.username}
                                             </span>
                                         </Grid>
                                         <Grid item xs={2}>
