@@ -58,7 +58,7 @@ const styles = {
   listing1: {
   	
   	fontFamily: 'Arial',
-  	color: '#FF4500',
+  	color: '#000000',
   	lineHeight: 2,
   },
   plink: {
@@ -73,7 +73,7 @@ const styles = {
 
 
 
-export class SmartSpreaders extends React.Component {
+export class WhyThisCommunity extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -82,6 +82,7 @@ export class SmartSpreaders extends React.Component {
     
   }
 
+ 
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -93,13 +94,18 @@ export class SmartSpreaders extends React.Component {
     const { value } = this.state
     return (
       <div id="mainContainer" className={classes.wrapper}>
-      	
-            <h2 className={classes.subheading}>SMART SPREADERS</h2>
-            <ul className={classes.listing}>
-        		  <li>Smart Spreaders are the one who takes more initiative to explain and promote EduHelp good cause community to people in sponsoring many Help givers& receivers</li>
-        		  <li>SMART SPREADER gets an additional help benefit from others also where receiver’s are not eligible to receive from level below, then helper can wait till upline sponsor get eligible or he can pay to "smart spreaders" according to the queue of that level</li>
-            </ul>
-          
+      	<h2 className={classes.subheading}>Why this community</h2>
+        	<ul className={classes.listing}>
+        		<li>WE believe that <strong>education</strong> is the most important tool you can receive, that can bring you most <strong>success</strong> in society today</li>
+        		<li>Education is definitely important in one's life.  A gift of knowledge can bring us to the top of our dreams. It leads us to the right path and gives us a chance to have a wonderful life. </li>
+        		<li>Education is an important aspect that plays a huge role in the modern, industrialized world, which could transform
+        			<ul className={classes.listing1}>
+        				<ol>- Career Advancement </ol>
+        				<ol>- Character Building</ol>
+        				<ol>- Backbone of Society </ol>
+					   </ul>
+        		</li>
+			 </ul>
       </div>)
   }
 }
@@ -113,4 +119,4 @@ const mapStateToProps = state => ({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SmartSpreaders))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(WhyThisCommunity))
