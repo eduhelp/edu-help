@@ -3,6 +3,7 @@ import {
   MY_TREE_SUCCESS,
   MY_TOP_LEVEL_SUCCESS,
   ACTIVE_SMART_SPREADER_SUCCESS,
+  ALL_ACTIVE_SMART_SPREADER_SUCCESS
 } from './actionType'
 
 export const initialState = fromJS({
@@ -11,6 +12,7 @@ export const initialState = fromJS({
   smartSpreaderInfo: [{
     message: 'Root'
   }],
+  allActiveSSList: []
 })
 
 export default function placementsReducer (state = initialState, action) {
@@ -26,6 +28,10 @@ export default function placementsReducer (state = initialState, action) {
     case ACTIVE_SMART_SPREADER_SUCCESS:
       return state
         .set('smartSpreaderInfo',fromJS(action.data))
+
+    case ALL_ACTIVE_SMART_SPREADER_SUCCESS:
+      return state
+        .set('allActiveSSList',fromJS(action.data))
 
     default:
       return state

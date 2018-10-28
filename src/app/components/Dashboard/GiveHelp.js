@@ -193,14 +193,22 @@ export class GiveHelp extends React.Component {
                         {this.props.myTopLevel.map((option, key) => {
                             receivedCheck = false
                             const curPaymentObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == option.level) })
-                            if(option.level >= 3) {
+                            if(option.level >= 4) {
                                 const checkLevel = option.level - 2
                                 const curReceivedObject = _.find(this.props.myReceivedList, (n) => { return (n.payment_level == checkLevel && n.confirm_status == 'Confirmed' && n.receiver_type == 'RootParent') })
                                 if(curReceivedObject) {
                                     receivedCheck = true
                                 }
                             } else {
-                                receivedCheck = true
+                                if(option.level == '3') {
+                                    const mySponsorPaymentObj = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == '1') })
+                                    const level2PaymentObj = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == '2') })
+                                    if(mySponsorPaymentObj && level2PaymentObj) {
+                                        receivedCheck = true
+                                    }
+                                } else {
+                                    receivedCheck = true
+                                }
                             }
                             let disputeObj = ''
                             if(curPaymentObject) {

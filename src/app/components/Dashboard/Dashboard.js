@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { DashboardDetails } from './DashboardDetails'
 
-import { getMyTree, getMyTopLevel, getActiveSmartSpreader } from '../../store/Placements/actionCreator'
+import { getMyTree, getMyTopLevel, getActiveSmartSpreader, getAllSSActiveList } from '../../store/Placements/actionCreator'
 import { getUserDetails, getMyReferrals, getMySmartSpreadersList } from '../../store/Registration/actionCreator'
 import { getReceivedPaymentList, getMyPaymentList, getLevelPayments, getReceivedPayments } from '../../store/Payments/actionCreator'
 import { getMyDisputes } from '../../store/Disputes/actionCreator'
@@ -89,6 +89,7 @@ export class Dashboard extends React.Component {
     this.props.getMyReferrals(sendData)
     this.props.getMySmartSpreadersList(sendData)
     this.props.getMyDisputes(sendData)
+    this.props.getAllSSActiveList()
     // this.props.getActiveSmartSpreader()
 }
 
@@ -150,6 +151,7 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
             levelPayments={this.props.levelPayments}
             mySmartSpreadersList={this.props.mySmartSpreadersList}
             myDisputes={this.props.myDisputes}
+            allActiveSSList={this.props.allActiveSSList}
         />
     } else if (this.state.currentPage === 'ConfirmReceiver') {
         var levelObj = _.find(this.props.levelPayments, (n) => { return n.level_index == this.state.levelIndex} )
@@ -201,6 +203,7 @@ const mapDispatchToProps = dispatch =>
     getMyReferrals,
     getMySmartSpreadersList,
     getMyDisputes,
+    getAllSSActiveList,
   }, dispatch)
 
 const mapStateToProps = state => ({
@@ -215,5 +218,6 @@ const mapStateToProps = state => ({
     myReferrals: state.getIn(['RegistrationContainer', 'myReferrals']).toJS(),
     mySmartSpreadersList: state.getIn(['RegistrationContainer', 'mySmartSpreadersList']).toJS(),
     myDisputes: state.getIn(['DisputesContainer', 'myDisputes']).toJS(),
+    allActiveSSList: state.getIn(['PlcementsContainer', 'allActiveSSList']).toJS(),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard))
