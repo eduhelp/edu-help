@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import MyInfo from './MyInfo'
 import PaymentInfo from './PaymentInfo'
 import ChangePassword from './ChangePassword'
+import { updateUserInfo, checkAvailability } from '../../store/Registration/actionCreator'
 
 function TabContainer(props) {
   return (
@@ -43,6 +44,18 @@ class Profile extends React.Component {
     this.setState({ value });
   };
 
+  updateUserInfo = (sendData) => {
+    this.props.updateUserInfo(sendData)
+  }
+
+  checkAvailability = (field_name, field_value) => {
+    const sendData = {
+      field_name,
+      field_value
+    }
+    this.props.checkAvailability(sendData)
+  }
+
   render() {
     const { classes, authInfo } = this.props;
     const { value } = this.state;
@@ -57,7 +70,12 @@ class Profile extends React.Component {
         </AppBar>
         {value === 0 && 
             <TabContainer>
-                <MyInfo authInfo={authInfo.data} />
+                <MyInfo 
+                  authInfo={authInfo.data}
+                  updateUserInfoCB={this.updateUserInfo}
+                  checkAvailabilityCB={this.checkAvailability}
+                  availableStatus={this.props.availableStatus}
+                />
             </TabContainer>
         }
         {value === 1 && 
@@ -81,9 +99,12 @@ Profile.propTypes = {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
+    updateUserInfo,
+    checkAvailability,
   }, dispatch)
 
 const mapStateToProps = state => ({
     authInfo: state.getIn(['RegistrationContainer', 'authInfo']).toJS(),
+    availableStatus: state.getIn(['RegistrationContainer', 'availableStatus']).toJS(),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Profile))

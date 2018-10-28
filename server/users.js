@@ -72,7 +72,7 @@ async function getAuthInfoDetails (user_id, res) {
     }
 }
 router.post('/updateUserInfo', async function(req, res) {
-    var curQuery = "update users set email='"+req.body.email+"', dob='"+req.body.dob+"', gender='"+req.body.gender+"', address='"+req.body.address+"', pincode='"+req.body.pincode+"' where user_id="+req.body.user_id
+    var curQuery = "update users set fullname='"+req.body.fullname+"', email='"+req.body.email+"',mobile='"+req.body.mobile+"', dob='"+req.body.dob+"', gender='"+req.body.gender+"', country='"+req.body.country+"', city='"+req.body.city+"', state='"+req.body.state+"', address='"+req.body.address+"', pincode='"+req.body.pincode+"' where user_id="+req.body.user_id
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
         await getAuthInfoDetails(req.body.user_id, res)
