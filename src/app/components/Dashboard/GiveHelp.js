@@ -217,9 +217,9 @@ export class GiveHelp extends React.Component {
                             }
                             
                             if(option.level > 1 && nextLevelCheck && receivedCheck)  {
-                                /*if(!curPaymentObject && nextLevelCheck) {
+                                if(!curPaymentObject && nextLevelCheck && option.level >= 4) {
                                     nextLevelCheck = false
-                                }*/
+                                }
                                 if(nextLevelCheck) {
                                     const curfirstObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == '1') })
                                     if(!curfirstObject) {

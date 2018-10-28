@@ -125,7 +125,7 @@ export class PaymentInfo extends React.Component {
         if(stName == 'bank_ac_name') {
           if(!enteredValue) {
             this.setErrorState('bank_ac_name', true, 'Account Name required')
-          }
+          } 
         }
 
         if(stName == 'bank_name') {
@@ -136,7 +136,11 @@ export class PaymentInfo extends React.Component {
 
         if(stName == 'bank_ac_number') {
             if(!enteredValue) {
-              this.setErrorState('bank_ac_number', true, 'Account Number required')
+                this.setErrorState('bank_ac_number', true, 'Account Number required')
+            } else if(/^[0-9]*$/.test(enteredValue) == false) {
+                this.setErrorState('bank_ac_number', true, 'Invalid Account number')
+            } else if(enteredValue.length > 15) {
+                this.setErrorState('bank_ac_number', true, 'Account number should be not be more than 15 characters long')
             }
         }
 
@@ -169,6 +173,15 @@ export class PaymentInfo extends React.Component {
             this.setState('bank_ac_number', true, 'Account Number required')
             return false
         }
+
+        if(/^[0-9]*$/.test(this.state.bank_ac_number) == false) {
+            this.setErrorState('bank_ac_number', true, 'Invalid Account number')
+            return false
+        } else if(this.state.bank_ac_number.length > 15) {
+            this.setErrorState('bank_ac_number', true, 'Account number should be not be more than 15 characters long')
+            return false
+        }
+
   
         if(this.state.confirm_bank_ac_number !== this.state.bank_ac_number) {
             this.setErrorState('confirm_bank_ac_number', true, "did't match with account number")
