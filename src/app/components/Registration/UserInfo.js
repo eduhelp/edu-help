@@ -14,6 +14,7 @@ import Cancel from '@material-ui/icons/Cancel'
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import { getAge, ValidateEmail } from '../Common/Utils'
 
 const styles = {
   root: {
@@ -90,7 +91,7 @@ export class UserInfo extends React.Component {
         dob: '',
         gender: '',
         address: '',
-        zipcode: ''
+        pincode: ''
       },
       userInfoError: {
         fullname: {
@@ -118,6 +119,10 @@ export class UserInfo extends React.Component {
           text: ''
         },
         dob: {
+          error: false,
+          text: ''
+        },
+        pincode: {
           error: false,
           text: ''
         },
@@ -181,7 +186,7 @@ handleBlurChange = (stName) => event => {
   if(stName == 'email') {
     if(!enteredValue) {
       this.setErrorState('email', true, 'Email required')
-    } else if(!this.ValidateEmail(enteredValue)) {
+    } else if(!ValidateEmail(enteredValue)) {
       this.setErrorState('email', true, 'Invalid Email')
     } else if(this.props.availableStatus['email']) {
       this.setErrorState('email', true, 'Email already exists')
@@ -201,7 +206,7 @@ handleBlurChange = (stName) => event => {
   }
 
   if(stName == 'dob') {
-    const age = this.getAge(enteredValue)
+    const age = getAge(enteredValue)
     if(!enteredValue) {
       this.setErrorState('dob', true, 'Date of birth required')
     } else if(age < 18) {
@@ -209,18 +214,17 @@ handleBlurChange = (stName) => event => {
     }
   }
 
+  if(stName == 'pincode') {
+    if(/^[0-9]*$/.test(enteredValue) == false) {
+      this.setErrorState('pincode', true, 'Invalid pincode')
+    } else if(enteredValue.length !== 6) {
+      this.setErrorState('pincode', true, 'pincode should be 6 characters long')
+    } 
+  }
+
 }
 
-getAge = (dateString) => {
-  var today = new Date();
-  var birthDate = new Date(dateString);
-  var age = today.getFullYear() - birthDate.getFullYear();
-  var m = today.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-  }
-  return age;
-}
+
 
 setErrorState = (stname, err, msg) => {
   this.setState({ 
@@ -234,15 +238,7 @@ setErrorState = (stname, err, msg) => {
    })
 }
 
-ValidateEmail = (emailField)  =>
-{
-  var atposition=emailField.indexOf("@");  
-  var dotposition=emailField.lastIndexOf(".");  
-  if (atposition<1 || dotposition<atposition+2 || dotposition+2>=emailField.length){  
-    return false;  
-  } 
-  return true
-}
+
 
 validateUserInfo = () => {
   const userInfo = this.state.userInfo
@@ -280,7 +276,7 @@ validateUserInfo = () => {
   if(!userInfo.email) {
     this.setErrorState('email', true, 'Email required')
     return false
-  } else if(!this.ValidateEmail(userInfo.email)) {
+  } else if(!ValidateEmail(userInfo.email)) {
     this.setErrorState('email', true, 'Invalid Email')
     return false
   } else if(this.props.availableStatus['email']) {
@@ -300,12 +296,20 @@ validateUserInfo = () => {
     return false
   }
 
-  const age = this.getAge(userInfo.dob)
+  const age = getAge(userInfo.dob)
   if(!userInfo.dob) {
     this.setErrorState('dob', true, 'Date of birth required')
     return false
   } else if(age < 18) {
     this.setErrorState('dob', true, 'Your Age : '+age+', Age should be 18+')
+    return false
+  }
+
+  if(/^[0-9]*$/.test(userInfo.pincode) == false) {
+    this.setErrorState('pincode', true, 'Invalid Pincode')
+    return false
+  } else if(userInfo.pincode.length !== 6) {
+    this.setErrorState('pincode', true, 'pincode number should be 6 characters long')
     return false
   }
 
@@ -584,6 +588,9 @@ checkExist = (field_name, field_value) => event => {
                     }}
                     value={userInfo.pincode}
                     onChange={this.handleChange('pincode')}
+                    error={userInfoError.pincode.error}
+                    helperText={userInfoError.pincode.text}
+                    onBlur={this.handleBlurChange('pincode')}
                   /> 
                 </Grid>
               </Grid>
