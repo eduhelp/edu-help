@@ -54,6 +54,11 @@ const styles = {
     textDecoration: 'underline',
     cursor: 'pointer',
   },
+  nextPos: {
+    color: '#ff0000',
+    fontSize: 20,
+    textAlign: 'center',
+  },
 };
 
 
@@ -205,9 +210,12 @@ export class SmartSpreader extends React.Component {
                 <Grid item xs={12} className={classes.rowHead}>
                     <Grid container>
                         <Grid item xs={1}>
+                            Position
+                        </Grid>
+                        <Grid item xs={1}>
                             ID
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={2}>
                             User Id
                         </Grid>
                         <Grid item xs={2}>
@@ -230,13 +238,17 @@ export class SmartSpreader extends React.Component {
                     </Grid>
                 </Grid>
                 {this.state.displayList.map((option, index) => {
+                    const position = index + 1
                     return (
                         <Grid item xs={12} className={index % 2 ? classes.rowOdd : classes.rowEven}>
                             <Grid container>
+                                <Grid item xs={1} className={classes.nextPos}>
+                                    {position}
+                                </Grid>
                                 <Grid item xs={1}>
                                     {option.spreader_id}
                                 </Grid>
-                                <Grid item xs={3}>
+                                <Grid item xs={2}>
                                     <span className={classes.navLink} onClick={this.showUserDetails(option)}>
                                         {option.username} ({option.user_id})
                                     </span>

@@ -51,6 +51,10 @@ const styles = {
     textDecoration: 'underline',
     cursor: 'pointer',
   },
+  countText: {
+    fontSize: '20',
+    color: '#ff0000',
+  },
 };
 
 
@@ -229,17 +233,17 @@ export class MySmartSpreader extends React.Component {
                                         Completed Date
                                     </Grid>
                                 }
-                                {this.state.selectedStatus !== 'Active' ? (
+                                {this.state.selectedStatus !== 'Active' &&
                                     <Grid item xs={2}>
                                         Payment Id
                                     </Grid>
-                                ) : (
-                                    <Grid item xs={2}>
-                                        Running Status
-                                    </Grid>
-                                )
                                 }
-                                
+                                {this.state.selectedStatus == 'Active' &&
+                                    <Grid item xs={3}>
+                                        Running Status ( Your Position / Active List )
+                                    </Grid>
+                                }
+
                             </Grid>
                         </Grid>
                         {this.state.displayList.map((option, index) => {
@@ -267,21 +271,23 @@ export class MySmartSpreader extends React.Component {
                                         <Grid item xs={2}>
                                             {getFormatedDate(option.added_date)}
                                         </Grid>
-                                        <Grid item xs={2}>
-                                            {getFormatedDate(option.completed_date)}
-                                        </Grid>
-                                        <Grid item xs={2}>
-                                            {this.state.selectedStatus !== 'Active' ? (
+                                        {this.state.selectedStatus !== 'Active' &&
+                                            <Grid item xs={2}>
+                                                {getFormatedDate(option.completed_date)}
+                                            </Grid>
+                                        }
+                                        {this.state.selectedStatus !== 'Active' &&
+                                            <Grid item xs={2}>
                                                 <span className={classes.navLink} onClick={this.showPaymentDetails(option)}>
                                                     View Details
                                                 </span>
-                                            ) : (
-                                                <span>
-                                                    {this.state.myLevel} / {this.state.totalCount}
-                                                </span>
-                                            )
-                                            }
-                                        </Grid>
+                                            </Grid>
+                                        }
+                                        {this.state.selectedStatus == 'Active' &&
+                                            <Grid item xs={3} className={classes.countText}>
+                                                {this.state.myLevel} / {this.state.totalCount}
+                                            </Grid>
+                                        }
                                     </Grid>
                                 </Grid>
                             )
