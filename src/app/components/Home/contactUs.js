@@ -56,7 +56,7 @@ export class ContactUs extends React.Component {
                <Grid item xs={4}>
                <br /><br /><br />
                <h2 className={classes.hed}>Contact Us</h2>
-               <p>- Reach Us support@Edu-help.live</p>
+               <p>Reach Us:  support@eduhelp.live</p>
               
                 </Grid>
               </Grid>
