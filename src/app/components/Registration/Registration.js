@@ -47,6 +47,7 @@ class Registration extends React.Component {
     
     componentWillMount() {
       var uname = this.getParameterByName('n'); // "lorem"
+      window.localStorage.setItem('regSponsorId', uname)
       const sponsorInfo = {
         username: uname,
       }
@@ -140,6 +141,7 @@ class Registration extends React.Component {
         activeStep: activeStep + 1,
         skipped,
       });
+      window.localStorage.removeItem('regSponsorId')
     } if( activeStep === 1) {
       if(this.validateUserInfo()) {
         this.setState({
