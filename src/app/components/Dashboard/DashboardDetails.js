@@ -162,6 +162,7 @@ export class DashboardDetails extends React.Component {
                     myReferrals = {this.props.myReferrals}
                     levelPayments={this.props.levelPayments}
                     mySmartSpreadersList={this.props.mySmartSpreadersList}
+                    allActiveSSList={this.props.allActiveSSList}
                     classes={classes}
                 />
             </TabContainer>

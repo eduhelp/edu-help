@@ -63,26 +63,27 @@ export class MySmartSpreader extends React.Component {
         displayList: [],
         dialogOpenStatus: false,
         dialogTitle: '',
-        dialogContent: ''
+        dialogContent: '',
+        myLevel: '',
+        totalCount: ''
     }
   }
 
   handleLevelChange = event =>  {
     const activeList = _.filter(this.props.mySmartSpreadersList, (n) => { return (n.current_status == 'Active' && n.payment_level == event.target.value)})
-    this.setState({displayList: activeList, selectedStatus: 'Active', selectedLevel: event.target.value })
+    const levelActiveObj = _.filter(this.props.allActiveSSList, (n) => { return (n.level == event.target.value )})
+    const myLevel = _.findIndex(levelActiveObj[0].list, (n) => { return n.user_id == this.props.authInfo.data.user_id }) + 1
+    const totalCount = levelActiveObj[0].list.length
+    this.setState({displayList: activeList, selectedStatus: 'Active', selectedLevel: event.target.value, myLevel, totalCount })
   }
 
   componentWillMount () {
-    console.log('mySmartSpreadersList')
-    console.log(this.props.mySmartSpreadersList)
     let activeList = _.filter(this.props.mySmartSpreadersList, (n) => { return (n.payment_level == this.state.selectedLevel)})
-    console.log('activeList - filter1')
-    console.log(activeList)
     activeList = _.filter(activeList, (n) => { return (n.current_status == 'Active')})
-    //const activeList = _.filter(this.props.mySmartSpreadersList, { 'current_status': 'Active', 'payment_level': this.state.selectedLevel });
-    console.log('activeList - filter2')
-    console.log(activeList)
-    this.setState({displayList: activeList,selectedStatus: 'Active'})
+    const levelActiveObj = _.filter(this.props.allActiveSSList, (n) => { return (n.level == this.state.selectedLevel)})
+    const myLevel = _.findIndex(levelActiveObj[0].list, (n) => { return n.user_id == this.props.authInfo.data.user_id }) + 1
+    const totalCount = levelActiveObj[0].list.length
+    this.setState({displayList: activeList,selectedStatus: 'Active', myLevel, totalCount})
   }
 
   handleStatusChange = event => {
@@ -228,10 +229,15 @@ export class MySmartSpreader extends React.Component {
                                         Completed Date
                                     </Grid>
                                 }
-                                {this.state.selectedStatus !== 'Active' &&
+                                {this.state.selectedStatus !== 'Active' ? (
                                     <Grid item xs={2}>
                                         Payment Id
                                     </Grid>
+                                ) : (
+                                    <Grid item xs={2}>
+                                        Running Status
+                                    </Grid>
+                                )
                                 }
                                 
                             </Grid>
@@ -265,9 +271,16 @@ export class MySmartSpreader extends React.Component {
                                             {getFormatedDate(option.completed_date)}
                                         </Grid>
                                         <Grid item xs={2}>
-                                            <span className={classes.navLink} onClick={this.showPaymentDetails(option)}>
-                                                {option.payment_id}
-                                            </span>
+                                            {this.state.selectedStatus !== 'Active' ? (
+                                                <span className={classes.navLink} onClick={this.showPaymentDetails(option)}>
+                                                    View Details
+                                                </span>
+                                            ) : (
+                                                <span>
+                                                    {this.state.myLevel} / {this.state.totalCount}
+                                                </span>
+                                            )
+                                            }
                                         </Grid>
                                     </Grid>
                                 </Grid>

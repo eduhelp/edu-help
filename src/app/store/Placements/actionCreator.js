@@ -2,6 +2,7 @@ import {
   MY_TREE_SUCCESS,
   MY_TOP_LEVEL_SUCCESS,
   ACTIVE_SMART_SPREADER_SUCCESS,
+  ALL_ACTIVE_SMART_SPREADER_SUCCESS,
   } from './actionType'
   import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
   import { postService } from '../../services/Registration'
@@ -41,3 +42,17 @@ import {
       })
     }
   }
+
+  export function getAllSSActiveList (payload) {
+    return dispatch => {
+      return postService('placements/getAllSSActiveList', payload)
+      .then((resp) => {
+        dispatch({data: resp, type: ALL_ACTIVE_SMART_SPREADER_SUCCESS})
+      })
+      .catch((error) => {
+        dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
+      })
+    }
+  }
+
+  

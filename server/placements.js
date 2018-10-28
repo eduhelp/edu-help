@@ -170,4 +170,18 @@ async function getmyNodePlacementsArray(sp_id, retArr, getLevel, res) {
     return retArr
 }
 
+router.post('/getAllSSActiveList', async function(req, res) {
+    var tempData = []
+    for(var i=2; i<=7; i++) {
+        var curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id  where t1.current_status='Active' and t1.payment_level="+i+" order by t1.spreader_id"
+        var result = await pg_connect.connectDB(curQuery, res)
+        var newData = {
+            level: i,
+            list: result
+        }
+        tempData.push(newData)
+    }
+    res.status(200).send(tempData)
+});
+
 module.exports = router

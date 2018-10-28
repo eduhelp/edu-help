@@ -252,7 +252,7 @@ export class SmartSpreader extends React.Component {
                                 </Grid>
                                 <Grid item xs={2}>
                                     <span className={classes.navLink} onClick={this.showPaymentDetails(option)}>
-                                        {option.payment_id}
+                                        View Details
                                     </span>
                                 </Grid>
                             </Grid>
