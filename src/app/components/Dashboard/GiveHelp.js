@@ -195,7 +195,7 @@ export class GiveHelp extends React.Component {
                             const curPaymentObject = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == option.level) })
                             if(option.level >= 4) {
                                 const checkLevel = option.level - 2
-                                const curReceivedObject = _.find(this.props.myReceivedList, (n) => { return (n.payment_level == checkLevel && n.confirm_status == 'Confirmed' && n.receiver_type == 'RootParent') })
+                                const curReceivedObject = _.find(this.props.myReceivedList, (n) => { return (n.payment_level >= checkLevel && n.confirm_status == 'Confirmed' && n.receiver_type == 'RootParent') })
                                 if(curReceivedObject) {
                                     receivedCheck = true
                                 }
