@@ -62,7 +62,7 @@ export class Layout extends React.Component {
   componentWillReceiveProps(nextProps) {
     const chCookie = checkCookie()
     const pathName = window.location.pathname
-    if (!chCookie && pathName !== '/registration' && pathName !== 'about_plan') {
+    if (!chCookie && pathName !== '/registration' && pathName !== '/about_plan') {
       window.location.replace('/')
     } 
   }

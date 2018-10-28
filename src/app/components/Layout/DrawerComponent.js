@@ -30,6 +30,7 @@ import Login from './Login'
 import SideDrawer from '../Common/SideDrawer'
 import SmartSpreader from '../SmartSpreader/SmartSpreader';
 import Disputes from '../Disputes/Disputes'
+import AboutPlan from '../Placements/AboutPlan'
 // import NotFound from '../NotFoundPage/NotFoundPage'
 // import { ReactComponent as Logo } from '../../images/logo.svg'
 import Main from './Picture1.png';
@@ -171,6 +172,11 @@ class MiniDrawer extends React.Component {
   confirmLogout = () => {
        this.props.userLogout()
   }
+  registerNow = () => {
+    const regLink = window.location.origin+"/registration?n="+window.localStorage.getItem('regSponsorId')
+    window.location.href = regLink
+  }
+
   render () {
     const { classes, theme, authInfo } = this.props
     const { isAuth, data } = authInfo
@@ -205,9 +211,17 @@ class MiniDrawer extends React.Component {
                         </Button>
                     </div>
                 ) : (
+                  <div className={classes.userNameDisp}> 
+                    {window.localStorage.getItem('regSponsorId') && 
+                      <Button color="primary" className={classes.button} onClick={this.registerNow}>
+                        Register
+                    </Button>
+                    }
                     <Button color="primary" className={classes.button} onClick={this.openDrawer}>
                         Login
                     </Button>
+                  </div>
+                    
                 )}
             </div>
             <SideDrawer
@@ -247,6 +261,7 @@ class MiniDrawer extends React.Component {
                 {/* routes */}
                 <Switch>
                     <Route exact path="/" component={Home} />
+                    <Route exact path="/about_plan" component={AboutPlan} />
                     <Route path="/registration" component={Registration} />
                     <Route path="/dashboard" component={Dashboard} />
                     <Route path="/confirm_receiver/:levelIndex/:paymentTo" component={ConfirmReceiver} />
