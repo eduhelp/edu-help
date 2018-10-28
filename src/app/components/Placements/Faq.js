@@ -80,7 +80,7 @@ class FAQ extends React.Component {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
-              Over years an affluent broadminded NRI’s and entrepreneurs were thinking on a <strong>“Idea”</strong> that could change & solve millions of people Education expense issue through an innovative idea that flashed out in minds, that’s the <strong>birth story of “EduHelp”</strong>
+              Over years a group of  affluent broadminded NRI’s and entrepreneurs were thinking on a <strong>“Idea”</strong> that could change & solve millions of people Education expense issue through an innovative idea that flashed out in minds, that’s the <strong>birth story of “EduHelp”</strong>
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -304,7 +304,7 @@ class FAQ extends React.Component {
         </ExpansionPanel>
         <ExpansionPanel expanded={expanded === 'panel21'} onChange={this.handleChange('panel21')}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography className={classes.heading}>21. Incase if I forgot the password?</Typography>
+            <Typography className={classes.heading}>21. Incase if I forget the password?</Typography>
             
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
