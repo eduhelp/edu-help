@@ -203,7 +203,8 @@ export class GiveHelp extends React.Component {
                                 if(option.level == '3') {
                                     const mySponsorPaymentObj = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == '1') })
                                     const level2PaymentObj = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == '2') })
-                                    if(mySponsorPaymentObj && level2PaymentObj) {
+                                    const l3curReceivedObject = _.find(this.props.myReceivedList, (n) => { return (n.payment_level == '1' && n.confirm_status == 'Confirmed') })
+                                    if(mySponsorPaymentObj && level2PaymentObj && l3curReceivedObject) {
                                         receivedCheck = true
                                     }
                                 } else {
