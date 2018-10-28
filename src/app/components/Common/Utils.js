@@ -80,4 +80,24 @@ export function getUserStatus(userStatus, paymentStatus) {
     }
     return currentStatus
 }
+
+export function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+  }
+
+export function ValidateEmail (emailField) {
+    var atposition=emailField.indexOf("@");  
+    var dotposition=emailField.lastIndexOf(".");  
+    if (atposition<1 || dotposition<atposition+2 || dotposition+2>=emailField.length){  
+        return false;  
+    } 
+    return true
+}
                             

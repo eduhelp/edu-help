@@ -126,6 +126,7 @@ export class DashboardDetails extends React.Component {
                 <GiveHelp 
                     authInfo={this.props.authInfo}
                     myPaymentList={this.props.myPaymentList}
+                    myReceivedList = {this.props.myReceivedList}
                     myTopLevel={this.props.myTopLevel}
                     sponsorDetails={this.props.sponsorDetails}
                     confirmReceiverCB={this.props.confirmReceiverCB}
