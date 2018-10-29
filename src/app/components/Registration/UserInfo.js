@@ -91,7 +91,10 @@ export class UserInfo extends React.Component {
         dob: '',
         gender: '',
         address: '',
-        pincode: ''
+        pincode: '',
+        country: 'India',
+        state: 'None',
+        city: ''
       },
       userInfoError: {
         fullname: {
@@ -132,6 +135,11 @@ export class UserInfo extends React.Component {
 
   componentWillMount(){
     this.setState({ userInfo: this.props.userInfo })
+    /*this.setState({ userInfo: { 
+      ...this.state.userInfo,
+      country : 'India',
+      state: 'None'
+    }})*/
   }
 
 handleChange = (stName) => (event) => {
@@ -566,7 +574,7 @@ checkExist = (field_name, field_value) => event => {
                       onChange={this.handleChange('state')}
                       className={classes.selectBox}
                     >
-                      <MenuItem value=''>None</MenuItem>
+                      <MenuItem value='None'>Select State</MenuItem>
                       {this.state.listStates.map((option, key) => {
                         return (<MenuItem value={option} key={key}>{option}</MenuItem>)
                       })}

@@ -74,12 +74,6 @@ handleChange = (stName) => (event) => {
                 <Grid item xs={6}>
                   <Grid container>
                     <Grid item xs={3}>
-                      Sponsor ID : 
-                    </Grid>
-                    <Grid item xs={9}>
-                      {this.props.sponsorDetails.user_id} 
-                    </Grid>
-                    <Grid item xs={3}>
                       Sponsor Name : 
                     </Grid>
                     <Grid item xs={9}>

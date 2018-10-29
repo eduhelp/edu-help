@@ -24,16 +24,31 @@ router.post('/addUser', async function(req, res) {
     }
 });
 
+async function getSponsorName(sponsor_id, res) {
+    if (sponsor_id > 0) {
+        var sponsorQuery = "select username from users where user_id="+sponsor_id
+        var sponsorResult = await pg_connect.connectDB(sponsorQuery, res)
+        return sponsorResult[0].username
+    } else {
+        return 'root'
+    }
+}
+
+async function getBankDetails(user_id, res) {
+    var bnkQuery = "select * from user_bank_details where user_id="+user_id
+    var bnkresult = await pg_connect.connectDB(bnkQuery, res)
+    return bnkresult[0]
+}
+
 router.post('/userLogin', async function(req, res) {
-    var curQuery = "select * from users where (username='"+req.body.username+"' or mobile='"+req.body.username+"') and pwd='"+req.body.pwd+"'"
+    var curQuery = "select "+userInfoList+" from users where (username='"+req.body.username+"' or mobile='"+req.body.username+"') and pwd='"+req.body.pwd+"'"
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
         if(result.length === 0) {
             res.status(403).send({status: true, variant: 'error', message: 'Invalid username or password'})
         } else {
-            var bnkQuery = "select * from user_bank_details where user_id="+result[0].user_id
-            var bnkresult = await pg_connect.connectDB(bnkQuery, res)
-            result[0]['bank_details'] = bnkresult[0]
+            result[0]['bank_details'] = await getBankDetails(result[0].user_id, res)
+            result[0]['sponsor_name'] = await getSponsorName(result[0].sponsor_id, res)
             res.status(200).send(result[0])
         }
     }
@@ -53,21 +68,19 @@ router.post('/getUserDetails', async function(req, res) {
         if(result.length === 0) {
             res.status(403).send({status: true, variant: 'error', message: 'Invalid Sponsor ID'})
         } else {
-            var bnkQuery = "select * from user_bank_details where user_id="+result[0].user_id
-            var bnkresult = await pg_connect.connectDB(bnkQuery, res)
-            result[0]['bank_details'] = bnkresult[0]
+            result[0]['bank_details'] = await getBankDetails(result[0].user_id, res)
+            result[0]['sponsor_name'] = await getSponsorName(result[0].sponsor_id, res)
             res.status(200).send(result[0])
         }
     }
 });
 
 async function getAuthInfoDetails (user_id, res) {
-    var selQuery = "select * from users where user_id="+user_id
+    var selQuery = "select "+userInfoList+" from users where user_id="+user_id
     var selResult = await pg_connect.connectDB(selQuery, res)
     if (selResult) {
-        var bnkQuery = "select * from user_bank_details where user_id="+user_id
-        var bnkresult = await pg_connect.connectDB(bnkQuery, res)
-        selResult[0]['bank_details'] = bnkresult[0]
+        selResult[0]['bank_details'] = await getBankDetails(selResult[0].user_id, res)
+        selResult[0]['sponsor_name'] = await getSponsorName(selResult[0].sponsor_id, res)
         res.status(200).send(selResult[0])
     }
 }
@@ -124,6 +137,7 @@ router.post('/myReferrals', async function(req, res) {
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
         for(var i=0; i<result.length; i++) {
+            result[i]['sponsor_name'] = await getSponsorName(result[i].sponsor_id, res)
             var selQuery = "select * from payments where from_id="+result[i].user_id+" and confirm_status!='Cancelled' and payment_level=1"
             var selResult = await pg_connect.connectDB(selQuery, res)
             if (selResult) {
@@ -139,6 +153,9 @@ router.post('/getMySmartSpreadersList', async function(req, res) {
     curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id where t1.user_id="+req.body.user_id+" order by t1.spreader_id"
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
+        for(var i=0; i<result.length; i++) {    
+            result[i]['sponsor_name'] = await getSponsorName(result[i].sponsor_id, res)
+        }
         res.status(200).send(result)
     }
 });

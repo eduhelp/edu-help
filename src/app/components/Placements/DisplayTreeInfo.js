@@ -91,7 +91,7 @@ export class DisplayTreeInfo extends React.Component {
                             </Grid>
                              <Grid item xs={4}>
                                 <span className={classes.navLink} onClick={this.getUserDetails(option.nodeInfo.sponsor_id)}>
-                                    {option.nodeInfo.sponsor_id}
+                                    {option.nodeInfo.sponsor_name}
                                 </span>
                             </Grid>
                             

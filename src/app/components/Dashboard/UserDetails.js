@@ -109,11 +109,19 @@ export class UserDetails extends React.Component {
             <Grid item xs={12} className={classes.rowDetails}>
                 <Grid container>
                     <Grid item xs={6}>
-                        Sponsor Id
+                        Sponsor
                     </Grid>
-                    <Grid item xs={6}>
-                        {details.sponsor_id}
-                    </Grid>
+                    {details.sponsor_name ? (
+                        <Grid item xs={6}>
+                            {details.sponsor_name}
+                        </Grid>
+                    ) : (
+                        <Grid item xs={6}>
+                            {details.sponsor_id}
+                        </Grid>
+                    )
+                    }
+                    
                 </Grid>
             </Grid>
         </Grid>

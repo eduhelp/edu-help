@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types';
@@ -12,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import SponsorInfo from './SponsorInfo'
 import UserInfo from './UserInfo'
 import ConfirmInfo from './ConfirmInfo'
-import { addUser, getUserDetails, checkAvailability } from '../../store/Registration/actionCreator'
+import { addUser, getUserDetails, checkAvailability, userLogin } from '../../store/Registration/actionCreator'
 
 const styles = theme => ({
   root: {
@@ -29,7 +30,11 @@ const styles = theme => ({
     margin: 10,
     padding: 10,
     textAlign: 'center',
-  }
+  },
+  navLink: {
+    textDecoration: 'underline',
+    cursor: 'pointer',
+  },
 });
 
 class Registration extends React.Component {
@@ -142,6 +147,13 @@ class Registration extends React.Component {
         skipped,
       });
       window.localStorage.removeItem('regSponsorId')
+      setTimeout(() => {
+        const loginData = {
+          username: this.state.userInfo.username,
+          pwd: this.state.userInfo.pwd
+        }
+        this.props.userLogin(loginData)
+      }, 1000)
     } if( activeStep === 1) {
       if(this.validateUserInfo()) {
         this.setState({
@@ -192,12 +204,19 @@ class Registration extends React.Component {
     this.setState({
       activeStep: 0,
       sponsorInfo: '',
-      userInfo: ''
+      userInfo: {
+        country: 'India',
+        state: 'None'
+      }
     });
   };
 
   isStepSkipped(step) {
     return this.state.skipped.has(step);
+  }
+
+  navToBankPage = () => {
+    window.location.href = '/profile'
   }
 
   render() {
@@ -238,12 +257,14 @@ class Registration extends React.Component {
           {activeStep === steps.length ? (
             <div>
               <Typography className={classes.instructions}>
-                All steps completed - you're finished <br />
-                please make the payment to your sponsor for activation.
+                Registration completed, Welcome to Eduhelp community <br />
+                continue to update bank details and start giving help.
               </Typography>
-              <Button onClick={this.handleReset} className={classes.button}>
-                Add another user
-              </Button>
+              <Link className={classes.navLink} to="/profile/bank">
+                <Button variant="contained" color="primary" className={classes.button}>
+                  Add Bank Details
+                </Button>
+              </Link>
             </div>
           ) : (
             <div>
@@ -295,6 +316,7 @@ const mapDispatchToProps = dispatch =>
     addUser,
     getUserDetails,
     checkAvailability,
+    userLogin,
   }, dispatch)
 
 const mapStateToProps = state => ({

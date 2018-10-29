@@ -59,16 +59,6 @@ export class SponsorInfo extends React.Component {
             <div>
               {(sponsorDetails.status == 'Active') ? (
                 <Grid container>
-                  <Grid item xs={12} className={classes.rowOdd}>
-                    <Grid container>
-                        <Grid item xs={6} className={classes.textRight}>
-                          Sponsor Id :
-                        </Grid>
-                        <Grid item xs={6} className={classes.textLeft}>
-                          {sponsorDetails.user_id}
-                        </Grid>
-                    </Grid>
-                  </Grid>
                   <Grid item xs={12} className={classes.rowEven}>
                     <Grid container>
                         <Grid item xs={6} className={classes.textRight}>
