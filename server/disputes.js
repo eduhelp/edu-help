@@ -6,6 +6,16 @@ var router = express.Router();
 let multer = require('multer')
 var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status, fullname, country, state, city"
 
+async function getSponsorName(sponsor_id, res) {
+    if (sponsor_id > 0) {
+        var sponsorQuery = "select username from users where user_id="+sponsor_id
+        var sponsorResult = await pg_connect.connectDB(sponsorQuery, res)
+        return sponsorResult[0].username
+    } else {
+        return 'root'
+    }
+}
+
 router.post('/open', async function(req, res) {
     var curQuery = "insert into disputes(dispute_from, dispute_to, dispute_type, payment_id, message, dispute_status, added_date) values("+req.body.dispute_from+","+req.body.dispute_to+",'"+req.body.dispute_type+"',"+req.body.payment_id+",'"+req.body.message+"','Open','"+pg_connect.getCurrentDate()+"') returning dispute_id"
     var result = await pg_connect.connectDB(curQuery, res)
@@ -48,10 +58,12 @@ router.post('/screenshotUpload', async function(req, res) {
         for(var i=0; i<result.length; i++) {
             var selQuery = "select * from payments where payment_id="+result[i].payment_id
             var selResult = await pg_connect.connectDB(selQuery, res)
-            var userQuery = "select * from users where user_id="+result[i].dispute_to
+            var userQuery = "select "+userInfoList+" from users where user_id="+result[i].dispute_to
             var userResult = await pg_connect.connectDB(userQuery, res)
-            var userFromQuery = "select * from users where user_id="+result[i].dispute_from
+            userResult[0]['sponsor_name'] = await getSponsorName(userResult[0].sponsor_id, res)
+            var userFromQuery = "select "+userInfoList+" from users where user_id="+result[i].dispute_from
             var userfromResult = await pg_connect.connectDB(userFromQuery, res)
+            userfromResult[0]['sponsor_name'] = await getSponsorName(userfromResult[0].sponsor_id, res)
             result[i]['paymentInfo'] = selResult[0]
             result[i]['disputeToUserInfo'] = userResult[0]
             result[i]['disputeFromUserInfo'] = userfromResult[0]

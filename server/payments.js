@@ -4,6 +4,22 @@ var pg_connect = require('./pg_connect');
 var router = express.Router();
 var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status, fullname, country, state, city"
 
+async function getSponsorName(sponsor_id, res) {
+    if (sponsor_id > 0) {
+        var sponsorQuery = "select username from users where user_id="+sponsor_id
+        var sponsorResult = await pg_connect.connectDB(sponsorQuery, res)
+        return sponsorResult[0].username
+    } else {
+        return 'root'
+    }
+}
+
+async function getBankDetails(user_id, res) {
+    var bnkQuery = "select * from user_bank_details where user_id="+user_id
+    var bnkresult = await pg_connect.connectDB(bnkQuery, res)
+    return bnkresult[0]
+}
+
 router.post('/levelPayments', async function(req, res) {
     var curQuery = "select * from level_payments"
     var result = await pg_connect.connectDB(curQuery, res)
@@ -37,6 +53,7 @@ router.post('/myConfirmPendingList', async function(req, res) {
             var selResult = await pg_connect.connectDB(selQuery, res)
             if (selResult) {
                 result[i]['giverInfo'] = selResult[0]
+                result[i]['giverInfo']['sponsor_name'] = await getSponsorName(selResult[0].sponsor_id, res)
             }
         }
         res.status(200).send(result)
@@ -198,9 +215,8 @@ async function getPaymentList(query, res) {
             var selResult = await pg_connect.connectDB(selQuery, res)
             if (selResult) {
                 result[i]['receiverInfo'] = selResult[0]
-                var bnkQuery = "select * from user_bank_details where user_id="+result[i].to_id
-                var bnkresult = await pg_connect.connectDB(bnkQuery, res)
-                result[i]['receiverInfo']['bank_details'] = bnkresult[0]
+                result[i]['receiverInfo']['sponsor_name'] = await getSponsorName(selResult[0].sponsor_id, res)
+                result[i]['receiverInfo']['bank_details'] = await getBankDetails(selResult[0].user_id, res)
             }
         }
         res.status(200).send(result)

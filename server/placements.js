@@ -4,6 +4,22 @@ var pg_connect = require('./pg_connect');
 var router = express.Router();
 var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status, fullname, country, state, city"
 
+async function getSponsorName(sponsor_id, res) {
+    if (sponsor_id > 0) {
+        var sponsorQuery = "select username from users where user_id="+sponsor_id
+        var sponsorResult = await pg_connect.connectDB(sponsorQuery, res)
+        return sponsorResult[0].username
+    } else {
+        return 'root'
+    }
+}
+
+async function getBankDetails(user_id, res) {
+    var bnkQuery = "select * from user_bank_details where user_id="+user_id
+    var bnkresult = await pg_connect.connectDB(bnkQuery, res)
+    return bnkresult[0]
+}
+
 router.post('/myTree', async function(req, res) {
     var retArr = []
     var curLevel = 0
@@ -21,6 +37,7 @@ async function getMyTreeArray(sp_id, retArr, getLevel, res) {
     for(var i=0; i<curResult.length; i++) {
         var curQuery = "select "+userInfoList+" from users where user_id="+curResult[i].user_id
         var result = await pg_connect.connectDB(curQuery, res)
+        result[0]['sponsor_name'] = await getSponsorName(result[0].sponsor_id, res)
         var payQuery = "select * from payments where from_id="+curResult[i].user_id+" and payment_level=1  and confirm_status!='Cancelled'"
         var payResult = await pg_connect.connectDB(payQuery, res)
         var levQuery = "select * from payments where from_id="+curResult[i].user_id+" and confirm_status!='Cancelled' and payment_level="+curLevel
@@ -58,11 +75,9 @@ async function getTopLevelArray(user_id, retArr, getLevel, max_level, res) {
     var curResult = await pg_connect.connectDB(curQuery, res)
     var curUserQuery = "select "+userInfoList+" from users where user_id="+curResult[0].user_id
     var result = await pg_connect.connectDB(curUserQuery, res)
-
-    var bnkQuery = "select * from user_bank_details where user_id="+curResult[0].user_id
-    var bnkresult = await pg_connect.connectDB(bnkQuery, res)
-    result[0]['bank_details'] = bnkresult[0]
-
+    result[0]['sponsor_name'] = await getSponsorName(result[0].sponsor_id, res)
+    result[0]['bank_details'] = await getBankDetails(result[0].user_id, res)
+    
     var findRootLevelId = await getMyParentLevelWise(user_id, getLevel, res)
     var eligibility = ''
     if (findRootLevelId) {
@@ -123,9 +138,8 @@ router.post('/activeSmartSpreader', async function(req, res) {
     if(result.length === 0) {
         res.status(200).send({message: 'no smart spreader'})
     } else {
-        var bnkQuery = "select * from user_bank_details where user_id="+result[0].user_id
-        var bnkresult = await pg_connect.connectDB(bnkQuery, res)
-        result[0]['bank_details'] = bnkresult[0]
+        result[0]['sponsor_name'] = await getSponsorName(result[0].sponsor_id, res)
+        result[0]['bank_details'] = await getBankDetails(result[0].user_id, res)
         res.status(200).send(result[0])
     }
 });
@@ -135,6 +149,7 @@ router.post('/myNodePlacements', async function(req, res) {
     var curLevel = 0
     var curQuery = "select "+userInfoList+" from users where user_id="+req.body.user_id
     var result = await pg_connect.connectDB(curQuery, res)
+    result[0]['sponsor_name'] = await getSponsorName(result[0].sponsor_id, res)
     var nodeObj = {
         level: curLevel,
         nodeInfo: result[0],
@@ -154,6 +169,7 @@ async function getmyNodePlacementsArray(sp_id, retArr, getLevel, res) {
     for(var i=0; i<curResult.length; i++) {
         var curQuery = "select "+userInfoList+" from users where user_id="+curResult[i].user_id
         var result = await pg_connect.connectDB(curQuery, res)
+        result[0]['sponsor_name'] = await getSponsorName(result[0].sponsor_id, res)
         var nodeObj = {
             level: curLevel,
             nodeInfo: result[0],
@@ -175,6 +191,9 @@ router.post('/getAllSSActiveList', async function(req, res) {
     for(var i=2; i<=7; i++) {
         var curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id  where t1.current_status='Active' and t1.payment_level="+i+" order by t1.spreader_id"
         var result = await pg_connect.connectDB(curQuery, res)
+        for(var j=0; j<result.length; j++) {    
+            result[j]['sponsor_name'] = await getSponsorName(result[j].sponsor_id, res)
+        } 
         var newData = {
             level: i,
             list: result

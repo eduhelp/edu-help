@@ -36,10 +36,18 @@ const styles = theme => ({
 });
 
 class Profile extends React.Component {
-  state = {
-    value: 0,
-  };
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: 0
+    }
+  }
 
+  componentWillMount () {
+    if (this.props.match.params.page == 'bank') {
+      this.setState({value: 1})
+    }
+  } 
   handleChange = (event, value) => {
     this.setState({ value });
   };
