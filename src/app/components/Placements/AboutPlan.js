@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Pdf from '../Home/EduHelp.pdf';
-import How from './sample.png';
+import Pdf from '../Home/EduHelp_Final1.pdf';
+import How from './sample1.png';
 import Background2 from '../Home/logow.png';
 import Button from '@material-ui/core/Button';
 
@@ -30,18 +30,35 @@ const styles = theme => ({
  
 },
 pic:{
-   backgroundImage: `url(${Background2})`,
+   backgroundImage: `url(${How})`,
    
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'noRepeat',
-            backgroundOpacity:'30%',
+            
             height:'299px',
 },
   hed:{
     color:'#92d219',
    fontFamily:'Edwardian Script ITC',
    fontSize:'75px',
+ },
+ hed1:{
+    color:'black',
+   fontFamily:'Arial',
+   fontSize:'25px',
+ },
+ hed2:{
+    color:'#FF7F50',
+   fontFamily:'Arial',
+   fontSize:'63px',
+   textDecoration: 'none',
+   textAlign:'center',
+   border: '1px solid red',
+    padding: '10px',
+    borderRadius: '50px 20px',
+   
+
  },
   spa:{
     fontSize:'46px',
@@ -66,10 +83,9 @@ class AboutPlan extends React.Component {
       <div className={classes.root}>
         <Paper className={classes.paper}>
          <center className={classes.paperso}><span className={classes.hed}>Helping Plan<br /></span>
-
-         <br />For more details<br /><a href = {Pdf} target = "_blank">Click Here</a>
+        <br /><span className={classes.hed1}>For more details</span><br /><br /><a href = {Pdf} target = "_blank" style={{ textDecoration: 'none' }} ><span className={classes.hed2}>Click Here</span></a>
          <br />
-              
+            <br />  
             </center>
                  
         
