@@ -89,7 +89,7 @@ export class ReceivePendingList extends React.Component {
                                     />
                                 </Grid>
                                 <Grid item xs={3}>
-                                    {option.giverInfo.username} ({option.from_id})
+                                    {option.giverInfo.username}
                                 </Grid>
                                 <Grid item xs={3}>
                                     {option.payment_level}
