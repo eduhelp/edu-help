@@ -54,7 +54,7 @@ export class MakePaymentConfirm extends React.Component {
                                     Payment From
                                 </Grid>
                                 <Grid item xs={6}>
-                                {authInfo.data.username}({authInfo.data.user_id})
+                                {authInfo.data.username}
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -64,7 +64,7 @@ export class MakePaymentConfirm extends React.Component {
                                     Payment To
                                 </Grid>
                                 <Grid item xs={6}>
-                                {makePaymentObj.receiverInfo.username}({makePaymentObj.receiverInfo.user_id})
+                                {makePaymentObj.receiverInfo.username}
                                 </Grid>
                             </Grid>
                         </Grid>

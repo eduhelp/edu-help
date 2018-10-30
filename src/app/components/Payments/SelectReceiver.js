@@ -87,7 +87,6 @@ export class SelectReceiver extends React.Component {
                                     <Grid container>
                                         <Grid item xs={4}>
                                         Name : {userDetails.username}
-                                        <br />User Id : {userDetails.user_id}
                                         <br />Mobile: {userDetails.mobile}
                                         </Grid>
                                         {userDetails.bank_details && 
@@ -125,7 +124,6 @@ export class SelectReceiver extends React.Component {
                                     <Grid container>
                                         <Grid item xs={4}>
                                             Name : {smartSpreaderInfo.username}
-                                            <br />User Id : {smartSpreaderInfo.user_id}
                                             <br />Mobile: {smartSpreaderInfo.mobile}
                                         </Grid>
                                         {smartSpreaderInfo.bank_details && 

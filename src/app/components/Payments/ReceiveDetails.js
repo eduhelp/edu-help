@@ -39,7 +39,7 @@ export class ReceiveDetails extends React.Component {
                     Payment ID : {pay_info.payment_id}
                 </div>
                 <div className={classes.detailRow}>
-                    Payment from : {pay_info.from_id}
+                    Payment from : {pay_info.giverInfo.username}
                 </div>
                 <div className={classes.detailRow}>
                     Payment Level : {pay_info.payment_level}
