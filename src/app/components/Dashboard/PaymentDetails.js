@@ -25,6 +25,10 @@ export class PaymentDetails extends React.Component {
     
   }
   
+  componentWillMount() {
+    console.log('this.props.details')
+    console.log(this.props.details)
+  }
 
   render() {
     const { classes, details } = this.props
@@ -37,7 +41,7 @@ export class PaymentDetails extends React.Component {
                         From Username  To Username
                     </Grid>
                     <Grid item xs={6}>
-                        {details.from_id} -> {details.to_id}
+                        {details.giver_name} -> {details.receiver_name}
                     </Grid>
                 </Grid>
             </Grid>

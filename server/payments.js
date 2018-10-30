@@ -32,6 +32,10 @@ router.post('/paymentDetails', async function(req, res) {
     var curQuery = "select * from payments where from_id="+req.body.user_id+" or to_id="+req.body.user_id
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
+        for(var i=0; i<result.length; i++) {
+            result[i]['giver_name'] = await getSponsorName(result[i].from_id, res)
+            result[i]['receiver_name'] = await getSponsorName(result[i].to_id, res)
+        }
         res.status(200).send(result)
     }
 });
@@ -49,6 +53,8 @@ router.post('/myConfirmPendingList', async function(req, res) {
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
         for(var i=0; i<result.length; i++) {
+            result[i]['giver_name'] = await getSponsorName(result[i].from_id, res)
+            result[i]['receiver_name'] = await getSponsorName(result[i].to_id, res)
             var selQuery = "select "+userInfoList+" from users where user_id="+result[i].from_id
             var selResult = await pg_connect.connectDB(selQuery, res)
             if (selResult) {
@@ -211,6 +217,8 @@ async function getPaymentList(query, res) {
     var result = await pg_connect.connectDB(query, res)
     if(result) {
         for(var i=0; i<result.length; i++) {
+            result[i]['giver_name'] = await getSponsorName(result[i].from_id, res)
+            result[i]['receiver_name'] = await getSponsorName(result[i].to_id, res)
             var selQuery = "select "+userInfoList+" from users where user_id="+result[i].to_id
             var selResult = await pg_connect.connectDB(selQuery, res)
             if (selResult) {

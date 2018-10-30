@@ -40,8 +40,16 @@ async function getMyTreeArray(sp_id, retArr, getLevel, res) {
         result[0]['sponsor_name'] = await getSponsorName(result[0].sponsor_id, res)
         var payQuery = "select * from payments where from_id="+curResult[i].user_id+" and payment_level=1  and confirm_status!='Cancelled'"
         var payResult = await pg_connect.connectDB(payQuery, res)
+        for(var j=0; j<payResult.length; j++) {
+            payResult[j]['giver_name'] = await getSponsorName(payResult[j].from_id, res)
+            payResult[j]['receiver_name'] = await getSponsorName(payResult[j].to_id, res)
+        }
         var levQuery = "select * from payments where from_id="+curResult[i].user_id+" and confirm_status!='Cancelled' and payment_level="+curLevel
-        var levResult = await pg_connect.connectDB(levQuery, res) 
+        var levResult = await pg_connect.connectDB(levQuery, res)
+        for(var j=0; j<levResult.length; j++) {
+            levResult[j]['giver_name'] = await getSponsorName(levResult[j].from_id, res)
+            levResult[j]['receiver_name'] = await getSponsorName(levResult[j].to_id, res)
+        }
         var nodeObj = {
             level: curLevel,
             parent_id: sp_id,
