@@ -35,7 +35,7 @@ async function uploadFileToFolder(fileData, dispute_id, dispute_from, res) {
 router.post('/screenshotUpload', async function(req, res) {
     let storage = multer.diskStorage({
       destination: function (req, file, cb) {
-        cb(null, ('screenshots/'))
+        cb(null, ('/root/edu-help/screenshots/'))
       },
       filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now()+'.jpeg')
