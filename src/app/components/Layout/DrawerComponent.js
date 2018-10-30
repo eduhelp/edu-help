@@ -33,7 +33,7 @@ import Disputes from '../Disputes/Disputes'
 import AboutPlan from '../Placements/AboutPlan'
 // import NotFound from '../NotFoundPage/NotFoundPage'
 // import { ReactComponent as Logo } from '../../images/logo.svg'
-import Main from './Picture1.png';
+import Logo from './main_logo.png';
 
 
 const drawerWidth = 240
@@ -130,9 +130,10 @@ const styles = theme => ({
     padding: 0,
   },
   companyTitle: {
-    color: '#000',
+    color: '#92d23a',
     fontSize: 28,
     fontFamily: 'sans-serif',
+    padding: 10,
   },
   userInfo: {
       position: 'absolute',
@@ -197,7 +198,10 @@ class MiniDrawer extends React.Component {
               <MenuIcon />
 
             </IconButton>
-            <div className={classes.companyTitle}>Edu Help</div>
+            <img src={ Logo } width='50' />
+            <div className={classes.companyTitle}>
+              EduHelp
+            </div>
 
             <div className={classes.userInfo}>
                 {(isAuth) ? (
