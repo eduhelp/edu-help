@@ -79,7 +79,7 @@ export class UserInfo extends React.Component {
   constructor() {
     super()
     this.state = {
-      listStates : ['Arunachal Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Andaman and Nicobar Islands', 'Chandigarh', 'Dadra and Nagar Haveli', 'Daman and Diu', 'Lakshadweep', 'National Capital Territory of Delhi', 'Puducherry'],
+      listStates : ['Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Andaman and Nicobar Islands', 'Chandigarh', 'Dadra and Nagar Haveli', 'Daman and Diu', 'Lakshadweep', 'National Capital Territory of Delhi', 'Puducherry'],
       availableStatus: {},
       userInfo: {
         fullname: '',
@@ -135,11 +135,13 @@ export class UserInfo extends React.Component {
 
   componentWillMount(){
     this.setState({ userInfo: this.props.userInfo })
-    /*this.setState({ userInfo: { 
-      ...this.state.userInfo,
-      country : 'India',
-      state: 'None'
-    }})*/
+    if (!this.props.userInfo.country) {
+      this.setState({ userInfo: { 
+        ...this.state.userInfo,
+        country : 'India',
+        state: 'None'
+      }})
+    }
   }
 
 handleChange = (stName) => (event) => {
