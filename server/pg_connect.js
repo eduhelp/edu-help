@@ -2,12 +2,12 @@ var express = require('express');
 var pg = require('pg');
 
 //server info
-//var dbName =  'EduHelp'
-//var pwd = 'fgjgo874nvj7hv'
+var dbName =  'EduHelp'
+var pwd = 'fgjgo874nvj7hv'
 
 //local info
-var dbName =  'eduhelp'
-var pwd = '1234'
+//var dbName =  'eduhelp'
+//var pwd = '1234'
 
 //pool connect
 let pool = new pg.Pool({
