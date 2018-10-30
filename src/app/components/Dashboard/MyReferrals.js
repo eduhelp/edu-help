@@ -136,9 +136,7 @@ export class MyReferrals extends React.Component {
                             </Grid>
                         </Grid>
                         {myReferrals.map((option, index) => {
-                            console.log(option.user_id)
-                            //placedLevel = _.find(myTree, (n) => { return n.user_id == option.user_id })
-                            //placedLevel = 'test'
+                            placedLevel = _.find(myTree, (n) => { return n.user_id == option.user_id })
                             return (
                                 <Grid item xs={12} className={index % 2 ? classes.rowOdd : classes.rowEven} key={index}>
                                     <Grid container>
