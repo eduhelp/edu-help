@@ -140,6 +140,8 @@ router.post('/myReferrals', async function(req, res) {
             result[i]['sponsor_name'] = await getSponsorName(result[i].sponsor_id, res)
             var selQuery = "select * from payments where from_id="+result[i].user_id+" and confirm_status!='Cancelled' and payment_level=1"
             var selResult = await pg_connect.connectDB(selQuery, res)
+            selResult[0]['giver_name'] = await getSponsorName(selResult[0].from_id, res)
+            selResult[0]['receiver_name'] = await getSponsorName(selResult[0].to_id, res)
             if (selResult) {
                 result[i]['paymentInfo'] = selResult[0]
             }
