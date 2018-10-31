@@ -147,22 +147,22 @@ export class MySmartSpreader extends React.Component {
                                     onChange={this.handleLevelChange}
                                 >
                                     <MenuItem value='2'>
-                                        Level 2 Bucket
+                                        Level 2 Queue
                                     </MenuItem>
                                     <MenuItem value='3'>
-                                        Level 3 Bucket
+                                        Level 3 Queue
                                     </MenuItem>
                                     <MenuItem value='4'>
-                                        Level 4 Bucket
+                                        Level 4 Queue
                                     </MenuItem>
                                     <MenuItem value='5'>
-                                        Level 5 Bucket
+                                        Level 5 Queue
                                     </MenuItem>
                                     <MenuItem value='6'>
-                                        Level 6 Bucket
+                                        Level 6 Queue
                                     </MenuItem>
                                     <MenuItem value='7'>
-                                        Level 7 Bucket
+                                        Level 7 Queue
                                     </MenuItem>
                                 </Select>
                             </FormControl>
@@ -295,7 +295,7 @@ export class MySmartSpreader extends React.Component {
                     </Paper>
                 ) : (
                     <Paper className={classes.paperCenter}>
-                        You are not in level {this.state.selectedLevel} bucket
+                        You are not in level {this.state.selectedLevel} Queue
                     </Paper>
                 )
                 }
@@ -304,7 +304,7 @@ export class MySmartSpreader extends React.Component {
             <Paper className={classes.paperCenter}>
                 <Grid container>
                     <Grid item xs={12}>
-                        Sorry ! You are not into any smart spreader bucket, if you wish to become a smart spreader please do the following
+                        Sorry ! You are not into any smart spreader queue, if you wish to become a smart spreader please do the following
                     </Grid>
                     <Grid item xs={12}>
                         You need to Refer 6 people.

@@ -267,13 +267,14 @@ class MiniDrawer extends React.Component {
                     <Route exact path="/" component={Home} />
                     <Route exact path="/about_plan" component={AboutPlan} />
                     <Route path="/registration" component={Registration} />
+                    <Route exact path="/dashboard/:page" component={Dashboard} />
                     <Route path="/dashboard" component={Dashboard} />
                     <Route path="/confirm_receiver/:levelIndex/:paymentTo" component={ConfirmReceiver} />
                     <Route path="/make_payment/:levelIndex/:paymentTo" component={MakePayment} />
                     <Route path="/receive_payment/:levelIndex" component={ReceivePayment} />
                     <Route path="/my_tree" component={MyTree} />
                     <Route path="/faq" component={Faq} />
-                    <Route path='/profile/:page' component={Profile} />
+                    <Route exact path='/profile/:page' component={Profile} />
                     <Route path='/profile' component={Profile} />
                     <Route path='/smart_spreaders' component={SmartSpreader} />
                     <Route path='/disputes' component={Disputes} />

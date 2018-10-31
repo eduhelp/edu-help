@@ -152,6 +152,7 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
             mySmartSpreadersList={this.props.mySmartSpreadersList}
             myDisputes={this.props.myDisputes}
             allActiveSSList={this.props.allActiveSSList}
+            redirectPage={this.props.match.params.page}
         />
     } else if (this.state.currentPage === 'ConfirmReceiver') {
         var levelObj = _.find(this.props.levelPayments, (n) => { return n.level_index == this.state.levelIndex} )

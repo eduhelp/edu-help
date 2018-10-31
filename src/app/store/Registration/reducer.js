@@ -65,6 +65,7 @@ export default function usersReducer (state = initialState, action) {
     
     case GET_AUTH_INFO_SUCCESS:
       const authInfoReload = {isAuth: true, data: action.data, expTime: dt }
+      window.localStorage.setItem('AuthInfo', JSON.stringify(action.data));
       return state
         .set('authInfo', fromJS(authInfoReload))
     

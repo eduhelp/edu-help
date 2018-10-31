@@ -1,5 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
+import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -283,7 +284,7 @@ export class GiveHelp extends React.Component {
             </Paper>
         ) : (
             <Paper className={classes.paperCenter}>
-                Pleae add your bank details, before giving help to any level.
+                Pleae add your <Link className={classes.navLink} to='/profile/bank' >bank details</Link>, before giving help to any level.
             </Paper>
         )}
       </div>)
