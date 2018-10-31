@@ -1,4 +1,5 @@
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withStyles } from '@material-ui/core/styles';
@@ -43,6 +44,7 @@ export class PaymentInfo extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+        redirectPage: '',
         bank_ac_name: '',
         bank_ac_number: '',
         bank_name: '',
@@ -139,8 +141,8 @@ export class PaymentInfo extends React.Component {
                 this.setErrorState('bank_ac_number', true, 'Account Number required')
             } else if(/^[0-9]*$/.test(enteredValue) == false) {
                 this.setErrorState('bank_ac_number', true, 'Invalid Account number')
-            } else if(enteredValue.length > 15) {
-                this.setErrorState('bank_ac_number', true, 'Account number should be not be more than 15 characters long')
+            } else if(enteredValue.length > 20) {
+                this.setErrorState('bank_ac_number', true, 'Account number should be not be more than 20 characters long')
             }
         }
 
@@ -177,8 +179,8 @@ export class PaymentInfo extends React.Component {
         if(/^[0-9]*$/.test(this.state.bank_ac_number) == false) {
             this.setErrorState('bank_ac_number', true, 'Invalid Account number')
             return false
-        } else if(this.state.bank_ac_number.length > 15) {
-            this.setErrorState('bank_ac_number', true, 'Account number should be not be more than 15 characters long')
+        } else if(this.state.bank_ac_number.length > 20) {
+            this.setErrorState('bank_ac_number', true, 'Account number should be not be more than 20 characters long')
             return false
         }
 
@@ -225,12 +227,18 @@ export class PaymentInfo extends React.Component {
                 wallet_gp_name: this.state.wallet_gp_name
             }
             this.props.updatePaymentInfo(sendData)
+            if (mode == 'add') {
+                this.setState({redirectPage : '/dashboard/giveHelp'})
+            }
         }
     }
 
   render() {
     const { classes, authInfo } = this.props
-    const { bankInfoError } = this.state
+    const { bankInfoError, redirectPage } = this.state
+    if (redirectPage) {
+        return <Redirect to={redirectPage} />
+    }
     return (
       <div id="mainContainer">
         <Paper className={classes.paper}>

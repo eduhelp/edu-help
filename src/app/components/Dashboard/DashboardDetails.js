@@ -35,6 +35,9 @@ export class DashboardDetails extends React.Component {
 
   componentWillMount() {
       this.setState({disputePage: ''})
+      if (this.props.redirectPage == 'giveHelp') {
+        this.setState({tabValue: 2})
+      }
   }
   componentWillReceiveProps(nextProps) {
     console.log('authInfo')
@@ -92,7 +95,6 @@ export class DashboardDetails extends React.Component {
             <Tabs value={tabValue} onChange={this.handleChange} className={classes.tabs}>
                 <Tab label="Level Status" />
                 <Tab label="My Referrals" />
-                <Tab label="Level view" />
                 <Tab label="Give help" />
                 <Tab label="Receive help" />
                 <Tab label="Smart Spreader" />
@@ -118,11 +120,6 @@ export class DashboardDetails extends React.Component {
         }
         {tabValue === 2 && 
             <TabContainer>
-                Level view
-            </TabContainer>
-        }
-        {tabValue === 3 && 
-            <TabContainer>
                 <GiveHelp 
                     authInfo={this.props.authInfo}
                     myPaymentList={this.props.myPaymentList}
@@ -138,7 +135,7 @@ export class DashboardDetails extends React.Component {
                 />
             </TabContainer>
         }
-        {tabValue === 4 && 
+        {tabValue === 3 && 
             <TabContainer>
                 <ReceiveHelp 
                     authInfo={this.props.authInfo}
@@ -153,7 +150,7 @@ export class DashboardDetails extends React.Component {
                 />
             </TabContainer>
         }
-        {tabValue === 5 && 
+        {tabValue === 4 && 
             <TabContainer>
                 <MySmartSpreader
                     authInfo={this.props.authInfo}
@@ -167,7 +164,7 @@ export class DashboardDetails extends React.Component {
                 />
             </TabContainer>
         }
-        {tabValue === 6 && 
+        {tabValue === 5 && 
             <TabContainer>
                 {disputePage == 'details' ? (
                     <DisputeDetails
