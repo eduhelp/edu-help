@@ -57,7 +57,7 @@ export class SponsorInfo extends React.Component {
         <Paper className={classes.paper}>
           {(sponsorDetails.user_id) ? (
             <div>
-              {(sponsorDetails.status == 'Active') ? (
+              {(sponsorDetails.status !== 'Inactive') ? (
                 <Grid container>
                   <Grid item xs={12} className={classes.rowEven}>
                     <Grid container>

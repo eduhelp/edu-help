@@ -31,6 +31,7 @@ import SideDrawer from '../Common/SideDrawer'
 import SmartSpreader from '../SmartSpreader/SmartSpreader';
 import Disputes from '../Disputes/Disputes'
 import AboutPlan from '../Placements/AboutPlan'
+import UsersContainer from '../Users/UsersContainer'
 // import NotFound from '../NotFoundPage/NotFoundPage'
 // import { ReactComponent as Logo } from '../../images/logo.svg'
 import Logo from './main_logo.png';
@@ -278,6 +279,7 @@ class MiniDrawer extends React.Component {
                     <Route path='/profile' component={Profile} />
                     <Route path='/smart_spreaders' component={SmartSpreader} />
                     <Route path='/disputes' component={Disputes} />
+                    <Route path='/users' component={UsersContainer} />
                 </Switch>
               </Grid>
             </Grid>

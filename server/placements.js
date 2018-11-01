@@ -86,28 +86,32 @@ async function getTopLevelArray(user_id, retArr, getLevel, max_level, res) {
     result[0]['sponsor_name'] = await getSponsorName(result[0].sponsor_id, res)
     result[0]['bank_details'] = await getBankDetails(result[0].user_id, res)
     
-    var findRootLevelId = await getMyParentLevelWise(user_id, getLevel, res)
-    var eligibility = ''
-    if (findRootLevelId) {
-        var firstQuery = "select * from payments where to_id="+user_id+" and payment_level=1 and confirm_status!='Cancelled'"
-        var firstResult = await pg_connect.connectDB(firstQuery, res)
-        if(firstResult.length >= 1) { 
-            var eliQuery = "select * from payments where from_id="+user_id+" and confirm_status!='Cancelled' and payment_level="+getLevel
-            var eliResult = await pg_connect.connectDB(eliQuery, res)
-            if(eliResult) {
-                if(eliResult.length === 0) {
-                    eligibility = false
-                } else {
-                    eligibility = true
+    if (result[0].status == 'Blocked') {
+        eligibility = false
+    } else {
+        var findRootLevelId = await getMyParentLevelWise(user_id, getLevel, res)
+        var eligibility = ''
+        if (findRootLevelId) {
+            var firstQuery = "select * from payments where to_id="+user_id+" and payment_level=1 and confirm_status!='Cancelled'"
+            var firstResult = await pg_connect.connectDB(firstQuery, res)
+            if(firstResult.length >= 1) { 
+                var eliQuery = "select * from payments where from_id="+user_id+" and confirm_status!='Cancelled' and payment_level="+getLevel
+                var eliResult = await pg_connect.connectDB(eliQuery, res)
+                if(eliResult) {
+                    if(eliResult.length === 0) {
+                        eligibility = false
+                    } else {
+                        eligibility = true
+                    }
                 }
+            } else {
+                eligibility = false
             }
         } else {
-            eligibility = false
+            eligibility = true
         }
-
-    } else {
-        eligibility = true
     }
+    
     var nodeObj = {
         level: getLevel,
         parent_id: curResult[0].parent_id,

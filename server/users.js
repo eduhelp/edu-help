@@ -4,13 +4,27 @@ var pg_connect = require('./pg_connect');
 var router = express.Router();
 var userInfoList = "user_id, username, email, mobile, dob, gender, address, pincode, sponsor_id, status, fullname, country, state, city"
 
-router.get('/usersList', async function(req, res) {
+router.post('/usersList', async function(req, res) {
     const curQuery = "select * from users"
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
         res.status(200).send(result)  
     }
 });
+
+router.post('/changeUserStatus', async function(req, res) {
+    const upQuery = "update users set status='"+req.body.new_status+"' where user_id="+req.body.user_id
+    var upResult = await pg_connect.connectDB(upQuery, res)
+    if (upResult) {
+        const curQuery = "select * from users"
+        var result = await pg_connect.connectDB(curQuery, res)
+        if(result) {
+            res.status(200).send(result)  
+        }
+    }
+    
+});
+
 
 router.post('/addUser', async function(req, res) {
     var curQuery = "insert into users(username, pwd, email, mobile, dob, gender, address, pincode, sponsor_id, status, fullname, country, state, city) values('"+req.body.username+"','"+req.body.pwd+"','"+req.body.email+"','"+req.body.mobile+"','"+req.body.dob+"','"+req.body.gender+"','"+req.body.address+"',"+req.body.pincode+","+req.body.sponsor_id+",'Inactive','"+req.body.fullname+"','"+req.body.country+"','"+req.body.state+"','"+req.body.city+"') returning user_id"

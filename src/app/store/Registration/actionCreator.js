@@ -16,23 +16,8 @@ import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
 import { getService, postService } from '../../services/Registration'
 
 export function getUsers () {
-  return { type: GET_USERS }
-}
-
-export function getUsersAPI () {
-  return getService('users')
-    .then((resp) => {
-      return resp
-    })
-    .catch((error) => {
-      throw(error)
-    })
-}
-
-
-export function getUsersAPITemp () {
   return dispatch => {
-    return getService('users/usersList')
+    return postService('users/usersList')
     .then((resp) => {
       dispatch({data: resp, type: GET_USERS_SUCCESS})
     })
@@ -189,6 +174,21 @@ export function getMySmartSpreadersList(payload) {
     })
     .catch((error) => {
       const errMsg = {status: true, variant: 'error', message: 'problem while retieve my referrals'}
+      dispatch({ snackMessage: errMsg, type: TOGGLE_SNACKBAR })
+    })
+  }
+}
+
+export function changeUserStatus(payload) {
+  return dispatch => {
+    return postService('users/changeUserStatus', payload)
+    .then((resp) => {
+      dispatch({ data: resp, type: GET_USERS_SUCCESS })
+      const sucMsg = {status: true, variant: 'success', message: 'user status successfully chagned'}
+      dispatch({ snackMessage: sucMsg, type: TOGGLE_SNACKBAR })
+    })
+    .catch((error) => {
+      const errMsg = {status: true, variant: 'error', message: 'problem while change user status'}
       dispatch({ snackMessage: errMsg, type: TOGGLE_SNACKBAR })
     })
   }

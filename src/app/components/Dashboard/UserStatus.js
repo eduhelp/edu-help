@@ -21,15 +21,15 @@ export class UserStatus extends React.Component {
   render() {
     const { classes, authInfo, myPaymentList } = this.props
     let currentStatus = ''
-    if (authInfo.data.status == 'Active') {
-        currentStatus = 'Active'
-    } else if (authInfo.data.status == 'Inactive') {
-        const sponsor_payment = _.find(myPaymentList, (n) => {return n.payment_level == '1'})
-        if(sponsor_payment && sponsor_payment.confirm_status == 'Pending') {
-            currentStatus = 'Inactive - Receiver Confirmation Pending'
-        } else {
-            currentStatus = 'Inactive - Give Help Pending'
-        }
+    if (authInfo.data.status == 'Inactive') {
+      const sponsor_payment = _.find(myPaymentList, (n) => {return n.payment_level == '1'})
+      if(sponsor_payment && sponsor_payment.confirm_status == 'Pending') {
+          currentStatus = 'Inactive - Receiver Confirmation Pending'
+      } else {
+          currentStatus = 'Inactive - Give Help Pending'
+      }
+    } else {
+      currentStatus = authInfo.data.status
     }
     const regLink = window.location.origin+"/registration?n="+authInfo.data.username
     return (
