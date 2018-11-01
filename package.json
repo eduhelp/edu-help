@@ -18,6 +18,7 @@
     "pg": "^7.4.3",
     "promise-pg": "^0.1.1",
     "react": "^16.4.1",
+    "react-autosuggest": "^9.4.2",
     "react-dom": "^16.4.1",
     "react-dropzone": "^6.2.4",
     "react-dropzone-component": "^3.2.0",

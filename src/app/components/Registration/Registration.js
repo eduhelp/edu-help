@@ -224,7 +224,7 @@ class Registration extends React.Component {
     const steps = this.getSteps(this.props);
     const { activeStep, sponsorInfo, userInfo } = this.state;
     let nextBtnDisabledState = true
-    if (activeStep === 0 && userDetails && userDetails.status == 'Active') {
+    if (activeStep === 0 && userDetails && userDetails.status !== 'Inactive') {
       nextBtnDisabledState = false
     } else if (activeStep === 1 && userInfo !== 'undefined' && userInfo !== '') {
       nextBtnDisabledState = false

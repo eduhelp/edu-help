@@ -69,14 +69,14 @@ export function getFormatedDate (dt) {
 
 export function getUserStatus(userStatus, paymentStatus) {
     let currentStatus = ''
-    if (userStatus == 'Active') {
-        currentStatus = 'Active'
-    } else if (userStatus == 'Inactive') {
+    if (userStatus == 'Inactive') {
         if(paymentStatus == 'Pending') {
             currentStatus = 'Inactive - Receiver Confirmation Pending'
         } else {
             currentStatus = 'Inactive - Give Help Pending'
         }
+    } else {
+        currentStatus = userStatus
     }
     return currentStatus
 }
@@ -100,4 +100,7 @@ export function ValidateEmail (emailField) {
     } 
     return true
 }
-                            
+
+export function sortData (order, orderBy) {
+    return order === 'desc' ? (a, b) => b[orderBy] - a[orderBy] : (a, b) => a[orderBy] - b[orderBy]
+}

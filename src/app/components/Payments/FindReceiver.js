@@ -100,18 +100,29 @@ export class FindReceiver extends React.Component {
                         <div>
                             {(smartSpreaderInfo.message !== 'undefined' && smartSpreaderInfo.message === 'no smart spreader') ? (
                                 <div>
-                                    As per your parent tree, your Level-{this.props.receiverInfo.payment_level} parent {userDetails.username} is not eleigible <br />
-                                    to receive any payment from level-{this.props.receiverInfo.payment_level}, you can wait till {userDetails.username} is get eleigible
+                                    As per your parent tree, your <b>Level-{this.props.receiverInfo.payment_level}</b> parent <b>{userDetails.username}</b> is not eleigible <br />
+                                    to receive any payment from <b>level-{this.props.receiverInfo.payment_level}</b>, you can wait till <b>{userDetails.username}</b> is get eleigible
                                     <br /><br />OR<br /><br />
-                                    And the is no Active smart spreader, please try after some time.
+                                    And the is no Active smart spreader, please try after some time.<br />
                                 </div>
                             ) : (
                                 <Grid container>
                                     <Grid item xs={12}>
-                                        As per your parent tree, your Level-{this.props.receiverInfo.payment_level} parent {userDetails.username} is not eleigible <br />
-                                        to receive any payment from level-{this.props.receiverInfo.payment_level}, you can wait till {userDetails.username} is get eleigible
-                                        <br /><br />OR<br /><br />
-                                        You can pay to the smart spreader (information given below), to make process faster.
+                                        {userDetails.status == 'Blocked' ? (
+                                            <div>
+                                                <b>{userDetails.username}</b> is in <b>Blocked</b> state, due to some mis gudance about the system, so <b>{userDetails.username}</b> is not eligible <br />
+                                                to receive any payment from <b>level-{this.props.receiverInfo.payment_level}</b>, you can wait till <b>{userDetails.username}</b> is become a <b>Active</b> state
+                                                <br /><br />OR<br /><br />
+                                                You can pay to the smart spreader (information given below), to make process faster.<br /><br />
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                As per your parent tree, your <b>Level-{this.props.receiverInfo.payment_level}</b> parent <b>{userDetails.username}</b> is not eleigible <br />
+                                                to receive any payment from <b>level-{this.props.receiverInfo.payment_level}</b>, you can wait till <b>{userDetails.username}</b> is get eleigible
+                                                <br /><br />OR<br /><br />
+                                                You can pay to the smart spreader (information given below), to make process faster.<br /><br />
+                                            </div>
+                                        )}
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Grid container className={classes.rowHead}>
