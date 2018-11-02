@@ -24,6 +24,10 @@ app.use(bodyParser.json());
 
 var router = express.Router();
 
+app.get("*", function (req, res, next) {
+    res.redirect("https://" + req.headers.host + "/" + req.path);
+});
+
 router.get('/screenshots/:name', function(req,res) {
     var name = req.params.name;
     res.sendFile(path.join(__dirname+"./../screenshots/"+name));
@@ -56,15 +60,6 @@ var httpsServer = https.createServer(credentials, app);
 
 httpServer.listen(80);
 httpsServer.listen(443);
-
-app.use(function(req, res, next) {
-    if (req.secure) {
-        next();
-    } else {
-        res.redirect('https://' + req.headers.host + req.url);
-    }
-});
-
 
 /*
 var options = {
