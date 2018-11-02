@@ -45,8 +45,8 @@ app.use("/disputes", disputes)
 
 
 const options = {
-    key: fs.readFileSync('/root/ssl/key.pem'),
-    cert: fs.readFileSync('/root/ssl/cert.pem')
+    key: fs.readFileSync('root/ssl/key.pem'),
+    cert: fs.readFileSync('root/ssl/cert.pem')
   };
   
   var server = https.createServer(options, app);
