@@ -57,6 +57,14 @@ var httpsServer = https.createServer(credentials, app);
 httpServer.listen(80);
 httpsServer.listen(443);
 
+app.use(function(req, res, next) {
+    if (req.secure) {
+        next();
+    } else {
+        res.redirect('https://' + req.headers.host + req.url);
+    }
+});
+
 
 /*
 var options = {
