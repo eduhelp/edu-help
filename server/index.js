@@ -24,10 +24,6 @@ app.use(bodyParser.json());
 
 var router = express.Router();
 
-app.get("*", function (req, res, next) {
-    res.redirect("https://" + req.headers.host + "/" + req.path);
-});
-
 router.get('/screenshots/:name', function(req,res) {
     var name = req.params.name;
     res.sendFile(path.join(__dirname+"./../screenshots/"+name));
@@ -57,6 +53,14 @@ var credentials = { key: privateKey, cert: certificate };
 
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
+
+app.use(function(req,resp,next){
+    if (req.headers['x-forwarded-proto'] == 'http') {
+        return resp.redirect(301, 'https://' + req.headers.host + '/');
+    } else {
+        return next();
+    }
+  });
 
 httpServer.listen(80);
 httpsServer.listen(443);
