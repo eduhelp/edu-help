@@ -43,8 +43,8 @@ app.use("/payments", payments)
 app.use("/placements", placements)
 app.use("/disputes", disputes)
 
-
-const options = {
+/*
+var options = {
     key: fs.readFileSync('/root/ssl/key.pem'),
     cert: fs.readFileSync('/root/ssl/cert.pem')
   };
@@ -53,13 +53,8 @@ const options = {
 
     server.listen(80, function(){
         console.log("server running ...")
-    });
-
-  /*https.createServer(options, (req, res) => {
-    res.writeHead(200);
-    res.end('hello world\n');
-  }).listen(80); */
+    }); */
   
-//app.listen(80);
+app.listen(80);
 //app.listen(9000);
 console.log('server started... ');
