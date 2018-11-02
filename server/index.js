@@ -1,6 +1,8 @@
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
+var https = require('https');
+var fs = require('fs');
 var app = express();
 
 var users = require('./users')
@@ -26,6 +28,11 @@ router.get('/screenshots/:name', function(req,res) {
     res.sendFile(path.join(__dirname+"./../screenshots/"+name));
 });
 
+router.get('/dashboard/:page', function(req,res) {
+    var name = req.params.name;
+    res.sendFile(path.join(__dirname+"./../src/index.html"));
+});
+
 router.get('/*', function(req,res) {
     res.sendFile(path.join(__dirname+"./../src/index.html"));
 });
@@ -37,5 +44,22 @@ app.use("/placements", placements)
 app.use("/disputes", disputes)
 
 
-app.listen(80);
+const options = {
+    key: fs.readFileSync('/root/ssl/key.pem'),
+    cert: fs.readFileSync('/root/ssl/cert.pem')
+  };
+  
+  var server = https.createServer(options, app);
+
+    server.listen(80, function(){
+        console.log("server running ...")
+    });
+
+  /*https.createServer(options, (req, res) => {
+    res.writeHead(200);
+    res.end('hello world\n');
+  }).listen(80); */
+  
+//app.listen(80);
+//app.listen(9000);
 console.log('server started... ');
