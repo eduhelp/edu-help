@@ -271,6 +271,9 @@ export class PaymentInfo extends React.Component {
                         type='password'
                         margin="normal"
                         variant="outlined"
+                        inputProps={{
+                            maxLength: 20,
+                        }}
                         value={this.state.bank_ac_number}
                         onChange={this.handleChange('bank_ac_number')}
                         onBlur={this.handleBlurChange('bank_ac_number')}
@@ -336,9 +339,9 @@ export class PaymentInfo extends React.Component {
                         className={classes.textField}
                         margin="normal"
                         variant="outlined"
-                       inputProps={{
-                      maxLength: 15,
-                    }}
+                        inputProps={{
+                          maxLength: 20,
+                        }}
                         value={this.state.confirm_bank_ac_number}
                         onChange={this.handleChange('confirm_bank_ac_number')}
                         onBlur={this.handleBlurChange('confirm_bank_ac_number')}

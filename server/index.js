@@ -43,6 +43,20 @@ app.use("/payments", payments)
 app.use("/placements", placements)
 app.use("/disputes", disputes)
 
+var privateKey  = fs.readFileSync('/root/ssl/key.pem', 'utf8');
+var certificate = fs.readFileSync('/root/ssl/cert.pem', 'utf8');
+
+var credentials = { key: privateKey, cert: certificate };
+
+// your express configuration here
+
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(80);
+httpsServer.listen(443);
+
+
 /*
 var options = {
     key: fs.readFileSync('/root/ssl/key.pem'),
@@ -55,6 +69,6 @@ var options = {
         console.log("server running ...")
     }); */
   
-app.listen(80);
+// app.listen(80);
 //app.listen(9000);
 console.log('server started... ');
