@@ -51,12 +51,14 @@ export class Layout extends React.Component {
   }
 
   componentWillMount() {
+    if (window.location.protocol == 'http:') {
+      window.location.href = 'https://'+window.location.host
+    }
     const chCookie = checkCookie()
     if (this.props.authInfo.isAuth === false && chCookie === true) {
       const sendData = JSON.parse(window.localStorage.getItem('AuthInfo'))
       this.props.getAuthInfo(sendData)
     }
-    
   }
 
   componentWillReceiveProps(nextProps) {
