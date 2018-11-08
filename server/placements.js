@@ -215,4 +215,16 @@ router.post('/getAllSSActiveList', async function(req, res) {
     res.status(200).send(tempData)
 });
 
+router.post('/checkPlacements', async function(req, res) {
+    var userQuery = "select * from users"
+    var result = await pg_connect.connectDB(userQuery, res) 
+    for(var j=0; j<result.length; j++) {
+        var posQuery = "select count(*) from positions where user_id="+result[j].user_id
+        var posResult = await pg_connect.connectDB(posQuery, res)
+        if (posResult[0].count >= 2) {
+            console.log(result[j].user_id+" >>>> "+posResult[0].count)
+        }
+    }
+});
+
 module.exports = router

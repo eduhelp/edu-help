@@ -67,43 +67,53 @@ router.post('/myConfirmPendingList', async function(req, res) {
 });
 
 router.post('/confirmLevelPayment', async function(req, res) {
-    var updateQuery = "update payments set confirm_status='Confirmed', confirm_date='"+pg_connect.getCurrentDate()+"', confirmed_by='"+req.body.confirmed_by+"' where payment_id="+req.body.payment_id
-    var updateRes = await pg_connect.connectDB(updateQuery, res)
-    if(updateRes) {
-        if(req.body.receiver_type == "SmartSpreader") {
-            var updQuery = "update smart_spreaders set current_status='Completed', completed_date='"+pg_connect.getCurrentDate()+"', payment_id="+req.body.payment_id+" where user_id="+req.body.to_id+" and current_status='InProgress' and payment_level="+req.body.payment_level
-            var updRes = await pg_connect.connectDB(updQuery, res)
-            // select smart spreader count level wise and check if it is reached 10 or not
-            var countSSQuery = "select count(*) from smart_spreaders where current_status='Completed' and user_id="+req.body.to_id+" and payment_level="+req.body.payment_level
-            var countSSRes = await pg_connect.connectDB(countSSQuery, res)
-            if(countSSRes[0].count < 10) {
-                var insQuery = "insert into smart_spreaders(user_id, added_date, current_status, payment_level) values("+req.body.to_id+",'"+pg_connect.getCurrentDate()+"','Active',"+req.body.payment_level+")"
-                var insRes = await pg_connect.connectDB(insQuery, res)
-            }
-        }
-        if(req.body.payment_level == "1") {
-            var retArr = []
-            var curLevel = 0
-            var nodeObj = {
-                level: curLevel,
-                node: req.body.sponsor_id
-            }
-            retArr.push(nodeObj)
-            var resultArray = await getRootArray(req.body.sponsor_id, retArr, curLevel, res)
-            var insResult = await insertToPosition(req.body.user_id, resultArray, res)
-            var updResult = await updateUser(req.body.user_id, res)
-            await checkDisputes(req.body.payment_id, res)
-            var entResult = await entryToSmartSpreaderBucket(req.body.sponsor_id, req.body.payment_level, res)
-            if(entResult) {
-                res.status(200).send({message: 'Confirmaton status successfully updated for level-'+req.body.payment_level})
+    var checkQuery = "select * from payments where payment_id="+req.body.payment_id
+    var checkRes = await pg_connect.connectDB(checkQuery, res)
+    if(checkRes) {
+        if(checkRes[0].confirm_status == 'Pending') {
+            var updateQuery = "update payments set confirm_status='Confirmed', confirm_date='"+pg_connect.getCurrentDate()+"', confirmed_by='"+req.body.confirmed_by+"' where payment_id="+req.body.payment_id
+            var updateRes = await pg_connect.connectDB(updateQuery, res)
+            if(updateRes) {
+                if(req.body.receiver_type == "SmartSpreader") {
+                    var updQuery = "update smart_spreaders set current_status='Completed', completed_date='"+pg_connect.getCurrentDate()+"', payment_id="+req.body.payment_id+" where user_id="+req.body.to_id+" and current_status='InProgress' and payment_level="+req.body.payment_level
+                    var updRes = await pg_connect.connectDB(updQuery, res)
+                    // select smart spreader count level wise and check if it is reached 10 or not
+                    var countSSQuery = "select count(*) from smart_spreaders where current_status='Completed' and user_id="+req.body.to_id+" and payment_level="+req.body.payment_level
+                    var countSSRes = await pg_connect.connectDB(countSSQuery, res)
+                    if(countSSRes[0].count < 10) {
+                        var insQuery = "insert into smart_spreaders(user_id, added_date, current_status, payment_level) values("+req.body.to_id+",'"+pg_connect.getCurrentDate()+"','Active',"+req.body.payment_level+")"
+                        var insRes = await pg_connect.connectDB(insQuery, res)
+                    }
+                }
+                if(req.body.payment_level == "1") {
+                    var retArr = []
+                    var curLevel = 0
+                    var nodeObj = {
+                        level: curLevel,
+                        node: req.body.sponsor_id
+                    }
+                    retArr.push(nodeObj)
+                    var resultArray = await getRootArray(req.body.sponsor_id, retArr, curLevel, res)
+                    var insResult = await insertToPosition(req.body.user_id, resultArray, res)
+                    var updResult = await updateUser(req.body.user_id, res)
+                    await checkDisputes(req.body.payment_id, res)
+                    var entResult = await entryToSmartSpreaderBucket(req.body.sponsor_id, req.body.payment_level, res)
+                    if(entResult) {
+                        res.status(200).send({message: 'Confirmaton status successfully updated for level-'+req.body.payment_level})
+                    }
+                } else {
+                    await checkDisputes(req.body.payment_id, res)
+                    var entResult = await entryToSmartSpreaderBucket(req.body.user_id, req.body.payment_level, res)
+                    if(entResult) {
+                        res.status(200).send({message: 'Confirmaton status successfully updated for level-'+req.body.payment_level})
+                    }
+                }
             }
         } else {
-            await checkDisputes(req.body.payment_id, res)
-            var entResult = await entryToSmartSpreaderBucket(req.body.user_id, req.body.payment_level, res)
-            if(entResult) {
-                res.status(200).send({message: 'Confirmaton status successfully updated for level-'+req.body.payment_level})
-            }
+            res.status(403).send({message:'payment already processed on level'+req.body.payment_level})
         }
+    } else {
+        res.status(403).send({message:'payment already processed on level'+req.body.payment_level})
     }
 });
 
@@ -254,29 +264,35 @@ router.post('/levelEligibility', async function(req, res) {
 });
 
 router.post('/addConfirmReceiver', async function(req, res) {
-    var insQuery = "insert into payments(from_id, to_id, payment_level, payment_value, paid_status, receiver_type, receiver_confirm_date, confirm_status) values("+req.body.from_id+","+req.body.to_id+","+req.body.payment_level+","+req.body.payment_value+",'Pending','"+req.body.receiver_type+"','"+pg_connect.getCurrentDate()+"', 'Initiated')"
-    if(req.body.receiver_type == 'RootParent') {
-        var result = await pg_connect.connectDB(insQuery, res)
-        if(result) {
-            res.status(200).send({message: 'receiver confirmed from root parent'})
-        }
-    } else if(req.body.receiver_type == 'SmartSpreader') {
-        var curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id  where t1.current_status='Active' and t1.payment_level="+req.body.payment_level+" order by t1.spreader_id limit 1"
-        var result = await pg_connect.connectDB(curQuery, res)
-        if(result) {
-            if(result[0].user_id == req.body.to_id) {
-                var updQuery = "update smart_spreaders set current_status='InProgress' where spreader_id="+result[0].spreader_id
-                var updResult = await pg_connect.connectDB(updQuery, res)
-                if(updResult) {
-                    var result = await pg_connect.connectDB(insQuery, res)
-                    if(result) {
-                        res.status(200).send({message: 'receiver confirmed from smart spreader'})
+    var checkQuery = "select count(*) from payments where from_id="+req.body.from_id+" and to_id="+req.body.to_id+" and payment_level="+req.body.payment_level
+    var checkResult = await pg_connect.connectDB(checkQuery, res)
+    if(checkResult[0].count == 0) {
+        var insQuery = "insert into payments(from_id, to_id, payment_level, payment_value, paid_status, receiver_type, receiver_confirm_date, confirm_status) values("+req.body.from_id+","+req.body.to_id+","+req.body.payment_level+","+req.body.payment_value+",'Pending','"+req.body.receiver_type+"','"+pg_connect.getCurrentDate()+"', 'Initiated')"
+        if(req.body.receiver_type == 'RootParent') {
+            var result = await pg_connect.connectDB(insQuery, res)
+            if(result) {
+                res.status(200).send({message: 'receiver confirmed from root parent'})
+            }
+        } else if(req.body.receiver_type == 'SmartSpreader') {
+            var curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id  where t1.current_status='Active' and t1.payment_level="+req.body.payment_level+" order by t1.spreader_id limit 1"
+            var result = await pg_connect.connectDB(curQuery, res)
+            if(result) {
+                if(result[0].user_id == req.body.to_id) {
+                    var updQuery = "update smart_spreaders set current_status='InProgress' where spreader_id="+result[0].spreader_id
+                    var updResult = await pg_connect.connectDB(updQuery, res)
+                    if(updResult) {
+                        var result = await pg_connect.connectDB(insQuery, res)
+                        if(result) {
+                            res.status(200).send({message: 'receiver confirmed from smart spreader'})
+                        }
                     }
+                } else {
+                    res.status(403).send({message: 'selected smart spreader already engaged, please select another smart spreader'})
                 }
-            } else {
-                res.status(403).send({message: 'selected smart spreader already engaged, please select another smart spreader'})
             }
         }
+    } else {
+        res.status(403).send({message:'receiver already confirmed for level'+req.body.payment_level})
     }
 });
 module.exports = router
