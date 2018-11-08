@@ -2,17 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withStyles } from '@material-ui/core/styles';
-
-
 import { DashboardDetails } from './DashboardDetails'
-
 import { getMyTree, getMyTopLevel, getActiveSmartSpreader, getAllSSActiveList } from '../../store/Placements/actionCreator'
-import { getUserDetails, getMyReferrals, getMySmartSpreadersList } from '../../store/Registration/actionCreator'
+import { getUserDetails, getMyReferrals, getMySmartSpreadersList, getMaintenanceStatus } from '../../store/Registration/actionCreator'
 import { getReceivedPaymentList, getMyPaymentList, getLevelPayments, getReceivedPayments } from '../../store/Payments/actionCreator'
 import { getMyDisputes } from '../../store/Disputes/actionCreator'
 import ConfirmReceiver from '../Payments/ConfirmReceiver';
 import MakePayment from "../Payments/MakePayment"
 import OpenDispute from '../Disputes/OpenDispute'
+import Dialog from '../Common/Dialog'
 
 const styles = {
   root: {
@@ -60,6 +58,9 @@ export class Dashboard extends React.Component {
         makePaymentObj: {},
         disputePaymentObj: {},
         disputeFrom: '',
+        dialogOpenStatus: false,
+        dialogTitle: '',
+        dialogContent: ''
     }
     
   }
@@ -90,32 +91,49 @@ export class Dashboard extends React.Component {
     this.props.getMySmartSpreadersList(sendData)
     this.props.getMyDisputes(sendData)
     this.props.getAllSSActiveList()
+    this.props.getMaintenanceStatus()
     // this.props.getActiveSmartSpreader()
 }
 
 confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, treeParentInfo) => {
-    console.log('confirm receiver - dashboard')
-    if(!levelEligibility) {
-        var sendData = {
-            payment_level: levelIndex
+    console.log('this.props.maintenanceStatus >>> ')
+    console.log(this.props.maintenanceStatus)
+    if (this.props.maintenanceStatus.status !== 'Active') {
+        this.setState({
+            dialogOpenStatus: true,
+            dialogTitle: this.props.maintenanceStatus.title,
+            dialogContent: this.props.maintenanceStatus.message
+        })
+    } else {
+        if(!levelEligibility) {
+            var sendData = {
+                payment_level: levelIndex
+            }
+            this.props.getActiveSmartSpreader(sendData)
         }
-        this.props.getActiveSmartSpreader(sendData)
+        this.setState({
+            currentPage,
+            levelIndex,
+            treeParentID,
+            levelEligibility,
+            treeParentInfo
+        })
     }
-    console.log(currentPage, levelIndex, treeParentID, levelEligibility, treeParentInfo)
-    this.setState({
-        currentPage,
-        levelIndex,
-        treeParentID,
-        levelEligibility,
-        treeParentInfo
-    })
   }
 
   makePayment = (currentPage,makePaymentObj) => {
-    this.setState({
-        currentPage,
-        makePaymentObj
-    })
+    if (this.props.maintenanceStatus.status !== 'Active') {
+        this.setState({
+            dialogOpenStatus: true,
+            dialogTitle: this.props.maintenanceStatus.title,
+            dialogContent: this.props.maintenanceStatus.message
+        })
+    } else {
+        this.setState({
+            currentPage,
+            makePaymentObj
+        })
+    }
   }
 
   openDispute = (currentPage,disputePaymentObj,disputeFrom) => {
@@ -129,6 +147,14 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
   cancelCallBack = () => {
     this.setState({
         currentPage: 'Dashboard'
+    })
+  }
+
+  closeDialog = () => {
+    this.setState({
+      dialogOpenStatus: false,
+      dialogTitle: '',
+      dialogContent: ''
     })
   }
 
@@ -153,6 +179,7 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
             myDisputes={this.props.myDisputes}
             allActiveSSList={this.props.allActiveSSList}
             redirectPage={this.props.match.params.page}
+            maintenanceStatus={this.props.maintenanceStatus}
         />
     } else if (this.state.currentPage === 'ConfirmReceiver') {
         var levelObj = _.find(this.props.levelPayments, (n) => { return n.level_index == this.state.levelIndex} )
@@ -165,6 +192,7 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
             treeParentInfo={this.state.treeParentInfo}
             levelEligibility={this.state.levelEligibility}
             cancelCB={this.cancelCallBack}
+            maintenanceStatus={this.props.maintenanceStatus}
         />
     } else if (this.state.currentPage === 'MakePayment') {
         var levelObj = _.find(this.props.levelPayments, (n) => { return n.level_index == this.state.levelIndex} )
@@ -172,6 +200,7 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
             authInfo={this.props.authInfo}
             makePaymentObj={this.state.makePaymentObj}
             cancelCB={this.cancelCallBack}
+            maintenanceStatus={this.props.maintenanceStatus}
         />
     } else if (this.state.currentPage === 'OpenDispute') {
         DisplayPage = <OpenDispute
@@ -185,6 +214,12 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
     
     return (
         <div>
+            <Dialog
+                dialogOpenStatus = {this.state.dialogOpenStatus}
+                dialogTitle = {this.state.dialogTitle}
+                dialogContent = {this.state.dialogContent}
+                closeCB = {this.closeDialog}
+            />
             {DisplayPage}
         </div>
       )
@@ -205,6 +240,7 @@ const mapDispatchToProps = dispatch =>
     getMySmartSpreadersList,
     getMyDisputes,
     getAllSSActiveList,
+    getMaintenanceStatus,
   }, dispatch)
 
 const mapStateToProps = state => ({
@@ -220,5 +256,6 @@ const mapStateToProps = state => ({
     mySmartSpreadersList: state.getIn(['RegistrationContainer', 'mySmartSpreadersList']).toJS(),
     myDisputes: state.getIn(['DisputesContainer', 'myDisputes']).toJS(),
     allActiveSSList: state.getIn(['PlcementsContainer', 'allActiveSSList']).toJS(),
+    maintenanceStatus: state.getIn(['RegistrationContainer', 'maintenanceStatus']).toJS(),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard))

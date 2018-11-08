@@ -137,6 +137,14 @@ openDispute = (paymentObject) => event => {
     this.props.viewDisputeCB(disputeObj)
  }
 
+ openMaintenanceScreen = event => {
+    this.setState({
+        dialogOpenStatus: true,
+        dialogTitle: this.props.maintenanceStatus.title,
+        dialogContent: this.props.maintenanceStatus.message
+    })
+ }
+
   render() {
     const { classes, authInfo, levelPayments } = this.props
     const { selectedLevel, displayList } = this.state
@@ -292,11 +300,23 @@ openDispute = (paymentObject) => event => {
                                                     {paymentObj.confirm_status == 'Pending' && 
                                                         <div>
                                                             <div>Payment paid on {getFormatedDate(paymentObj.paid_date)} | status : {paymentObj.confirm_status}</div>
-                                                            <div><Link className={classes.navLink} to={receivePaymentLink}> Confirm Payment </Link></div>
+                                                            <div>
+                                                                {this.props.maintenanceStatus.status !== 'Active' ? (
+                                                                    <span className={classes.navLink} onClick={this.openMaintenanceScreen}> Confirm Payment </span>
+                                                                ) : (
+                                                                    <Link className={classes.navLink} to={receivePaymentLink}> Confirm Payment </Link>
+                                                                )}
+                                                            </div>
                                                             {disputeObj ? (
                                                                 <div className={classes.navLink} onClick={this.viewDispute(disputeObj)}>View Dispute</div>
                                                             ) : (
-                                                                <div className={classes.navLink} onClick={this.openDispute(paymentObj)}>Open Dispute</div>
+                                                                <div>
+                                                                    {this.props.maintenanceStatus.status !== 'Active' ? (
+                                                                        <span className={classes.navLink} onClick={this.openMaintenanceScreen}> Open Dispute </span>
+                                                                    ) : (
+                                                                        <div className={classes.navLink} onClick={this.openDispute(paymentObj)}>Open Dispute</div>
+                                                                    )}
+                                                                </div>
                                                             )}
                                                         </div>
                                                     }

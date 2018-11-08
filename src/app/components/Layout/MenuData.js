@@ -14,6 +14,7 @@ import HelpIcon from '@material-ui/icons/HelpOutline'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import Notification from '@material-ui/icons/NotificationsNone'
 import People from '@material-ui/icons/People'
+import TransferWithinAStation from '@material-ui/icons/TransferWithinAStation'
 
 let menuDefinitions = []
 const getmenu = (props) => {
@@ -31,6 +32,7 @@ const getmenu = (props) => {
         menuDefinitions.push({ title: 'Users', to: '/users', icon: <People className={props.color} /> })
         menuDefinitions.push({ title: 'Disputes', to: '/disputes', icon: <MaintainIcon className={props.color} /> })
         menuDefinitions.push({ title: 'Smart Spreaders', to: '/smart_spreaders', icon: <DemoIcon className={props.color} /> })
+        menuDefinitions.push({ title: 'Maintenance', to: '/maintenance', icon: <TransferWithinAStation className={props.color} /> })
     }
   }
 }
