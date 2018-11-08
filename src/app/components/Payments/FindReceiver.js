@@ -110,7 +110,7 @@ export class FindReceiver extends React.Component {
                                     <Grid item xs={12}>
                                         {userDetails.status == 'Blocked' ? (
                                             <div>
-                                                <b>{userDetails.username}</b> is in <b>Blocked</b> state, due to some mis gudance about the system, so <b>{userDetails.username}</b> is not eligible <br />
+                                                <b>{userDetails.username}</b> is in <b>Blocked</b> state, due to some mis guidance about the system, so <b>{userDetails.username}</b> is not eligible <br />
                                                 to receive any payment from <b>level-{this.props.receiverInfo.payment_level}</b>, you can wait till <b>{userDetails.username}</b> is become a <b>Active</b> state
                                                 <br /><br />OR<br /><br />
                                                 You can pay to the smart spreader (information given below), to make process faster.<br /><br />
@@ -141,10 +141,9 @@ export class FindReceiver extends React.Component {
                                                 <Grid item xs={4}>
                                                     Bank A/C Name: {smartSpreaderInfo.bank_details.bank_ac_name}
                                                     <br />Bank Account No: {smartSpreaderInfo.bank_details.bank_ac_number}
-                                                    <br />Bank Account No: {smartSpreaderInfo.bank_details.bank_ac_number}
-                                                    <br />Bank Name: {smartSpreaderInfo.bank_details.bank_ac_number}
-                                                    <br />Branch Name: {smartSpreaderInfo.bank_details.bank_ac_number}
-                                                    <br />IFSC Code: {smartSpreaderInfo.bank_details.bank_ac_number}
+                                                    <br />Bank Name: {smartSpreaderInfo.bank_details.bank_name}
+                                                    <br />Branch Name: {smartSpreaderInfo.bank_details.bank_branch}
+                                                    <br />IFSC Code: {smartSpreaderInfo.bank_details.bank_ifsc_code}
                                                 </Grid>
                                             }
                                             {smartSpreaderInfo.bank_details && 
