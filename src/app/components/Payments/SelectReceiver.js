@@ -130,10 +130,9 @@ export class SelectReceiver extends React.Component {
                                         <Grid item xs={4}>
                                             Bank A/C Name: {smartSpreaderInfo.bank_details.bank_ac_name}
                                             <br />Bank Account No: {smartSpreaderInfo.bank_details.bank_ac_number}
-                                            <br />Bank Account No: {smartSpreaderInfo.bank_details.bank_ac_number}
-                                            <br />Bank Name: {smartSpreaderInfo.bank_details.bank_ac_number}
-                                            <br />Branch Name: {smartSpreaderInfo.bank_details.bank_ac_number}
-                                            <br />IFSC Code: {smartSpreaderInfo.bank_details.bank_ac_number}<br />
+                                            <br />Bank Name: {smartSpreaderInfo.bank_details.bank_name}
+                                            <br />Branch Name: {smartSpreaderInfo.bank_details.bank_branch}
+                                            <br />IFSC Code: {smartSpreaderInfo.bank_details.bank_ifsc_code}
                                             <br />Paytm Wallet : {smartSpreaderInfo.bank_details.wallet_paytm_name} ({smartSpreaderInfo.bank_details.wallet_paytm_number})
                                             <br />Google Pay : {smartSpreaderInfo.bank_details.wallet_gp_name} ({smartSpreaderInfo.bank_details.wallet_gp_number})
                                         </Grid>
