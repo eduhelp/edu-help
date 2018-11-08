@@ -254,7 +254,7 @@ class ConfirmReceiver extends React.Component {
                                 onClick={this.props.cancelCB}
                                 className={classes.button}
                                 >
-                                Bank to Dashboard
+                                Back to Dashboard
                                 </Button>
                                 {(this.props.smartSpreaderInfo.message !== 'undefined' && this.props.smartSpreaderInfo.message !== 'no smart spreader') ? (
                                     <span>
