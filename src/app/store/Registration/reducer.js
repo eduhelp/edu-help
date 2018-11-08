@@ -11,6 +11,7 @@ import {
   SMART_SPREADERS_SUCCESS,
   MY_REFERRALS_SUCCESS,
   MY_SMART_SPREADER_LIST_SUCCESS,
+  GET_MAINTENANCE_STATUS,
 } from './actionType'
 import { setCookie, deleteCookie } from '../../components/Common/Utils'
 
@@ -28,7 +29,11 @@ export const initialState = fromJS({
   },
   smartSpreadersList: [],
   myReferrals: [],
-  mySmartSpreadersList: []
+  mySmartSpreadersList: [],
+  maintenanceStatus: {
+    admin_id: 1,
+    status: 'Active'
+  }
 })
 
 
@@ -90,7 +95,11 @@ export default function usersReducer (state = initialState, action) {
     case MY_SMART_SPREADER_LIST_SUCCESS:
       return state
         .set('mySmartSpreadersList', fromJS(action.data))
-        
+    
+    case GET_MAINTENANCE_STATUS:
+      return state
+        .set('maintenanceStatus', fromJS(action.data))
+
     default:
       return state
   }

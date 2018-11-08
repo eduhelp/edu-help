@@ -10,6 +10,7 @@ import {
   SMART_SPREADERS_SUCCESS,
   MY_REFERRALS_SUCCESS,
   MY_SMART_SPREADER_LIST_SUCCESS,
+  GET_MAINTENANCE_STATUS,
 } from './actionType'
 import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
 // import config from './../../config/apiConfig'
@@ -185,6 +186,34 @@ export function changeUserStatus(payload) {
     .then((resp) => {
       dispatch({ data: resp, type: GET_USERS_SUCCESS })
       const sucMsg = {status: true, variant: 'success', message: 'user status successfully chagned'}
+      dispatch({ snackMessage: sucMsg, type: TOGGLE_SNACKBAR })
+    })
+    .catch((error) => {
+      const errMsg = {status: true, variant: 'error', message: 'problem while change user status'}
+      dispatch({ snackMessage: errMsg, type: TOGGLE_SNACKBAR })
+    })
+  }
+}
+
+export function getMaintenanceStatus() {
+  return dispatch => {
+    return postService('users/getMaintenanceStatus', {})
+    .then((resp) => {
+      dispatch({ data: resp, type: GET_MAINTENANCE_STATUS })
+    })
+    .catch((error) => {
+      const errMsg = {status: true, variant: 'error', message: 'problem while change user status'}
+      dispatch({ snackMessage: errMsg, type: TOGGLE_SNACKBAR })
+    })
+  }
+}
+
+export function updateMaintenance(payload) {
+  return dispatch => {
+    return postService('users/updateMaintenance', payload)
+    .then((resp) => {
+      dispatch({ data: resp, type: GET_MAINTENANCE_STATUS })
+      const sucMsg = {status: true, variant: 'success', message: 'Mainenenace status successfully chagned'}
       dispatch({ snackMessage: sucMsg, type: TOGGLE_SNACKBAR })
     })
     .catch((error) => {

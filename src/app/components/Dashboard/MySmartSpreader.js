@@ -88,6 +88,9 @@ export class MySmartSpreader extends React.Component {
     const myLevel = _.findIndex(levelActiveObj[0].list, (n) => { return n.user_id == this.props.authInfo.data.user_id }) + 1
     const totalCount = levelActiveObj[0].list.length
     this.setState({displayList: activeList,selectedStatus: 'Active', myLevel, totalCount})
+
+    console.log('this.props.maintenanceStatus >> ')
+    console.log(this.props.maintenanceStatus)
   }
 
   handleStatusChange = event => {
@@ -122,6 +125,14 @@ export class MySmartSpreader extends React.Component {
       dialogContent: ''
     })
 }
+
+openMaintenanceScreen = event => {
+    this.setState({
+        dialogOpenStatus: true,
+        dialogTitle: this.props.maintenanceStatus.title,
+        dialogContent: this.props.maintenanceStatus.message
+    })
+ }
 
   render() {
     const { classes, mySmartSpreadersList } = this.props
@@ -265,7 +276,13 @@ export class MySmartSpreader extends React.Component {
                                         <Grid item xs={2}>
                                             {option.current_status}
                                             {option.current_status == 'InProgress' && 
-                                                <div><Link className={classes.navLink} to={receivePaymentLink}> Confirm Payment </Link></div>
+                                                <div>
+                                                    {this.props.maintenanceStatus.status !== 'Active' ? (
+                                                        <span className={classes.navLink} onClick={this.openMaintenanceScreen}> Confirm Payment </span>
+                                                    ) : (
+                                                        <Link className={classes.navLink} to={receivePaymentLink}> Confirm Payment </Link>
+                                                    )}
+                                                </div>
                                             }
                                         </Grid>
                                         <Grid item xs={2}>

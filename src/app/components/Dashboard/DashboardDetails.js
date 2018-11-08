@@ -147,6 +147,7 @@ export class DashboardDetails extends React.Component {
                     viewDisputeCB={this.showDisputeDetails}
                     myDisputes={this.props.myDisputes}
                     classes={classes}
+                    maintenanceStatus={this.props.maintenanceStatus}
                 />
             </TabContainer>
         }
@@ -161,6 +162,7 @@ export class DashboardDetails extends React.Component {
                     mySmartSpreadersList={this.props.mySmartSpreadersList}
                     allActiveSSList={this.props.allActiveSSList}
                     classes={classes}
+                    maintenanceStatus={this.props.maintenanceStatus}
                 />
             </TabContainer>
         }

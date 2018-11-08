@@ -24,14 +24,30 @@ app.use(bodyParser.json());
 
 var router = express.Router();
 
+function handleRedirect(req,res) {
+    const targetUrl = 'http://google.com'
+    res.redirect(targetUrl)
+}
+
+/*
+app.get('*', function(req, res, next) {
+    console.log('welcomeeeee ')
+    var curHost = req.headers.referer.split(":")[0]
+    console.log(curHost)
+    if (curHost == 'http') {
+        console.log('ready to redirect')
+        window.location.href = 'http://google.com'
+        res.redirect(301, '/about_plan');
+        console.log('redirect - done')
+    } else {
+        return next();
+    }
+})
+*/
+
 router.get('/screenshots/:name', function(req,res) {
     var name = req.params.name;
     res.sendFile(path.join(__dirname+"./../screenshots/"+name));
-});
-
-router.get('/dashboard/:page', function(req,res) {
-    var name = req.params.name;
-    res.sendFile(path.join(__dirname+"./../src/index.html"));
 });
 
 router.get('/*', function(req,res) {
@@ -44,26 +60,18 @@ app.use("/payments", payments)
 app.use("/placements", placements)
 app.use("/disputes", disputes)
 
-var privateKey  = fs.readFileSync('/root/ssl/key.pem', 'utf8');
-var certificate = fs.readFileSync('/root/ssl/cert.pem', 'utf8');
+// var privateKey  = fs.readFileSync('/root/ssl/key.pem', 'utf8');
+// var certificate = fs.readFileSync('/root/ssl/cert.pem', 'utf8');
 
-var credentials = { key: privateKey, cert: certificate };
+// var credentials = { key: privateKey, cert: certificate };
 
 // your express configuration here
 
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
+// var httpServer = http.createServer(app);
+// var httpsServer = https.createServer(credentials, app);
 
-app.use(function(req,resp,next){
-    if (req.headers['x-forwarded-proto'] == 'http') {
-        return resp.redirect(301, 'https://' + req.headers.host + '/');
-    } else {
-        return next();
-    }
-  });
-
-httpServer.listen(80);
-httpsServer.listen(443);
+// httpServer.listen(80);
+// httpsServer.listen(443);
 
 /*
 var options = {
@@ -78,5 +86,5 @@ var options = {
     }); */
   
 // app.listen(80);
-//app.listen(9000);
-console.log('server started... ');
+app.listen(9000);
+console.log('server started... 123');

@@ -176,4 +176,28 @@ router.post('/getMySmartSpreadersList', async function(req, res) {
     }
 });
 
+async function maintenanceStatus (res) {
+    var adminQuery = "select * from admin where admin_id=1"
+    var adminRes = await pg_connect.connectDB(adminQuery, res)
+    return adminRes[0]
+    
+}
+router.post('/getMaintenanceStatus', async function(req, res) {
+    var adminRes = await maintenanceStatus() 
+    if(adminRes) {
+        res.status(200).send(adminRes)
+    }
+});
+
+router.post('/updateMaintenance', async function(req, res) {
+    var adminQuery = "update admin set status='"+req.body.status+"', message='"+req.body.message+"', title='"+req.body.title+"' where admin_id=1"
+    var adminUpRes = await pg_connect.connectDB(adminQuery, res)
+    var adminRes = await maintenanceStatus() 
+    if(adminRes) {
+        res.status(200).send(adminRes)
+    }
+});
+
+
+
 module.exports = router
