@@ -104,3 +104,17 @@ export function ValidateEmail (emailField) {
 export function sortData (order, orderBy) {
     return order === 'desc' ? (a, b) => b[orderBy] - a[orderBy] : (a, b) => a[orderBy] - b[orderBy]
 }
+
+export function compareSSDate (givenDate) {
+    var date = new Date();
+    date.setDate(date.getDate() - 3);
+    var mydate=new Date(givenDate);
+    if(date>mydate)
+    {
+        return "greater"
+    }
+    else
+    {
+        return "smaller"
+    }
+}

@@ -1,1 +1,2 @@
 export const TOGGLE_SNACKBAR = 'TOGGLE_SNACKBAR'
+export const TOGGLE_LOADER = 'TOGGLE_LOADER'

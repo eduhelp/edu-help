@@ -84,18 +84,27 @@ export class DisplayTreeInfo extends React.Component {
                 return (
                     <Grid item xs={12} className={index %2 ? classes.rowEven : classes.rowOdd} key={index}>
                         <Grid container>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <span className={classes.navLink} onClick={this.showUserDetails(option.nodeInfo)}>
-                                    {option.nodeInfo.username} 
+                                    {option.nodeInfo.username} ({option.nodeInfo.user_id})
                                 </span>
                             </Grid>
-                             <Grid item xs={4}>
+                             <Grid item xs={2}>
                                 <span className={classes.navLink} onClick={this.getUserDetails(option.nodeInfo.sponsor_id)}>
-                                    {option.nodeInfo.sponsor_name}
+                                    {option.nodeInfo.sponsor_name} ({option.nodeInfo.sponsor_id})
                                 </span>
                             </Grid>
-                            
-                            
+                            <Grid item xs={3}>
+                                <span className={classes.navLink} onClick={this.showUserDetails(option.nodeInfo.parent_id)}>
+                                    {option.nodeInfo.parent_name} ({option.nodeInfo.parent_id})
+                                </span>
+                            </Grid>
+                            <Grid item xs={2}>
+                                {option.nodeInfo.receive_level_status}
+                            </Grid>
+                            <Grid item xs={2}>
+                                {option.nodeInfo.give_level_status}
+                            </Grid>
                         </Grid>
                     </Grid>
                     

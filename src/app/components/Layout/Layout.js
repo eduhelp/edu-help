@@ -82,10 +82,14 @@ export class Layout extends React.Component {
           openStatus={this.props.snackbarMessage.status}
           toggleSnackBar={this.props.toggleSnackBar}
         />
-        <MiniDrawer 
-          authInfo = {this.props.authInfo}
-          userLogout = {this.props.userLogout}
-        />
+        {this.props.loaderStatus.status ? (
+          <div>Loading.....</div>
+        ) : (
+          <MiniDrawer 
+            authInfo = {this.props.authInfo}
+            userLogout = {this.props.userLogout}
+          />
+        )}
       </div>
     )
   }
@@ -101,6 +105,7 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   authInfo: state.getIn(['RegistrationContainer', 'authInfo']).toJS(),
   snackbarMessage: state.getIn(['SnackbarContainer', 'snackbarMessage']).toJS(),
+  loaderStatus: state.getIn(['SnackbarContainer', 'loaderStatus']).toJS(),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Layout))

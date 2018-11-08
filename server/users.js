@@ -63,6 +63,8 @@ router.post('/userLogin', async function(req, res) {
         } else {
             result[0]['bank_details'] = await getBankDetails(result[0].user_id, res)
             result[0]['sponsor_name'] = await getSponsorName(result[0].sponsor_id, res)
+            result[0]['receive_level_status'] = await getLevelStatus('to_id', result[0].user_id, res)
+            result[0]['give_level_status'] = await getLevelStatus('from_id', result[0].user_id, res)
             res.status(200).send(result[0])
         }
     }
@@ -89,15 +91,28 @@ router.post('/getUserDetails', async function(req, res) {
     }
 });
 
+async function getLevelStatus(status_for,user_id, res) {
+    var levQuery = "select max(payment_level) from payments where confirm_status='Confirmed' and "+status_for+"="+user_id
+    var levResult = await pg_connect.connectDB(levQuery, res)
+    if(levResult[0].max !== null) {
+        return 'Level '+levResult[0].max
+    } else {
+        return 'Level 0'
+    }
+}
+
 async function getAuthInfoDetails (user_id, res) {
     var selQuery = "select "+userInfoList+" from users where user_id="+user_id
     var selResult = await pg_connect.connectDB(selQuery, res)
     if (selResult) {
         selResult[0]['bank_details'] = await getBankDetails(selResult[0].user_id, res)
         selResult[0]['sponsor_name'] = await getSponsorName(selResult[0].sponsor_id, res)
+        selResult[0]['receive_level_status'] = await getLevelStatus('to_id', selResult[0].user_id, res)
+        selResult[0]['give_level_status'] = await getLevelStatus('from_id', selResult[0].user_id, res)
         res.status(200).send(selResult[0])
     }
 }
+
 router.post('/updateUserInfo', async function(req, res) {
     var curQuery = "update users set fullname='"+req.body.fullname+"', email='"+req.body.email+"',mobile='"+req.body.mobile+"', dob='"+req.body.dob+"', gender='"+req.body.gender+"', country='"+req.body.country+"', city='"+req.body.city+"', state='"+req.body.state+"', address='"+req.body.address+"', pincode='"+req.body.pincode+"' where user_id="+req.body.user_id
     var result = await pg_connect.connectDB(curQuery, res)
@@ -166,11 +181,25 @@ router.post('/myReferrals', async function(req, res) {
 
 router.post('/getMySmartSpreadersList', async function(req, res) {
     // curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id left join payments t3 on t1.payment_id = t3.payment_id where t1.user_id="+req.body.user_id+" order by t1.spreader_id"
-    curQuery = "select * from smart_spreaders t1 left join users t2 on t1.user_id = t2.user_id where t1.user_id="+req.body.user_id+" order by t1.spreader_id"
+    curQuery = "select * from smart_spreaders where user_id="+req.body.user_id+" order by spreader_id"
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
-        for(var i=0; i<result.length; i++) {    
-            result[i]['sponsor_name'] = await getSponsorName(result[i].sponsor_id, res)
+        for(var i=0; i<result.length; i++) {
+            if(result[i].current_status !== 'Active') {
+                var selQuery = "select * from payments where payment_id="+result[i].payment_id
+                var selResult = await pg_connect.connectDB(selQuery, res)
+                if(selResult.length >= 1) {
+                    result[i]['paymentInfo'] = selResult[0]
+                    result[i]['paymentInfo']['giver_name'] = await getSponsorName(selResult[0].from_id, res)
+                    result[i]['paymentInfo']['receiver_name'] = await getSponsorName(selResult[0].to_id, res)
+                    curQuery = "select "+userInfoList+" from users where user_id="+selResult[0].from_id
+                    var userResult = await pg_connect.connectDB(curQuery, res)
+                    if (userResult) {
+                        result[i]['giverInfo'] = userResult[0]
+                        result[i]['giverInfo']['sponsor_name'] = await getSponsorName(userResult[0].sponsor_id, res)
+                    }
+                }
+            }
         }
         res.status(200).send(result)
     }

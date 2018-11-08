@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import { getMyTree, getMyTopLevel } from '../../store/Placements/actionCreator'
+import { getMyTree } from '../../store/Placements/actionCreator'
 import DisplayTreeInfo from './DisplayTreeInfo'
 
 const styles = {
@@ -47,13 +47,9 @@ export class MyTree extends React.Component {
           user_id : this.props.authInfo.data.user_id,
           max_level: 7
       }
-      this.props.getMyTree(sendData)
-      this.props.getMyTopLevel(sendData)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log('nextProps my tree')
-    console.log(nextProps.MyTree)
+      if (this.props.myTree.length == 0) {
+            this.props.getMyTree(sendData)
+        } 
   }
 
   render() {
@@ -68,14 +64,20 @@ export class MyTree extends React.Component {
                     <Grid item xs={2}>
                         Level
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={2}>
                         User Name
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={2}>
                         Sponser Name
                     </Grid>
-                    <Grid item xs={3}>
-                        Active Level
+                    <Grid item xs={2}>
+                        Placed Under
+                    </Grid>
+                    <Grid item xs={2}>
+                        Receive Level Status
+                    </Grid>
+                    <Grid item xs={2}>
+                        Give Level Status
                     </Grid>
                 </Grid>
             </Grid>
@@ -86,7 +88,7 @@ export class MyTree extends React.Component {
                         <Grid item xs={2}>
                             Level{key}
                         </Grid>
-                        <Grid item xs={8}>
+                        <Grid item xs={10}>
                             <DisplayTreeInfo 
                                 details={group_levels[key]}
                             />
@@ -105,12 +107,10 @@ export class MyTree extends React.Component {
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
       getMyTree,
-      getMyTopLevel,
   }, dispatch)
 
 const mapStateToProps = state => ({
     authInfo: state.getIn(['RegistrationContainer', 'authInfo']).toJS(),
     myTree: state.getIn(['PlcementsContainer', 'myTree']).toJS(),
-    myTopLevel: state.getIn(['PlcementsContainer', 'myTopLevel']).toJS(),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(MyTree))

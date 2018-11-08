@@ -68,7 +68,7 @@ export class PaymentDetails extends React.Component {
             <Grid item xs={12} className={classes.rowDetails}>
                 <Grid container>
                     <Grid item xs={6}>
-                        From Bank -> Tp Bank 
+                        From Bank -> To Bank 
                     </Grid>
                     <Grid item xs={6}>
                         {details.from_bank} -> {details.to_bank}
@@ -91,7 +91,7 @@ export class PaymentDetails extends React.Component {
                         Receiver Type
                     </Grid>
                     <Grid item xs={6}>
-                        {'Level of'} {details.receiver_type}
+                        {details.receiver_type}
                     </Grid>
                 </Grid>
             </Grid>

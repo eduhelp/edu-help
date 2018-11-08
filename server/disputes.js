@@ -114,10 +114,12 @@ router.post('/getAllDisputes', async function(req, res) {
  router.post('/cancelTransaction', async function(req, res) {
     var curQuery = "update payments set confirm_status='Cancelled', confirm_date='"+pg_connect.getCurrentDate()+"' where payment_id="+req.body.payment_id
     var result = await pg_connect.connectDB(curQuery, res)
-    var disQuery = "update disputes set dispute_status='Closed', reply_message='payment cancelled by admin', replied_date='"+pg_connect.getCurrentDate()+"' where dispute_id="+req.body.dispute_id
-    var disResult = await pg_connect.connectDB(disQuery, res)
+    if (req.body.dispute_id) {
+        var disQuery = "update disputes set dispute_status='Closed', reply_message='payment cancelled by admin', replied_date='"+pg_connect.getCurrentDate()+"' where dispute_id="+req.body.dispute_id
+        var disResult = await pg_connect.connectDB(disQuery, res)
+    }
     if(req.body.receiver_type == 'SmartSpreader') {
-        var smQuery = "update smart_spreaders set current_status='Active' where user_id="+req.body.receiver_id+" and current_status='InProgress' and payment_level="+req.body.payment_level
+        var smQuery = "update smart_spreaders set current_status='Active', payment_id=null where user_id="+req.body.receiver_id+" and current_status='InProgress' and payment_level="+req.body.payment_level
         var smResult = await pg_connect.connectDB(smQuery, res)
     }
     res.status(200).send({message: 'transaction cancelled'})

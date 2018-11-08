@@ -267,7 +267,7 @@ router.post('/addConfirmReceiver', async function(req, res) {
     var checkQuery = "select count(*) from payments where from_id="+req.body.from_id+" and to_id="+req.body.to_id+" and payment_level="+req.body.payment_level
     var checkResult = await pg_connect.connectDB(checkQuery, res)
     if(checkResult[0].count == 0) {
-        var insQuery = "insert into payments(from_id, to_id, payment_level, payment_value, paid_status, receiver_type, receiver_confirm_date, confirm_status) values("+req.body.from_id+","+req.body.to_id+","+req.body.payment_level+","+req.body.payment_value+",'Pending','"+req.body.receiver_type+"','"+pg_connect.getCurrentDate()+"', 'Initiated')"
+        var insQuery = "insert into payments(from_id, to_id, payment_level, payment_value, paid_status, receiver_type, receiver_confirm_date, confirm_status) values("+req.body.from_id+","+req.body.to_id+","+req.body.payment_level+","+req.body.payment_value+",'Pending','"+req.body.receiver_type+"','"+pg_connect.getCurrentDate()+"', 'Initiated')  returning payment_id"
         if(req.body.receiver_type == 'RootParent') {
             var result = await pg_connect.connectDB(insQuery, res)
             if(result) {
@@ -278,11 +278,11 @@ router.post('/addConfirmReceiver', async function(req, res) {
             var result = await pg_connect.connectDB(curQuery, res)
             if(result) {
                 if(result[0].user_id == req.body.to_id) {
-                    var updQuery = "update smart_spreaders set current_status='InProgress' where spreader_id="+result[0].spreader_id
-                    var updResult = await pg_connect.connectDB(updQuery, res)
-                    if(updResult) {
-                        var result = await pg_connect.connectDB(insQuery, res)
-                        if(result) {
+                    var result = await pg_connect.connectDB(insQuery, res)
+                    if(result) {
+                        var updQuery = "update smart_spreaders set current_status='InProgress', payment_id="+result[0].payment_id+" where spreader_id="+result[0].spreader_id
+                        var updResult = await pg_connect.connectDB(updQuery, res)
+                        if(updResult) {
                             res.status(200).send({message: 'receiver confirmed from smart spreader'})
                         }
                     }
