@@ -55,7 +55,7 @@ async function getBankDetails(user_id, res) {
 }
 
 router.post('/userLogin', async function(req, res) {
-    var curQuery = "select "+userInfoList+" from users where (username='"+req.body.username+"' or mobile='"+req.body.username+"') and pwd='"+req.body.pwd+"'"
+    var curQuery = "select * from users where (username='"+req.body.username+"' or mobile='"+req.body.username+"') and pwd='"+req.body.pwd+"'"
     var result = await pg_connect.connectDB(curQuery, res)
     if(result) {
         if(result.length === 0) {
@@ -102,7 +102,7 @@ async function getLevelStatus(status_for,user_id, res) {
 }
 
 async function getAuthInfoDetails (user_id, res) {
-    var selQuery = "select "+userInfoList+" from users where user_id="+user_id
+    var selQuery = "select * from users where user_id="+user_id
     var selResult = await pg_connect.connectDB(selQuery, res)
     if (selResult) {
         selResult[0]['bank_details'] = await getBankDetails(selResult[0].user_id, res)
