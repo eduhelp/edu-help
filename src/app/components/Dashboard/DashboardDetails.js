@@ -6,7 +6,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 
 import UserStatus from './UserStatus'
-import LevelStatus from './LevelStatus'
+// import LevelStatus from './LevelStatus'
 import MyReferrals from './MyReferrals'
 import GiveHelp from './GiveHelp'
 import ReceiveHelp from './ReceiveHelp'
@@ -39,29 +39,12 @@ export class DashboardDetails extends React.Component {
         this.setState({tabValue: 2})
       }
   }
-  componentWillReceiveProps(nextProps) {
-    console.log('authInfo')
-    console.log(nextProps.authInfo)
-    //console.log('sponsorPayments')
-    //console.log(nextProps.sponsorPayments)
-    console.log('myTree')
-    console.log(nextProps.myTree)
-    console.log('myTopLevel')
-    console.log(nextProps.myTopLevel)
-    console.log('myPaymentList')
-    console.log(nextProps.myPaymentList)
-    console.log('myReceivedList')
-    console.log(nextProps.myReceivedList)
-    console.log('myDisputes')
-    console.log(nextProps.myDisputes)
-  }
 
   handleChange = (event, tabValue) => {
     this.setState({ tabValue, disputeObj: '', disputePage: '' });
   };
 
   confirmReceiver = (levelIndex, treeParentId, levelEligibility, treeParentInfo) => event => {
-      console.log('calling confirmReceiver')
     this.props.confirmReceiverCB('ConfirmReceiver',levelIndex, treeParentId, levelEligibility, treeParentInfo)
   }
 
@@ -74,7 +57,7 @@ export class DashboardDetails extends React.Component {
   }
 
   showDisputeDetails = (disputeObj) => {
-      this.setState({disputeObj: disputeObj, disputePage: 'details', tabValue: 6})
+      this.setState({disputeObj: disputeObj, disputePage: 'details', tabValue: 4})
   }
 
   cancelDetailsPage = () => {
@@ -84,7 +67,6 @@ export class DashboardDetails extends React.Component {
   render() {
     const { classes } = this.props
     const { tabValue, disputePage, disputeObj } = this.state
-    console.log(disputePage)
     return (
         <div>
         <UserStatus 
@@ -93,7 +75,6 @@ export class DashboardDetails extends React.Component {
         />
         <AppBar position="static">
             <Tabs value={tabValue} onChange={this.handleChange} className={classes.tabs}>
-                <Tab label="Level Status" />
                 <Tab label="My Referrals" />
                 <Tab label="Give help" />
                 <Tab label="Receive help" />
@@ -101,15 +82,15 @@ export class DashboardDetails extends React.Component {
                 <Tab label="Disputes" />
             </Tabs>
         </AppBar>
-        {tabValue === 0 && 
+        {/*tabValue === 0 && 
             <TabContainer>
                 <LevelStatus 
                     myTree = {this.props.myTree}
                     classes={classes}
                 />
             </TabContainer>
-        }
-        {tabValue === 1 && 
+        */}
+        {tabValue === 0 && 
             <TabContainer>
                 <MyReferrals 
                     myReferrals={this.props.myReferrals}
@@ -118,7 +99,7 @@ export class DashboardDetails extends React.Component {
                 />
             </TabContainer>
         }
-        {tabValue === 2 && 
+        {tabValue === 1 && 
             <TabContainer>
                 <GiveHelp 
                     authInfo={this.props.authInfo}
@@ -135,7 +116,7 @@ export class DashboardDetails extends React.Component {
                 />
             </TabContainer>
         }
-        {tabValue === 3 && 
+        {tabValue === 2 && 
             <TabContainer>
                 <ReceiveHelp 
                     authInfo={this.props.authInfo}
@@ -151,7 +132,7 @@ export class DashboardDetails extends React.Component {
                 />
             </TabContainer>
         }
-        {tabValue === 4 && 
+        {tabValue === 3 && 
             <TabContainer>
                 <MySmartSpreader
                     authInfo={this.props.authInfo}
@@ -162,11 +143,15 @@ export class DashboardDetails extends React.Component {
                     mySmartSpreadersList={this.props.mySmartSpreadersList}
                     allActiveSSList={this.props.allActiveSSList}
                     classes={classes}
+                    openDisputeCB={this.props.openDisputeCB}
+                    viewDisputeCB={this.showDisputeDetails}
                     maintenanceStatus={this.props.maintenanceStatus}
+                    myDisputes={this.props.myDisputes}
+                    cancelTransaction={this.props.cancelTransaction}
                 />
             </TabContainer>
         }
-        {tabValue === 5 && 
+        {tabValue === 4 && 
             <TabContainer>
                 {disputePage == 'details' ? (
                     <DisputeDetails

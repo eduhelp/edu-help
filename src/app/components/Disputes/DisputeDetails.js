@@ -202,7 +202,7 @@ export class DisputeDetails extends React.Component {
                                     Dispute Type : {disputeObj.dispute_type}
                                 </Grid>
                                 <Grid item xs={3}>
-                                    Dispute from > to : {disputeObj.disputeFromUserInfo.username} ({disputeObj.disputeFromUserInfo.user_id}) / {disputeObj.disputeToUserInfo.username} - ({disputeObj.disputeToUserInfo.user_id})
+                                    Dispute from > to : {disputeObj.disputeFromUserInfo.username} / {disputeObj.disputeToUserInfo.username}
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -216,7 +216,14 @@ export class DisputeDetails extends React.Component {
                                     initial message: {disputeObj.message}
                                 </Grid>
                                 {disputeComments.map((option, index) => {
-                                    const addedBy = (option.added_by == '1') ? 'admin' : option.added_by
+                                    let addedBy = ''
+                                    if (option.added_by == '1') {
+                                        addedBy = 'admin'
+                                    } else if(disputeObj.disputeFromUserInfo.user_id == option.added_by) {
+                                        addedBy = disputeObj.disputeFromUserInfo.username
+                                    } else if(disputeObj.disputeToUserInfo.user_id == option.added_by) {
+                                        addedBy = disputeObj.disputeToUserInfo.username
+                                    } 
                                     return (
                                         <Grid item xs={12} className={(index % 2 ? classes.rowOdd : classes.rowEven)}>
                                             {option.message} <br/>

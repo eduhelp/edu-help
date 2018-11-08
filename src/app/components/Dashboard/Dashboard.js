@@ -7,10 +7,12 @@ import { getMyTree, getMyTopLevel, getActiveSmartSpreader, getAllSSActiveList } 
 import { getUserDetails, getMyReferrals, getMySmartSpreadersList, getMaintenanceStatus } from '../../store/Registration/actionCreator'
 import { getReceivedPaymentList, getMyPaymentList, getLevelPayments, getReceivedPayments } from '../../store/Payments/actionCreator'
 import { getMyDisputes } from '../../store/Disputes/actionCreator'
+import { toggleLoader } from '../../store/Snackbar/actionCreator'
 import ConfirmReceiver from '../Payments/ConfirmReceiver';
 import MakePayment from "../Payments/MakePayment"
 import OpenDispute from '../Disputes/OpenDispute'
 import Dialog from '../Common/Dialog'
+import { cancelTransaction } from '../../store/Disputes/actionCreator'
 
 const styles = {
   root: {
@@ -69,16 +71,23 @@ export class Dashboard extends React.Component {
 
 
   componentWillMount() {
+    this.props.toggleLoader(true)
     var sendData = {
         user_id: this.props.authInfo.data.user_id,
         max_level: 7
     }
-    this.props.getMyTree(sendData)
-    this.props.getMyTopLevel(sendData)
-    var sponsorData = {
-      user_id: this.props.authInfo.data.sponsor_id,
+
+    if (this.props.myTree.length == 0) {
+        this.props.getMyTree(sendData)
+    } 
+    if (this.props.myTopLevel.length == 0) {
+        this.props.getMyTopLevel(sendData)
     }
-    this.props.getUserDetails(sponsorData)
+    var sponsorData = {
+        user_id: this.props.authInfo.data.sponsor_id,
+    }
+    this.props.getUserDetails(sendData)
+
     var listData = {
       user_id: this.props.authInfo.data.user_id,
       payment_level: 1
@@ -92,6 +101,7 @@ export class Dashboard extends React.Component {
     this.props.getMyDisputes(sendData)
     this.props.getAllSSActiveList()
     this.props.getMaintenanceStatus()
+    this.props.toggleLoader(false)
     // this.props.getActiveSmartSpreader()
 }
 
@@ -180,6 +190,7 @@ confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, tree
             allActiveSSList={this.props.allActiveSSList}
             redirectPage={this.props.match.params.page}
             maintenanceStatus={this.props.maintenanceStatus}
+            cancelTransaction={this.props.cancelTransaction}
         />
     } else if (this.state.currentPage === 'ConfirmReceiver') {
         var levelObj = _.find(this.props.levelPayments, (n) => { return n.level_index == this.state.levelIndex} )
@@ -241,6 +252,8 @@ const mapDispatchToProps = dispatch =>
     getMyDisputes,
     getAllSSActiveList,
     getMaintenanceStatus,
+    toggleLoader,
+    cancelTransaction,
   }, dispatch)
 
 const mapStateToProps = state => ({

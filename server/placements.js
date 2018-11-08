@@ -35,9 +35,21 @@ async function getMyTreeArray(sp_id, retArr, getLevel, res) {
     var curResult = await pg_connect.connectDB(curQuery, res)
     var curLevel = getLevel + 1
     for(var i=0; i<curResult.length; i++) {
+        // sponsor Info
         var curQuery = "select "+userInfoList+" from users where user_id="+curResult[i].user_id
         var result = await pg_connect.connectDB(curQuery, res)
         result[0]['sponsor_name'] = await getSponsorName(result[0].sponsor_id, res)
+
+        // placed under Info
+        var posQuery = "select * from positions where user_id="+curResult[i].user_id
+        var posResult = await pg_connect.connectDB(posQuery, res)
+        result[0]['parent_id'] = posResult[0].parent_id,
+        result[0]['parent_name'] = await getSponsorName(posResult[0].parent_id, res)
+
+        // Receive level status
+        result[0]['receive_level_status'] = await getLevelStatus('to_id', curResult[i].user_id, res)
+        result[0]['give_level_status'] = await getLevelStatus('from_id', curResult[i].user_id, res)
+
         var payQuery = "select * from payments where from_id="+curResult[i].user_id+" and payment_level=1  and confirm_status!='Cancelled'"
         var payResult = await pg_connect.connectDB(payQuery, res)
         for(var j=0; j<payResult.length; j++) {
@@ -64,6 +76,16 @@ async function getMyTreeArray(sp_id, retArr, getLevel, res) {
         await getMyTreeArray(curResult[i].user_id, retArr, curLevel, res)
     }
     return retArr
+}
+
+async function getLevelStatus(status_for,user_id, res) {
+    var levQuery = "select max(payment_level) from payments where confirm_status='Confirmed' and "+status_for+"="+user_id
+    var levResult = await pg_connect.connectDB(levQuery, res)
+    if(levResult[0].max !== null) {
+        return 'Level '+levResult[0].max
+    } else {
+        return 'Level 0'
+    }
 }
 
 router.post('/myTopLevel', async function(req, res) {

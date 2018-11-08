@@ -74,8 +74,6 @@ export class GiveHelp extends React.Component {
   }
 
   openDispute = (paymentObject) => event => {
-    console.log('giver - payment obj')
-    console.log(paymentObject)
     this.props.openDisputeCB('OpenDispute', paymentObject, 'Giver')
   }
 
@@ -143,7 +141,7 @@ export class GiveHelp extends React.Component {
                                     Parent User Name
                                 </Grid>
                                 <Grid item xs={3}>
-                                    Bank Details
+                                    Payment to
                                 </Grid>
                                 <Grid item xs={3}>
                                     Status
@@ -157,13 +155,16 @@ export class GiveHelp extends React.Component {
                                     to sponsor
                                 </Grid>
                                 <Grid item xs={3}>
-                                    <span className={classes.navLink} onClick={this.showUserDetails(this.props.sponsorDetails)}>
-                                        {this.props.sponsorDetails.username} 
+                                    <span className={classes.navLink} onClick={this.showUserDetails(level1SponsorObject.receiverInfo)}>
+                                        {level1SponsorObject.receiverInfo.username} 
                                     </span>
                                 </Grid>
                                 <Grid item xs={3}>
                                     {(level1SponsorObject.receiverInfo.bank_details && 
-                                        <span className={classes.navLink} onClick={this.showBankDetails(this.props.sponsorDetails.username,level1SponsorObject.receiverInfo)}>Bank Details</span>
+                                        <div>
+                                            <div>mobile: {level1SponsorObject.receiverInfo.mobile}</div>
+                                            <span className={classes.navLink} onClick={this.showBankDetails(level1SponsorObject.receiverInfo.username,level1SponsorObject.receiverInfo)}>Bank Details</span>
+                                        </div>
                                     )}
                                 </Grid>
                                 <Grid item xs={3}>
@@ -236,12 +237,15 @@ export class GiveHelp extends React.Component {
                                         <Grid item xs={3}>
                                             <span className={classes.navLink} onClick={this.showUserDetails(option.nodeInfo)}>
                                                 {option.nodeInfo.username} 
-                                                
                                             </span>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            {(option.nodeInfo.bank_details && 
-                                                <span className={classes.navLink} onClick={this.showBankDetails(option.nodeInfo.username,option.nodeInfo)}>Bank Details</span>
+                                            {(curPaymentObject && 
+                                                <div>
+                                                    <div>{curPaymentObject.receiver_name} / {curPaymentObject.receiver_type}</div>
+                                                    <div>mobile: {curPaymentObject.receiverInfo.mobile}</div>
+                                                    <span className={classes.navLink} onClick={this.showBankDetails(curPaymentObject.receiver_name, curPaymentObject.receiverInfo)}>Bank Details</span>
+                                                </div>
                                             )}
                                         </Grid>
                                         <Grid item xs={3}>
@@ -264,13 +268,13 @@ export class GiveHelp extends React.Component {
                                                             <div className={classes.navLink} onClick={this.showPaymentDetails(curPaymentObject)}>Payment Details</div>
                                                         </div>
                                                     ) : (curPaymentObject.paid_status == 'Pending') ? (
-                                                        <span className={classes.navLink} onClick={this.makePayment(curPaymentObject)}>Make Payment</span>
+                                                        <span className={classes.navLink} onClick={this.makePayment(curPaymentObject)}>Enter Payment Transaction Details</span>
                                                     ) : (
                                                         <span>Issue with payment, contact admin</span>
                                                     )}
                                                 </div>
                                             ) : (
-                                                <span className={classes.navLink} onClick={this.confirmReceiver(option.level, option.nodeInfo.user_id, option.levelEligibility, option.nodeInfo)}>Confirm Receiver</span>
+                                                <span className={classes.navLink} onClick={this.confirmReceiver(option.level, option.nodeInfo.user_id, option.levelEligibility, option.nodeInfo)}>View & Confirm Receiver Details</span>
                                             )
                                             }
                                         </Grid>

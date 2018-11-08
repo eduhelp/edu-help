@@ -9,7 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Radio from '@material-ui/core/Radio';
-import { getFormatedDate } from '../Common/Utils'
+import { getFormatedDate, compareSSDate } from '../Common/Utils'
 import Dialog from '../Common/Dialog'
 import UserDetails from '../Dashboard/UserDetails'
 import PaymentDetails from '../Dashboard/PaymentDetails'
@@ -134,6 +134,26 @@ openMaintenanceScreen = event => {
     })
  }
 
+ openDispute = (paymentObject) => event => {
+    this.props.openDisputeCB('OpenDispute', paymentObject, 'Receiver')
+  }
+
+  viewDispute = (disputeObj) => event => {
+    this.props.viewDisputeCB(disputeObj)
+ }
+
+ cancelTransaction = (paymentInfo) => event => {
+    const sendData = {
+        payment_id: paymentInfo.payment_id,
+        user_id: this.props.authInfo.data.user_id,
+        receiver_type: paymentInfo.receiver_type,
+        payment_level: paymentInfo.payment_level,
+        receiver_id: paymentInfo.to_id
+    }
+    this.props.cancelTransaction(sendData)
+    window.location.replace('/dashboard')
+}
+
   render() {
     const { classes, mySmartSpreadersList } = this.props
     return (
@@ -224,21 +244,20 @@ openMaintenanceScreen = event => {
                     <Paper className={classes.paper}>
                         <Grid item xs={12} className={classes.rowHead}>
                             <Grid container>
-                                <Grid item xs={1}>
+                                <Grid item xs={2}>
                                     Level
                                 </Grid>
-                                <Grid item xs={1}>
-                                    ID
-                                </Grid>
                                 <Grid item xs={2}>
-                                    User Name
+                                    From User
                                 </Grid>
                                 <Grid item xs={2}>
                                     Status
                                 </Grid>
-                                <Grid item xs={2}>
-                                    Added Date
-                                </Grid>
+                                {this.state.selectedStatus !== 'Active' &&
+                                    <Grid item xs={2}>
+                                        Receiver Confirm Date
+                                    </Grid>
+                                }
                                 {this.state.selectedStatus !== 'Active' &&
                                     <Grid item xs={2}>
                                         Completed Date
@@ -250,7 +269,7 @@ openMaintenanceScreen = event => {
                                     </Grid>
                                 }
                                 {this.state.selectedStatus == 'Active' &&
-                                    <Grid item xs={3}>
+                                    <Grid item xs={4}>
                                         Running Status ( Your Position / Active List )
                                     </Grid>
                                 }
@@ -258,20 +277,28 @@ openMaintenanceScreen = event => {
                             </Grid>
                         </Grid>
                         {this.state.displayList.map((option, index) => {
+                            let disputeObj = ''
+                            let checkDate = ''
+                            if(option.paymentInfo) {
+                                disputeObj = _.find(this.props.myDisputes, (n) => { return (n.payment_id == option.paymentInfo.payment_id) })
+                                if (option.paymentInfo.confirm_status == 'Initiated') {
+                                    checkDate = compareSSDate(option.paymentInfo.receiver_confirm_date)
+                                    console.log(checkDate)
+                                }
+                            }
                             const receivePaymentLink = '/receive_payment/'+option.payment_level
                             return (
                                 <Grid item xs={12} className={index % 2 ? classes.rowOdd : classes.rowEven}>
                                     <Grid container>
-                                        <Grid item xs={1}>
+                                        <Grid item xs={2}>
                                             {option.payment_level}
                                         </Grid>
-                                        <Grid item xs={1}>
-                                            {option.spreader_id}
-                                        </Grid>
                                         <Grid item xs={2}>
-                                            <span className={classes.navLink} onClick={this.showUserDetails(option)}>
-                                                {option.username} 
-                                            </span>
+                                            {option.giverInfo &&
+                                                <span className={classes.navLink} onClick={this.showUserDetails(option.giverInfo)}>
+                                                    {option.giverInfo.username} 
+                                                </span>
+                                            }
                                         </Grid>
                                         <Grid item xs={2}>
                                             {option.current_status}
@@ -280,14 +307,43 @@ openMaintenanceScreen = event => {
                                                     {this.props.maintenanceStatus.status !== 'Active' ? (
                                                         <span className={classes.navLink} onClick={this.openMaintenanceScreen}> Confirm Payment </span>
                                                     ) : (
-                                                        <Link className={classes.navLink} to={receivePaymentLink}> Confirm Payment </Link>
+                                                        <div>
+                                                            {option.paymentInfo.confirm_status == 'Initiated' ? (
+                                                                <div>
+                                                                <span> Payment Initiated </span>
+                                                                {checkDate == 'greater' && (
+                                                                    <div className={classes.navLink} onClick={this.cancelTransaction(option.paymentInfo)}>I like to reassign</div>
+                                                                )}
+                                                                </div>
+                                                            ) : (
+                                                                <div>
+                                                                    <Link className={classes.navLink} to={receivePaymentLink}> Confirm Payment </Link>
+                                                                    {disputeObj ? (
+                                                                        <div className={classes.navLink} onClick={this.viewDispute(disputeObj)}>View Dispute</div>
+                                                                    ) : (
+                                                                        <div>
+                                                                            {this.props.maintenanceStatus.status !== 'Active' ? (
+                                                                                <span className={classes.navLink} onClick={this.openMaintenanceScreen}> Open Dispute </span>
+                                                                            ) : (
+                                                                                <div className={classes.navLink} onClick={this.openDispute(option.paymentInfo)}>Open Dispute</div>
+                                                                            )}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                
+                                                            )
+                                                            }
+                                                        </div>
+                                                        
                                                     )}
                                                 </div>
                                             }
                                         </Grid>
-                                        <Grid item xs={2}>
-                                            {getFormatedDate(option.added_date)}
-                                        </Grid>
+                                        {(option.paymentInfo && this.state.selectedStatus !== 'Active') &&
+                                            <Grid item xs={2}>
+                                                {getFormatedDate(option.paymentInfo.receiver_confirm_date)}
+                                            </Grid>
+                                        }
                                         {this.state.selectedStatus !== 'Active' &&
                                             <Grid item xs={2}>
                                                 {getFormatedDate(option.completed_date)}
@@ -295,13 +351,15 @@ openMaintenanceScreen = event => {
                                         }
                                         {this.state.selectedStatus !== 'Active' &&
                                             <Grid item xs={2}>
-                                                <span className={classes.navLink} onClick={this.showPaymentDetails(option)}>
-                                                    View Details
-                                                </span>
+                                                {option.paymentInfo && 
+                                                    <span className={classes.navLink} onClick={this.showPaymentDetails(option.paymentInfo)}>
+                                                        View Details
+                                                    </span>
+                                                }
                                             </Grid>
                                         }
                                         {this.state.selectedStatus == 'Active' &&
-                                            <Grid item xs={3} className={classes.countText}>
+                                            <Grid item xs={4} className={classes.countText}>
                                                 {this.state.myLevel} / {this.state.totalCount}
                                             </Grid>
                                         }

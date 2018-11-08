@@ -143,7 +143,7 @@ export class OpenDispute extends React.Component {
                 <Grid item xs={12} className={classes.rowDetails}>
                     <Grid container>
                         <Grid item xs={6}>
-                            Giver ID
+                            Giver
                         </Grid>
                         <Grid item xs={6}>
                             {disputePaymentObj.from_id}
@@ -153,7 +153,7 @@ export class OpenDispute extends React.Component {
                 <Grid item xs={12} className={classes.rowDetails}>
                     <Grid container>
                         <Grid item xs={6}>
-                            Receiver ID
+                            Receiver
                         </Grid>
                         <Grid item xs={6}>
                             {disputePaymentObj.to_id}
