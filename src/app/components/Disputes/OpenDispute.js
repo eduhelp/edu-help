@@ -146,17 +146,17 @@ export class OpenDispute extends React.Component {
                             Giver
                         </Grid>
                         <Grid item xs={6}>
-                            {disputePaymentObj.from_id}
+                            {disputePaymentObj.giver_name}
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.rowDetails}>
+                <Grid item xs={12} className={classes.rowHead}>
                     <Grid container>
                         <Grid item xs={6}>
                             Receiver
                         </Grid>
                         <Grid item xs={6}>
-                            {disputePaymentObj.to_id}
+                            {disputePaymentObj.receiver_name}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -170,7 +170,7 @@ export class OpenDispute extends React.Component {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.rowDetails}>
+                <Grid item xs={12} className={classes.rowHead}>
                     <Grid container>
                         <Grid item xs={6}>
                             Receiver Type
@@ -201,7 +201,7 @@ export class OpenDispute extends React.Component {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.rowDetails}>
+                <Grid item xs={12} className={classes.rowHead}>
                     <AppBar position="static" color="default">
                         <div className="dropzone">
                         <Dropzone
