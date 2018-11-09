@@ -94,12 +94,15 @@ export class UserTableToolbar extends React.Component {
 
       let usernameList = []
       let statusList = []
+      let mobileList = []
       this.props.listItems.map((option) => {
         usernameList.push(option.username)
+        mobileList.push(option.moble)
         statusList.push(option.status)
       })
 
       usernameList = _.uniqBy(usernameList)
+      mobileList = _.uniqBy(mobileList)
       statusList = _.uniqBy(statusList)
 
       return (
@@ -119,6 +122,14 @@ export class UserTableToolbar extends React.Component {
                     getSuggestionCallback={this.readFilters.bind(this)}
                     column_id="username"
                     filter_name="User Name"
+                    clearField="No"
+                    id="loadUserName"
+                  />
+                  <EduHelpAutoSuggest
+                    suggestions={mobileList}
+                    getSuggestionCallback={this.readFilters.bind(this)}
+                    column_id="mobile"
+                    filter_name="Mobile Number"
                     clearField="No"
                     id="loadUserName"
                   />

@@ -11,6 +11,7 @@ const columnData = [
   { id: 'username', numeric: false, disablePadding: false, label: 'User Name' },
   { id: 'pwd', numeric: false, disablePadding: false, label: 'Password' },
   { id: 'mobile', numeric: false, disablePadding: false, label: 'Mobile' },
+  { id: 'state', numeric: false, disablePadding: false, label: 'State' },
   { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
   { id: 'action', numeric: false, disablePadding: false, label: 'Action' },
 ]
