@@ -141,6 +141,7 @@ export class UserTableList extends React.Component {
                     <TableCell className={classes.cellPadding} >{obj.username}</TableCell>
                     <TableCell className={classes.cellPadding} >{obj.pwd}</TableCell>
                     <TableCell className={classes.cellPadding} >{obj.mobile}</TableCell>
+                    <TableCell className={classes.cellPadding} >{obj.state}</TableCell>
                     <TableCell className={classes.cellPadding} >{obj.status}</TableCell>
                     <TableCell className={classes.cellPadding} >
                     {obj.status == 'Active' &&
