@@ -86,17 +86,17 @@ export class DisplayTreeInfo extends React.Component {
                         <Grid container>
                             <Grid item xs={3}>
                                 <span className={classes.navLink} onClick={this.showUserDetails(option.nodeInfo)}>
-                                    {option.nodeInfo.username} ({option.nodeInfo.user_id})
+                                    {option.nodeInfo.username}
                                 </span>
                             </Grid>
                              <Grid item xs={2}>
                                 <span className={classes.navLink} onClick={this.getUserDetails(option.nodeInfo.sponsor_id)}>
-                                    {option.nodeInfo.sponsor_name} ({option.nodeInfo.sponsor_id})
+                                    {option.nodeInfo.sponsor_name}
                                 </span>
                             </Grid>
                             <Grid item xs={3}>
                                 <span className={classes.navLink} onClick={this.showUserDetails(option.nodeInfo.parent_id)}>
-                                    {option.nodeInfo.parent_name} ({option.nodeInfo.parent_id})
+                                    {option.nodeInfo.parent_name}
                                 </span>
                             </Grid>
                             <Grid item xs={2}>
