@@ -295,11 +295,11 @@ openDispute = (paymentObject) => event => {
                                             {paymentObj ? (
                                                 <div>
                                                     {paymentObj.confirm_status == 'Confirmed' && 
-                                                        <div>Payment received and confirmed on {getFormatedDate(paymentObj.confirm_date)} | status : {paymentObj.confirm_status}</div>
+                                                        <div>Payment received and confirmed on {getFormatedDate(paymentObj.confirm_date)}</div>
                                                     }
                                                     {paymentObj.confirm_status == 'Pending' && 
                                                         <div>
-                                                            <div>Payment paid on {getFormatedDate(paymentObj.paid_date)} | status : {paymentObj.confirm_status}</div>
+                                                            <div>Payment paid on {getFormatedDate(paymentObj.paid_date)}</div>
                                                             <div>
                                                                 {this.props.maintenanceStatus.status !== 'Active' ? (
                                                                     <span className={classes.navLink} onClick={this.openMaintenanceScreen}> Confirm Payment </span>
@@ -326,8 +326,8 @@ openDispute = (paymentObject) => event => {
                                                 <div>
                                                     {missedInfo ? (
                                                         <span>
-                                                            You missed this level-{this.state.selectedLevel} payment, payment received by smart spreader - 
-                                                            <span onClick={this.getUserDetails(option.levelPayment.to_id)}>{option.levelPayment.to_id}</span>
+                                                            You missed this level-{this.state.selectedLevel} payment, payment received by smart spreader
+                                                            <span onClick={this.getUserDetails(option.levelPayment.to_id)}><b>  {option.levelPayment.receiver_name}</b></span>
                                                         </span>
                                                     ) : (
                                                         <span>Payment not done</span>

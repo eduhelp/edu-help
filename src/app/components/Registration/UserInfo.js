@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Button from '@material-ui/core/Button';
@@ -129,6 +130,10 @@ export class UserInfo extends React.Component {
           error: false,
           text: ''
         },
+        state: {
+          error: false,
+          text: ''
+        },
       }
     }
   }
@@ -232,6 +237,12 @@ handleBlurChange = (stName) => event => {
     } 
   }
 
+  if(stName == 'state') {
+    if(enteredValue == 'None') {
+      this.setErrorState('state', true, 'State required')
+    } 
+  }
+
 }
 
 
@@ -312,6 +323,11 @@ validateUserInfo = () => {
     return false
   } else if(age < 18) {
     this.setErrorState('dob', true, 'Your Age : '+age+', Age should be 18+')
+    return false
+  }
+
+  if(userInfo.state == 'None') {
+    this.setErrorState('state', true, 'State required')
     return false
   }
 
@@ -568,20 +584,22 @@ checkExist = (field_name, field_value) => event => {
                     </RadioGroup>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} className={classes.marginLeft20}>
+                <Grid item xs={12} className={classes.marginLeft20} error>
                   <FormControl className={classes.formControl}>
                     <InputLabel htmlFor="age-simple">State</InputLabel>
                     <Select
                       value={userInfo.state}
                       onChange={this.handleChange('state')}
                       className={classes.selectBox}
+                      error={userInfoError.state.error}
+                      onBlur={this.handleBlurChange('state')}
                     >
                       <MenuItem value='None'>Select State</MenuItem>
                       {this.state.listStates.map((option, key) => {
                         return (<MenuItem value={option} key={key}>{option}</MenuItem>)
                       })}
-                      
                     </Select>
+                    <FormHelperText className={classes.checkIconFail}>{userInfoError.state.text}</FormHelperText>
                   </FormControl>  
                 </Grid>
                 <Grid item xs={12} className={classes.marginLeft20}>
