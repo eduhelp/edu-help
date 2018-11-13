@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Button from '@material-ui/core/Button';
@@ -41,6 +42,9 @@ const styles = {
   },
   group: {
     display: 'inline',
+  },
+  checkIconFail: {
+    color: 'red',
   },
 };
 
@@ -82,6 +86,10 @@ export class MyInfo extends React.Component {
           text: ''
         },
         pincode: {
+          error: false,
+          text: ''
+        },
+        state: {
           error: false,
           text: ''
         },
@@ -171,6 +179,12 @@ export class MyInfo extends React.Component {
       } 
     }
 
+    if(stName == 'state') {
+      if(enteredValue == 'None') {
+        this.setErrorState('state', true, 'State required')
+      } 
+    }
+
   }
 
   validateUserInfo = () => {
@@ -212,6 +226,11 @@ export class MyInfo extends React.Component {
       return false
     }
     
+    if(userInfo.state == 'None') {
+      this.setErrorState('state', true, 'State required')
+      return false
+    }
+
     if(/^[0-9]*$/.test(userInfo.pincode) == false) {
       this.setErrorState('pincode', true, 'Invalid Pincode')
       return false
@@ -306,20 +325,21 @@ export class MyInfo extends React.Component {
                       helperText={userInfoError.dob.text}
                     />
                   </Grid>
-                  <Grid item xs={12} className={classes.marginLeft20}>
+                  <Grid item xs={12} className={classes.marginLeft20} error>
                     <FormControl className={classes.formControl}>
                       <InputLabel htmlFor="age-simple">State</InputLabel>
                       <Select
                         value={userInfo.state}
                         onChange={this.handleChange('state')}
                         className={classes.selectBox}
+                        error={userInfoError.state.error}
                       >
-                        <MenuItem value=''>None</MenuItem>
+                        <MenuItem value='None'>Select State</MenuItem>
                         {this.state.listStates.map((option, key) => {
                           return (<MenuItem value={option} key={key}>{option}</MenuItem>)
                         })}
-                        
                       </Select>
+                      <FormHelperText className={classes.checkIconFail}>{userInfoError.state.text}</FormHelperText>
                     </FormControl>  
                   </Grid>
                   <Grid item xs={12} className={classes.marginLeft20}>
