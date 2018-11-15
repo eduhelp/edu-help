@@ -93,10 +93,9 @@ export class SelectReceiver extends React.Component {
                                         <Grid item xs={4}>
                                             Bank A/C Name: {userDetails.bank_details.bank_ac_name}
                                             <br />Bank Account No: {userDetails.bank_details.bank_ac_number}
-                                            <br />Bank Account No: {userDetails.bank_details.bank_ac_number}
-                                            <br />Bank Name: {userDetails.bank_details.bank_ac_number}
-                                            <br />Branch Name: {userDetails.bank_details.bank_ac_number}
-                                            <br />IFSC Code: {userDetails.bank_details.bank_ac_number}<br />
+                                            <br />Bank Name: {userDetails.bank_details.bank_name}
+                                            <br />Branch Name: {userDetails.bank_details.bank_branch}
+                                            <br />IFSC Code: {userDetails.bank_details.bank_ifsc_code}<br />
                                             <br />Paytm Wallet : {userDetails.bank_details.wallet_paytm_name} ({userDetails.bank_details.wallet_paytm_number})
                                             <br />Google Pay : {userDetails.bank_details.wallet_gp_name} ({userDetails.bank_details.wallet_gp_number})
                                         </Grid>
