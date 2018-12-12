@@ -125,4 +125,21 @@ router.post('/getAllDisputes', async function(req, res) {
     res.status(200).send({message: 'transaction cancelled'})
 });
  
+
+router.post('/addNotification', async function(req, res) {
+    var curQuery = "insert into notifications(notify_title, notify_msg, notify_date) values('"+req.body.title+"','"+req.body.message+"','"+pg_connect.getCurrentDate()+"')"
+    var result = await pg_connect.connectDB(curQuery, res)
+    if(result) {
+        res.status(200).send(result)
+    }
+});
+
+router.post('/getNotifications', async function(req, res) {
+    var curQuery = "select * from notifications order by notify_date desc"
+    var result = await pg_connect.connectDB(curQuery, res)
+    if(result) {
+        res.status(200).send(result)
+    }
+});
+
 module.exports = router
