@@ -3,6 +3,7 @@ import {
   GET_MY_DISPUTES_SUCCESS,
   DISPUTE_PHOTOS_SUCCESS,
   DISPUTE_COMMENTS_SUCCESS,
+  GET_NOTIFICATIONS_SUCCESS,
   } from './actionType'
   import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
   import { postService } from '../../services/Registration'
@@ -107,4 +108,30 @@ import {
       })
     }
   }
+
+  export function addNotification (payload) {
+    return dispatch => {
+      return postService('disputes/addNotification', payload)
+      .then((resp) => {
+        const succMsg = {status: true, variant: 'success', message: 'Notification added successfully...'}
+        dispatch({ snackMessage: succMsg, type: TOGGLE_SNACKBAR })
+      })
+      .catch((error) => {
+        dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
+      })
+    }
+  }
+
+  export function getNotifications () {
+    return dispatch => {
+      return postService('disputes/getNotifications', {})
+      .then((resp) => {
+        dispatch({data: resp, type: GET_NOTIFICATIONS_SUCCESS})
+      })
+      .catch((error) => {
+        dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
+      })
+    }
+  }
+  
   

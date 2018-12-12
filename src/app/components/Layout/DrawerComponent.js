@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
@@ -33,6 +34,8 @@ import Disputes from '../Disputes/Disputes'
 import AboutPlan from '../Placements/AboutPlan'
 import UsersContainer from '../Users/UsersContainer'
 import Maintenance from '../Maintenance/Maintenance'
+import AddNotification from '../Notifications/AddNotification'
+import ViewNotifications from '../Notifications/ViewNotifications'
 // import NotFound from '../NotFoundPage/NotFoundPage'
 // import { ReactComponent as Logo } from '../../images/logo.svg'
 import Logo from './main_logo.png';
@@ -210,7 +213,7 @@ class MiniDrawer extends React.Component {
                     <div className={classes.userNameDisp}> 
                         Welcome {data.username} 
                         <Button color="black" className={classes.companyTitle} >
-                        <Notification/>
+                        <Link to='notifications'><Notification/></Link>
                         </Button> 
                         <Button color="primary" className={classes.button} onClick={this.confirmLogout}>
                              Logout
@@ -282,6 +285,8 @@ class MiniDrawer extends React.Component {
                     <Route path='/disputes' component={Disputes} />
                     <Route path='/users' component={UsersContainer} />
                     <Route path='/maintenance' component={Maintenance} />
+                    <Route path='/add_notification' component={AddNotification} />
+                    <Route path='/notifications' component={ViewNotifications} />
                 </Switch>
               </Grid>
             </Grid>
