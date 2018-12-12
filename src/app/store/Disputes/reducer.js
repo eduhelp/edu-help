@@ -4,6 +4,7 @@ import {
   GET_MY_DISPUTES_SUCCESS,
   DISPUTE_PHOTOS_SUCCESS,
   DISPUTE_COMMENTS_SUCCESS,
+  GET_NOTIFICATIONS_SUCCESS,
 } from './actionType'
 
 export const initialState = fromJS({
@@ -11,6 +12,7 @@ export const initialState = fromJS({
   myDisputes: [],
   disputePhotos: [],
   disputeComments: [],
+  listNitifications: []
 })
 
 export default function disputeReducer (state = initialState, action) {
@@ -30,6 +32,10 @@ export default function disputeReducer (state = initialState, action) {
     case DISPUTE_COMMENTS_SUCCESS:
       return state
         .set('disputeComments', fromJS(action.data))
+    
+    case GET_NOTIFICATIONS_SUCCESS:
+      return state
+        .set('listNitifications', fromJS(action.data))
         
     default:
       return state
