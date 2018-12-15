@@ -13,6 +13,8 @@ import MakePayment from "../Payments/MakePayment"
 import OpenDispute from '../Disputes/OpenDispute'
 import Dialog from '../Common/Dialog'
 import { cancelTransaction } from '../../store/Disputes/actionCreator'
+import { getNotifications, openNotifyStatus } from '../../store/Disputes/actionCreator'
+import NotifyDialog from '../Notifications/NotifyDialog'
 
 const styles = {
   root: {
@@ -71,6 +73,7 @@ export class Dashboard extends React.Component {
 
 
   componentWillMount() {
+    this.props.getNotifications()
     this.props.toggleLoader(true)
     var sendData = {
         user_id: this.props.authInfo.data.user_id,
@@ -105,9 +108,18 @@ export class Dashboard extends React.Component {
     // this.props.getActiveSmartSpreader()
 }
 
+componentWillReceiveProps (nextProps) {
+    if (nextProps.listNitifications.length > 0 && !this.state.dialogOpenStatus && !nextProps.notifcationOpenStatus) {
+        this.setState({
+            dialogOpenStatus: true,
+            dialogTitle: 'Latest Notification',
+            dialogContent: <NotifyDialog listNitifications={nextProps.listNitifications} />
+        })
+        this.props.openNotifyStatus()
+    }
+}
+
 confirmReceiver = (currentPage, levelIndex, treeParentID, levelEligibility, treeParentInfo) => {
-    console.log('this.props.maintenanceStatus >>> ')
-    console.log(this.props.maintenanceStatus)
     if (this.props.maintenanceStatus.status !== 'Active') {
         this.setState({
             dialogOpenStatus: true,
@@ -254,6 +266,8 @@ const mapDispatchToProps = dispatch =>
     getMaintenanceStatus,
     toggleLoader,
     cancelTransaction,
+    getNotifications,
+    openNotifyStatus,
   }, dispatch)
 
 const mapStateToProps = state => ({
@@ -270,5 +284,7 @@ const mapStateToProps = state => ({
     myDisputes: state.getIn(['DisputesContainer', 'myDisputes']).toJS(),
     allActiveSSList: state.getIn(['PlcementsContainer', 'allActiveSSList']).toJS(),
     maintenanceStatus: state.getIn(['RegistrationContainer', 'maintenanceStatus']).toJS(),
+    listNitifications: state.getIn(['DisputesContainer', 'listNitifications']).toJS(),
+    notifcationOpenStatus: state.getIn(['DisputesContainer', 'notifcationOpenStatus'])
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard))
