@@ -4,6 +4,7 @@ import {
   DISPUTE_PHOTOS_SUCCESS,
   DISPUTE_COMMENTS_SUCCESS,
   GET_NOTIFICATIONS_SUCCESS,
+  OPEN_NOTIFY_STATUS,
   } from './actionType'
   import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
   import { postService } from '../../services/Registration'
@@ -133,5 +134,14 @@ import {
       })
     }
   }
+
+  export function openNotifyStatus () {
+    const loaderMsg = { status: true }
+    return {
+      type: OPEN_NOTIFY_STATUS,
+      loaderMsg,
+    }
+  }
+  
   
   
