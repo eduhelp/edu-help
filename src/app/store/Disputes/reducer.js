@@ -6,6 +6,7 @@ import {
   DISPUTE_COMMENTS_SUCCESS,
   GET_NOTIFICATIONS_SUCCESS,
   OPEN_NOTIFY_STATUS,
+  GET_PENDING_LIST_SUCCESS,
 } from './actionType'
 
 export const initialState = fromJS({
@@ -14,7 +15,8 @@ export const initialState = fromJS({
   disputePhotos: [],
   disputeComments: [],
   listNitifications: [],
-  notifcationOpenStatus: false
+  notifcationOpenStatus: false,
+  pendingDetails: []
 })
 
 export default function disputeReducer (state = initialState, action) {
@@ -42,6 +44,10 @@ export default function disputeReducer (state = initialState, action) {
     case OPEN_NOTIFY_STATUS:
       return state
         .set('notifcationOpenStatus', true)
+
+    case GET_PENDING_LIST_SUCCESS:
+      return state
+        .set('pendingDetails', fromJS(action.data))
 
     default:
       return state

@@ -142,4 +142,38 @@ router.post('/getNotifications', async function(req, res) {
     }
 });
 
+router.post('/getPendingList', async function(req, res) {
+    var sendData = {
+        giveHelp: '',
+        receiveHelp: '',
+        smartSpreader: ''
+    }
+    // Give Help pending
+    var Query1 = "select * from payments where from_id="+req.body.user_id+" and confirm_status!='Confirmed'"
+    var givePending = await pg_connect.connectDB(Query1, res)
+    if(givePending) {
+        for(var i=0; i<givePending.length; i++) {
+            givePending[i]['disp_name'] = await getSponsorName(givePending[i].to_id, res)
+        }
+        sendData.giveHelp = givePending
+    }
+    // Receive Help pending
+    var Query2 = "select * from payments where to_id="+req.body.user_id+" and confirm_status!='Confirmed'"
+    var receivePending = await pg_connect.connectDB(Query2, res)
+    if(receivePending) {
+        for(var i=0; i<receivePending.length; i++) {
+            receivePending[i]['disp_name'] = await getSponsorName(receivePending[i].from_id, res)
+        }
+        sendData.receiveHelp = receivePending
+    }
+    // Smart Spreader pending
+    var Query3 = "select * from smart_spreaders t1 left join payments t2 on t1.payment_id = t2.payment_id  where t1.user_id="+req.body.user_id+" and t1.current_status='InProgress'"
+    // var Query3 = "select * from smart_spreaders where user_id="+req.body.user_id+" and current_status='InProgress'"
+    var smartPending = await pg_connect.connectDB(Query3, res)
+    if(smartPending) {
+        sendData.smartSpreader = smartPending
+    }
+    res.status(200).send(sendData)
+});
+
 module.exports = router
