@@ -13,6 +13,7 @@ import ShareIcon from '@material-ui/icons/Share'
 import HelpIcon from '@material-ui/icons/HelpOutline'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import Notification from '@material-ui/icons/NotificationsNone'
+import DirectionsRun from '@material-ui/icons/DirectionsRun'
 import People from '@material-ui/icons/People'
 import TransferWithinAStation from '@material-ui/icons/TransferWithinAStation'
 import AddAlert from '@material-ui/icons/AddAlert'
@@ -27,8 +28,9 @@ const getmenu = (props) => {
     menuDefinitions.push({ title: 'My Dashboard', to: '/dashboard', icon: <DashboardIcon className={props.color} /> })
     menuDefinitions.push({ title: 'My Profile', to: '/profile', icon: <AccountCircle className={props.color} /> })
     menuDefinitions.push({ title: 'My Tree', to: '/my_tree', icon: <ShareIcon className={props.color} /> })
+    menuDefinitions.push({ title: 'Pending Details', to: '/pending_details', icon: <DirectionsRun className={props.color} /> })
     menuDefinitions.push({ title: 'FAQ', to: '/faq', icon: <HelpIcon className={props.color} /> })
-     menuDefinitions.push({ title: 'Notifications', to: '/notifications', icon: <Notification className={props.color} /> })
+    menuDefinitions.push({ title: 'Notifications', to: '/notifications', icon: <Notification className={props.color} /> })
     if(props.authInfo.data.user_id == '1') {
         menuDefinitions.push({ title: 'Users', to: '/users', icon: <People className={props.color} /> })
         menuDefinitions.push({ title: 'Disputes', to: '/disputes', icon: <MaintainIcon className={props.color} /> })

@@ -5,6 +5,7 @@ import {
   DISPUTE_COMMENTS_SUCCESS,
   GET_NOTIFICATIONS_SUCCESS,
   OPEN_NOTIFY_STATUS,
+  GET_PENDING_LIST_SUCCESS,
   } from './actionType'
   import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
   import { postService } from '../../services/Registration'
@@ -142,6 +143,19 @@ import {
       loaderMsg,
     }
   }
+
+  export function getPendingDetails (payload) {
+    return dispatch => {
+      return postService('disputes/getPendingList', payload)
+      .then((resp) => {
+        dispatch({data: resp, type: GET_PENDING_LIST_SUCCESS})
+      })
+      .catch((error) => {
+        dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
+      })
+    }
+  }
+  
   
   
   

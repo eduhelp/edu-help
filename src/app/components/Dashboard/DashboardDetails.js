@@ -36,7 +36,7 @@ export class DashboardDetails extends React.Component {
   componentWillMount() {
       this.setState({disputePage: ''})
       if (this.props.redirectPage == 'giveHelp') {
-        this.setState({tabValue: 2})
+        this.setState({tabValue: 1})
       }
   }
 

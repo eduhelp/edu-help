@@ -36,6 +36,7 @@ import UsersContainer from '../Users/UsersContainer'
 import Maintenance from '../Maintenance/Maintenance'
 import AddNotification from '../Notifications/AddNotification'
 import ViewNotifications from '../Notifications/ViewNotifications'
+import PendingDetails from '../PendingDetails/PendingDetails'
 // import NotFound from '../NotFoundPage/NotFoundPage'
 // import { ReactComponent as Logo } from '../../images/logo.svg'
 import Logo from './main_logo.png';
@@ -287,6 +288,7 @@ class MiniDrawer extends React.Component {
                     <Route path='/maintenance' component={Maintenance} />
                     <Route path='/add_notification' component={AddNotification} />
                     <Route path='/notifications' component={ViewNotifications} />
+                    <Route path='/pending_details' component={PendingDetails} />
                 </Switch>
               </Grid>
             </Grid>
