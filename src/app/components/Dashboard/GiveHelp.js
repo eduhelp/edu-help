@@ -203,11 +203,11 @@ export class GiveHelp extends React.Component {
                                 }
                             } else {
                                 if(option.level == '3') {
-                                    const mySponsorPaymentObj = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == '1' && n.confirm_status == 'Confirmed') })
-                                    const level2PaymentObj = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == '2' && n.confirm_status == 'Confirmed') })
+                                    const mySponsorPaymentObj = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == '1') })
+                                    // const level2PaymentObj = _.find(this.props.myPaymentList, (n) => { return (n.payment_level == '2') })
                                     // const l3curReceivedObject = _.find(this.props.myReceivedList, (n) => { return (n.payment_level == '1' && n.confirm_status == 'Confirmed') })
                                     // if(mySponsorPaymentObj && level2PaymentObj && l3curReceivedObject) {
-                                    if(mySponsorPaymentObj && level2PaymentObj) {
+                                    if(mySponsorPaymentObj) {
                                         receivedCheck = true
                                     }
                                 } else {

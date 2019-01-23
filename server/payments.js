@@ -102,8 +102,11 @@ router.post('/confirmLevelPayment', async function(req, res) {
                         res.status(200).send({message: 'Confirmaton status successfully updated for level-'+req.body.payment_level})
                     }
                 } else {
-                    if (req.body.payment_level == "3") {
-                        var updResult = await updateUser(req.body.user_id, res) 
+                    if (req.body.payment_level == "3" || req.body.payment_level == "2") {
+                        var myActiveStatus = await getMyActiveStatus(req.body.user_id, res)
+                        if (myActiveStatus) {
+                            var updResult = await updateUser(req.body.user_id, res)
+                        }
                     }
                     await checkDisputes(req.body.payment_id, res)
                     var entResult = await entryToSmartSpreaderBucket(req.body.user_id, req.body.payment_level, res)
@@ -119,6 +122,15 @@ router.post('/confirmLevelPayment', async function(req, res) {
         res.status(403).send({message:'payment already processed on level'+req.body.payment_level})
     }
 });
+
+async function getMyActiveStatus(user_id, res) {
+    var checkQuery = "select * from payments where from_id ="+user_id+" and payment_level <=3 and confirm_status='Confirmed'"
+    var checkResult = await pg_connect.connectDB(checkQuery, res)
+    if(checkResult.length === 3) {
+        return true
+    }
+    return false
+}
 
 async function checkDisputes(payment_id, res) {
     var curQuery = "select * from disputes where dispute_status='Open' and payment_id="+payment_id
