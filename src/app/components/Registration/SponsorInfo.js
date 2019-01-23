@@ -83,7 +83,7 @@ export class SponsorInfo extends React.Component {
               ) : (
                 <Grid container>
                   <Grid item xs={12}>
-                    {sponsorDetails.username} not in Active state, please as your sponsor to activate the account or try with another sponsor.
+                    {sponsorDetails.username} not in Active state, please ask your sponsor to activate the account or try with another sponsor.
                   </Grid>
                 </Grid>
               )}

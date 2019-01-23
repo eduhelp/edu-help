@@ -95,13 +95,16 @@ router.post('/confirmLevelPayment', async function(req, res) {
                     retArr.push(nodeObj)
                     var resultArray = await getRootArray(req.body.sponsor_id, retArr, curLevel, res)
                     var insResult = await insertToPosition(req.body.user_id, resultArray, res)
-                    var updResult = await updateUser(req.body.user_id, res)
+                    // var updResult = await updateUser(req.body.user_id, res)
                     await checkDisputes(req.body.payment_id, res)
                     var entResult = await entryToSmartSpreaderBucket(req.body.sponsor_id, req.body.payment_level, res)
                     if(entResult) {
                         res.status(200).send({message: 'Confirmaton status successfully updated for level-'+req.body.payment_level})
                     }
                 } else {
+                    if (req.body.payment_level == "3") {
+                        var updResult = await updateUser(req.body.user_id, res) 
+                    }
                     await checkDisputes(req.body.payment_id, res)
                     var entResult = await entryToSmartSpreaderBucket(req.body.user_id, req.body.payment_level, res)
                     if(entResult) {
