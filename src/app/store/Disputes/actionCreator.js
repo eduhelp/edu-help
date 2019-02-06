@@ -155,6 +155,20 @@ import {
       })
     }
   }
+
+  export function emailNotification (payload) {
+    return dispatch => {
+      return postService('emails/emailNotification', payload)
+      .then((resp) => {
+        const succMsg = {status: true, variant: 'success', message: 'Email Notification sent successfully...'}
+        dispatch({ snackMessage: succMsg, type: TOGGLE_SNACKBAR })
+      })
+      .catch((error) => {
+        dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
+      })
+    }
+  }
+  
   
   
   

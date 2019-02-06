@@ -40,7 +40,8 @@ import PendingDetails from '../PendingDetails/PendingDetails'
 // import NotFound from '../NotFoundPage/NotFoundPage'
 // import { ReactComponent as Logo } from '../../images/logo.svg'
 import Logo from './main_logo.png';
-
+import ForgotPassword from './ForgotPassword'
+import EmailNotifications from '../Notifications/EmailNotification'
 
 const drawerWidth = 240
 
@@ -154,6 +155,8 @@ class MiniDrawer extends React.Component {
   state = {
     open: false,
     drawerOpenStatus: false,
+    drawerContent: '',
+    forgotDrawerOpenStatus: false,
   };
   componentWillReceiveProps() {
       if (!this.props.authInfo.isAuth) {
@@ -169,11 +172,11 @@ class MiniDrawer extends React.Component {
   };
 
   openDrawer = () => {
-    this.setState({ drawerOpenStatus: true })
+    this.setState({ drawerOpenStatus: true, drawerContent: <Login closeDrawer={this.closeDrawer} forgotPasswordLinkCB={this.openForgotPasswordScreen} /> })
   }
 
   closeDrawer = () => {
-    this.setState({ drawerOpenStatus: false })
+    this.setState({ drawerOpenStatus: false, drawerContent: '', forgotDrawerOpenStatus: false })
   }
 
   confirmLogout = () => {
@@ -182,6 +185,10 @@ class MiniDrawer extends React.Component {
   registerNow = () => {
     const regLink = window.location.origin+"/registration?n="+window.localStorage.getItem('regSponsorId')
     window.location.href = regLink
+  }
+
+  openForgotPasswordScreen= () => {
+    this.setState({ forgotDrawerOpenStatus: true, drawerContent: <ForgotPassword closeDrawer = {this.closeDrawer} /> })
   }
 
   render () {
@@ -236,8 +243,14 @@ class MiniDrawer extends React.Component {
             </div>
             <SideDrawer
               drawerPosition="right"
-              drawerContent={<Login closeDrawer={this.closeDrawer} />}
+              drawerContent={this.state.drawerContent}
               openStatus={this.state.drawerOpenStatus}
+              closeCallback={this.closeDrawer}
+            />
+            <SideDrawer
+              drawerPosition="right"
+              drawerContent={this.state.drawerContent}
+              openStatus={this.state.forgotDrawerOpenStatus}
               closeCallback={this.closeDrawer}
             />
           </Toolbar>
@@ -289,6 +302,7 @@ class MiniDrawer extends React.Component {
                     <Route path='/add_notification' component={AddNotification} />
                     <Route path='/notifications' component={ViewNotifications} />
                     <Route path='/pending_details' component={PendingDetails} />
+                    <Route path='/email_notification' component={EmailNotifications} />
                 </Switch>
               </Grid>
             </Grid>

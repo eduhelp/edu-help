@@ -35,11 +35,13 @@ export default class FormDialog extends React.Component {
           <DialogContent>
             {this.props.dialogContent}
           </DialogContent>
+          {!this.props.disableFooter && 
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
               Got it
             </Button>
           </DialogActions>
+          }
         </Dialog>
       </div>
     );

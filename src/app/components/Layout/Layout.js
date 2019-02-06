@@ -4,10 +4,12 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withStyles } from '@material-ui/core/styles'
 import MiniDrawer from './DrawerComponent'
-import { userLogout, getAuthInfo } from '../../store/Registration/actionCreator'
+import { userLogout, getAuthInfo, removeForgotPasswordMessage } from '../../store/Registration/actionCreator'
 import Snackbars from '../Common/Snackbars'
 import { toggleSnackBar } from '../../store/Snackbar/actionCreator'
 import { checkCookie, getCookie } from '../../components/Common/Utils'
+import ConfirmMessage from './ConfirmMessage'
+import Dialog from '../Common/Dialog'
 
 const styles = theme => ({
   header: {
@@ -45,9 +47,15 @@ const styles = theme => ({
 })
 
 export class Layout extends React.Component {
-  static defaultProps = {
-    layoutActions: {},
-    notificationActions: {},
+  constructor(props) {
+    super(props)
+    this.state = {
+      layoutActions: {},
+      notificationActions: {},
+      dialogOpenStatus: false,
+      dialogTitle: '',
+      dialogContent: ''
+    }
   }
 
   componentWillMount() {
@@ -61,9 +69,24 @@ export class Layout extends React.Component {
   componentWillReceiveProps(nextProps) {
     const chCookie = checkCookie()
     const pathName = window.location.pathname
-    if (!chCookie && pathName !== '/registration' && pathName !== '/about_plan') {
+    if (nextProps.forgotPasswordMessage !== '') {
+      this.setState({
+        dialogOpenStatus: true,
+        dialogTitle: "Forgot Password Confirmation",
+        dialogContent: <ConfirmMessage message="Password has been sent to your email." mode='show' />
+      })
+      // nextProps.removeForgotPasswordMessage()
+    } else if (!chCookie && pathName !== '/registration' && pathName !== '/about_plan' && !nextProps.availableStatus['email']) {
       window.location.replace('/')
-    } 
+    }
+  }
+
+  closeDialog = () => {
+    this.setState({
+      dialogOpenStatus: false,
+      dialogTitle: '',
+      dialogContent: ''
+    })
   }
 
   render () {
@@ -79,12 +102,20 @@ export class Layout extends React.Component {
           openStatus={this.props.snackbarMessage.status}
           toggleSnackBar={this.props.toggleSnackBar}
         />
+        <Dialog
+            dialogOpenStatus = {this.state.dialogOpenStatus}
+            dialogTitle = {this.state.dialogTitle}
+            dialogContent = {this.state.dialogContent}
+            closeCB = {this.closeDialog}
+            disableFooter = {false}
+        />
         {this.props.loaderStatus.status ? (
           <div>Loading.....</div>
         ) : (
           <MiniDrawer 
             authInfo = {this.props.authInfo}
             userLogout = {this.props.userLogout}
+            availableStatus = {this.props.availableStatus}
           />
         )}
       </div>
@@ -97,12 +128,15 @@ const mapDispatchToProps = dispatch =>
     userLogout,
     toggleSnackBar,
     getAuthInfo,
+    removeForgotPasswordMessage,
   }, dispatch)
 
 const mapStateToProps = state => ({
   authInfo: state.getIn(['RegistrationContainer', 'authInfo']).toJS(),
   snackbarMessage: state.getIn(['SnackbarContainer', 'snackbarMessage']).toJS(),
   loaderStatus: state.getIn(['SnackbarContainer', 'loaderStatus']).toJS(),
+  availableStatus: state.getIn(['RegistrationContainer', 'availableStatus']).toJS(),
+  forgotPasswordMessage: state.getIn(['RegistrationContainer', 'forgotPasswordMessage']),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Layout))

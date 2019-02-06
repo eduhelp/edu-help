@@ -5,7 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { userLogin } from '../../store/Registration/actionCreator'
+import { userLogin, checkAvailability } from '../../store/Registration/actionCreator'
+import Dialog from '../Common/Dialog'
 
 const styles = {
   root: {
@@ -18,6 +19,11 @@ const styles = {
   button: {
       margin: 10,
   },
+  forgotPassword: {
+    paddingLeft: 10,
+    textDecoration: 'underline',
+    cursor: 'pointer',
+  }
 };
 
 
@@ -26,7 +32,7 @@ export class Login extends React.Component {
     super(props)
     this.state = {
         username: '',
-        pwd: ''
+        pwd: '',
     }
   }
 
@@ -41,6 +47,8 @@ export class Login extends React.Component {
       }
       this.props.userLogin(loginData)
   }
+
+  
 
   render() {
     const { classes } = this.props
@@ -94,6 +102,14 @@ export class Login extends React.Component {
                   Submit
                 </Button>
             </Grid>
+            <Grid item xs={12} onClick={this.props.forgotPasswordLinkCB} className={classes.forgotPassword} closeCB={this.props.closeDrawer}>Forgot password?</Grid>
+            <Dialog
+              dialogOpenStatus = {this.state.dialogOpenStatus}
+              dialogTitle = {this.state.dialogTitle}
+              dialogContent = {this.state.dialogContent}
+              closeCB = {this.closeDialog}
+              disableFooter={true}
+            />
         </Grid>
         
 
@@ -104,6 +120,7 @@ export class Login extends React.Component {
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
     userLogin,
+    checkAvailability,
   }, dispatch)
 
 const mapStateToProps = state => ({

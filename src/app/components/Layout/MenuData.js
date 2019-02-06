@@ -17,6 +17,7 @@ import DirectionsRun from '@material-ui/icons/DirectionsRun'
 import People from '@material-ui/icons/People'
 import TransferWithinAStation from '@material-ui/icons/TransferWithinAStation'
 import AddAlert from '@material-ui/icons/AddAlert'
+import Email from '@material-ui/icons/Email'
 
 let menuDefinitions = []
 const getmenu = (props) => {
@@ -37,6 +38,7 @@ const getmenu = (props) => {
         menuDefinitions.push({ title: 'Smart Spreaders', to: '/smart_spreaders', icon: <DemoIcon className={props.color} /> })
         menuDefinitions.push({ title: 'Maintenance', to: '/maintenance', icon: <TransferWithinAStation className={props.color} /> })
         menuDefinitions.push({ title: 'Add Notification', to: '/add_notification', icon: <AddAlert className={props.color} /> })
+        menuDefinitions.push({ title: 'Email Notification', to: '/email_notification', icon: <Email className={props.color} /> })
     }
   }
 }

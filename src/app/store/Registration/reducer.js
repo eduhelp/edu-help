@@ -12,6 +12,8 @@ import {
   MY_REFERRALS_SUCCESS,
   MY_SMART_SPREADER_LIST_SUCCESS,
   GET_MAINTENANCE_STATUS,
+  FORGOT_PASSWORD_SUCCESS,
+  REMOVE_FORGOT_PASSWORD,
 } from './actionType'
 import { setCookie, deleteCookie } from '../../components/Common/Utils'
 
@@ -33,7 +35,8 @@ export const initialState = fromJS({
   maintenanceStatus: {
     admin_id: 1,
     status: 'Active'
-  }
+  },
+  forgotPasswordMessage: ''
 })
 
 
@@ -100,6 +103,16 @@ export default function usersReducer (state = initialState, action) {
       return state
         .set('maintenanceStatus', fromJS(action.data))
 
+    case FORGOT_PASSWORD_SUCCESS:
+      const stausTempArr2 = ['availableStatus', 'email']
+      return state
+        .set('forgotPasswordMessage', fromJS(action.data))
+        .setIn(stausTempArr2, false)
+
+    case REMOVE_FORGOT_PASSWORD:
+      return state
+        .set('forgotPasswordMessage', '')
+        
     default:
       return state
   }
