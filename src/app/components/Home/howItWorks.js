@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import How from './how.png';
-import Pdf from './EduHelp.pdf';
+import Pdf from './NewEduHelp.pdf';
 const styles = {
   root: {
     display: 'flex',

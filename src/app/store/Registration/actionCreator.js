@@ -11,6 +11,8 @@ import {
   MY_REFERRALS_SUCCESS,
   MY_SMART_SPREADER_LIST_SUCCESS,
   GET_MAINTENANCE_STATUS,
+  FORGOT_PASSWORD_SUCCESS,
+  REMOVE_FORGOT_PASSWORD,
 } from './actionType'
 import { TOGGLE_SNACKBAR } from './../Snackbar/actionType'
 // import config from './../../config/apiConfig'
@@ -223,3 +225,20 @@ export function updateMaintenance(payload) {
   }
 }
 
+export function sendForgotPassword(payload) {
+  return dispatch => {
+    return postService('emails/sendForgotPassword', payload)
+    .then((resp) => {
+      dispatch({ data: resp, type: FORGOT_PASSWORD_SUCCESS })
+    })
+    .catch((error) => {
+      dispatch({ snackMessage: error.response.data, type: TOGGLE_SNACKBAR })
+    })
+  }
+}
+
+export function removeForgotPasswordMessage () {
+  return {
+    type: REMOVE_FORGOT_PASSWORD
+  }
+}
